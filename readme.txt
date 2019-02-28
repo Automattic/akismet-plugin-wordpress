@@ -30,6 +30,10 @@ Upload the Akismet plugin to your blog, Activate it, then enter your [Akismet.co
 
 == Changelog ==
 
+= 4.1.2 =
+
+* Fixed a conflict between the Akismet setup banner and other plugin notices.
+
 = 4.1.1 =
 *Release Date - 31 January 2019*
 
