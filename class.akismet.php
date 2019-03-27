@@ -65,6 +65,11 @@ class Akismet {
 	}
 
 	public static function verify_key( $key, $ip = null ) {
+		// Shortcut for obviously invalid keys.
+		if ( strlen( $key ) != 12 ) {
+			return 'invalid';
+		}
+		
 		$response = self::check_key_status( $key, $ip );
 
 		if ( $response[1] != 'valid' && $response[1] != 'invalid' )
