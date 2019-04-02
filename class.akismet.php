@@ -1349,10 +1349,6 @@ p {
 				$pingbacks_closed = true;
 			}
 
-			// If this gets through the pre-check, make sure we properly identify the outbound request as a pingback verification
-			Akismet::pingback_forwarded_for( null, $args[0] );
-			add_filter( 'http_request_args', array( 'Akismet', 'pingback_forwarded_for' ), 10, 2 );
-
 			$comment = array(
 				'comment_author_url' => $args[0],
 				'comment_post_ID' => $post_id,
@@ -1373,29 +1369,7 @@ p {
 			}
 		}
 	}
-	
-	public static function pingback_forwarded_for( $r, $url ) {
-		static $urls = array();
-	
-		// Call this with $r == null to prime the callback to add headers on a specific URL
-		if ( is_null( $r ) && !in_array( $url, $urls ) ) {
-			$urls[] = $url;
-		}
 
-		// Add X-Pingback-Forwarded-For header, but only for requests to a specific URL (the apparent pingback source)
-		if ( is_array( $r ) && is_array( $r['headers'] ) && !isset( $r['headers']['X-Pingback-Forwarded-For'] ) && in_array( $url, $urls ) ) {
-			$remote_ip = preg_replace( '/[^a-fx0-9:.,]/i', '', $_SERVER['REMOTE_ADDR'] );
-		
-			// Note: this assumes REMOTE_ADDR is correct, and it may not be if a reverse proxy or CDN is in use
-			$r['headers']['X-Pingback-Forwarded-For'] = $remote_ip;
-
-			// Also identify the request as a pingback verification in the UA string so it appears in logs
-			$r['user-agent'] .= '; verifying pingback from ' . $remote_ip;
-		}
-
-		return $r;
-	}
-	
 	/**
 	 * Ensure that we are loading expected scalar values from akismet_as_submitted commentmeta.
 	 *
