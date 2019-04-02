@@ -1338,6 +1338,17 @@ p {
 		if ( !empty( $args[1] ) ) {
 			$post_id = url_to_postid( $args[1] );
 
+			// If pingbacks aren't open on this post, we'll still check whether this request is part of a potential DDOS,
+			// but indicate to the server that pingbacks are indeed closed so we don't include this request in the user's stats,
+			// since the user has already done their part by disabling pingbacks.
+			$pingbacks_closed = false;
+			
+			$post = get_post( $post_id );
+			
+			if ( ! $post || ! pings_open( $post ) ) {
+				$pingbacks_closed = true;
+			}
+
 			// If this gets through the pre-check, make sure we properly identify the outbound request as a pingback verification
 			Akismet::pingback_forwarded_for( null, $args[0] );
 			add_filter( 'http_request_args', array( 'Akismet', 'pingback_forwarded_for' ), 10, 2 );
@@ -1351,6 +1362,7 @@ p {
 				'comment_type' => 'pingback',
 				'akismet_pre_check' => '1',
 				'comment_pingback_target' => $args[1],
+				'pingbacks_closed' => $pingbacks_closed ? '1' : '0',
 			);
 
 			$comment = Akismet::auto_check_comment( $comment );

@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, Activate it, then enter your [Akismet.co
 
 * Fixed a conflict between the Akismet setup banner and other plugin notices.
 * Reduced the number of API requests made by the plugin when attempting to verify the API key.
+* Include additional data in the pingback pre-check API request to help make the stats more accurate.
 
 = 4.1.1 =
 *Release Date - 31 January 2019*
