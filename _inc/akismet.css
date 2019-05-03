@@ -80,8 +80,10 @@ table.comments td.comment p a:after {
     display: inline-block !important;
 }
 .checkforspam-progress {
-	padding-left: 1ex;
 	display: none;
+}
+.checkforspam.checking .checkforspam-progress {
+	padding-left: 1ex;
 }
 .checkforspam.button-disabled .checkforspam-progress {
 	display: inline;
