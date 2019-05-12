@@ -1183,6 +1183,10 @@ class Akismet {
 	}
 
 	public static function load_form_js() {
+		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+			return;
+		}
+
 		wp_register_script( 'akismet-form', plugin_dir_url( __FILE__ ) . '_inc/form.js', array(), AKISMET_VERSION, true );
 		wp_enqueue_script( 'akismet-form' );
 	}

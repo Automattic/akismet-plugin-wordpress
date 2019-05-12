@@ -36,6 +36,7 @@ Upload the Akismet plugin to your blog, Activate it, then enter your [Akismet.co
 * Reduced the number of API requests made by the plugin when attempting to verify the API key.
 * Include additional data in the pingback pre-check API request to help make the stats more accurate.
 * Fixed a bug that was enabling the "Check for Spam" button when no comments were eligible to be checked.
+* Improved Akismet's AMP compatibility.
 
 = 4.1.1 =
 *Release Date - 31 January 2019*
