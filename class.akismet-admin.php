@@ -1120,7 +1120,11 @@ class Akismet_Admin {
 		if ( !class_exists('Jetpack') )
 			return false;
 
-		Jetpack::load_xml_rpc_client();
+		if ( defined( 'JETPACK__VERSION' ) && version_compare( JETPACK__VERSION, '7.7', '<' )  ) {
+			// For version of Jetpack prior to 7.7.
+			Jetpack::load_xml_rpc_client();
+		}
+
 		$xml = new Jetpack_IXR_ClientMulticall( array( 'user_id' => get_current_user_id() ) );
 
 		$xml->addCall( 'wpcom.getUserID' );
