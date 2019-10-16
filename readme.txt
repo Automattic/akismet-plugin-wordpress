@@ -20,11 +20,11 @@ Major features in Akismet include:
 * Moderators can see the number of approved comments for each user.
 * A discard feature that outright blocks the worst spam, saving you disk space and speeding up your site.
 
-PS: You'll need an [Akismet.com API key](https://akismet.com/get/) to use it.  Keys are free for personal blogs; paid subscriptions are available for businesses and commercial sites.
+PS: You'll be prompted to get an Akismet.com API key to use it, once activated. Keys are free for personal blogs; paid subscriptions are available for businesses and commercial sites.
 
 == Installation ==
 
-Upload the Akismet plugin to your blog, Activate it, then enter your [Akismet.com API key](https://akismet.com/get/).
+Upload the Akismet plugin to your blog, Activate it, then enter your Akismet.com API key.
 
 1, 2, 3: You're done!
 
