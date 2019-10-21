@@ -24,7 +24,7 @@ PS: You'll be prompted to get an Akismet.com API key to use it, once activated. 
 
 == Installation ==
 
-Upload the Akismet plugin to your blog, Activate it, then enter your Akismet.com API key.
+Upload the Akismet plugin to your blog, activate it, and then enter your Akismet.com API key.
 
 1, 2, 3: You're done!
 
