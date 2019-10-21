@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 * Prevented an attacker from being able to cause a user to unknowingly recheck their Pending comments for spam.
 * Improved compatibility with Jetpack 7.7+.
+* Updated the plugin activation page to use consistent language and markup.
 
 = 4.1.2 =
 *Release Date - 14 May 2019*

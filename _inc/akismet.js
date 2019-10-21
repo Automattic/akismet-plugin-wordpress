@@ -314,4 +314,36 @@ jQuery( function ( $ ) {
 			}
 		} );
 	} );
+	
+	/**
+	 * Shows the Enter API key form
+	 */
+	$( '.akismet-enter-api-key-box a' ).on( 'click', function() {
+		var div = $( '.enter-api-key' );
+		div.show( 1000 );
+		div.find( 'input[name=key]' ).focus();
+		return false;
+	} );	
+	
+	/**
+	 * Hides the Connect with Jetpack form | Shows the Activate Akismet Account form
+	 */
+	$( 'a.toggle-ak-connect' ).on( 'click', function() {
+		$( '.akismet-ak-connect' ).slideToggle('slow');
+		$( 'a.toggle-ak-connect' ).hide();
+		$( '.akismet-jp-connect' ).hide();
+		$( 'a.toggle-jp-connect' ).show();
+		return false;
+	} );
+	
+	/**
+	 * Shows the Connect with Jetpack form | Hides the Activate Akismet Account form
+	 */
+	$( 'a.toggle-jp-connect' ).on( 'click', function() {
+		$( '.akismet-jp-connect' ).slideToggle('slow');
+		$( 'a.toggle-jp-connect' ).hide();
+		$( '.akismet-ak-connect' ).hide();
+		$( 'a.toggle-ak-connect' ).show();
+		return false;
+	} );
 });
