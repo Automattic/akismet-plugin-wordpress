@@ -80,12 +80,12 @@ class Akismet_Admin {
 	}
 
 	public static function admin_init() {
-                if ( get_option( 'Activated_Akismet' ) ) {
-                        delete_option( 'Activated_Akismet' );
-                        if ( ! headers_sent() ) {
+		if ( get_option( 'Activated_Akismet' ) ) {
+			delete_option( 'Activated_Akismet' );
+			if ( ! headers_sent() ) {
 				wp_redirect( add_query_arg( array( 'page' => 'akismet-key-config', 'view' => 'start' ), class_exists( 'Jetpack' ) ? admin_url( 'admin.php' ) : admin_url( 'options-general.php' ) ) );
 			}
-                }
+		}
 
 		load_plugin_textdomain( 'akismet' );
 		add_meta_box( 'akismet-status', __('Comment History', 'akismet'), array( 'Akismet_Admin', 'comment_status_meta_box' ), 'comment', 'normal' );
