@@ -1,3 +1,9 @@
+<?php
+
+//phpcs:disable VariableAnalysis
+// There are "undefined" variables here because they're defined in the code that includes this file as a template.
+
+?>
 <div class="akismet-box">
 	<?php Akismet::view( 'title' ); ?>
 	<div class="akismet-jp-connect">
@@ -12,7 +18,9 @@
 			<input type="submit" class="akismet-button akismet-is-primary" value="<?php esc_attr_e( 'Connect with Jetpack' , 'akismet' ); ?>"/>
 		</form>
 		<?php echo get_avatar( $akismet_user->user_email, null, null, null, array( 'class' => 'akismet-jetpack-gravatar' ) ); ?>
-		<p><?php echo sprintf( esc_html( __( 'You are connected as %s.', 'akismet' ) ), '<b>' . esc_html( $akismet_user->user_login ) . '</b>' ); ?><br /><span class="akismet-jetpack-email"><?php echo esc_html( $akismet_user->user_email ); ?></span></p>	
+		<p><?php
+			/* translators: %s is the WordPress.com username */
+            echo sprintf( esc_html( __( 'You are connected as %s.', 'akismet' ) ), '<b>' . esc_html( $akismet_user->user_login ) . '</b>' ); ?><br /><span class="akismet-jetpack-email"><?php echo esc_html( $akismet_user->user_email ); ?></span></p>
 		<?php } elseif ( $akismet_user->status == 'cancelled' ) { ?>
 		<p><?php esc_html_e( 'Use your Jetpack connection to set up Akismet.', 'akismet' ); ?></p>
 		<form name="akismet_activate" id="akismet_activate" action="https://akismet.com/get/" method="post" class="akismet-right" target="_blank">
@@ -23,13 +31,17 @@
 			<input type="submit" class="akismet-button akismet-is-primary" value="<?php esc_attr_e( 'Connect with Jetpack' , 'akismet' ); ?>"/>
 		</form>
 		<?php echo get_avatar( $akismet_user->user_email, null, null, null, array( 'class' => 'akismet-jetpack-gravatar' ) ); ?>
-		<p><?php echo esc_html( sprintf( __( 'Your subscription for %s is cancelled.' , 'akismet' ), $akismet_user->user_email ) ); ?><br /><span class="akismet-jetpack-email"><?php echo esc_html( $akismet_user->user_email ); ?></span></p>
+		<p><?php
+			/* translators: %s is the WordPress.com email address */
+            echo esc_html( sprintf( __( 'Your subscription for %s is cancelled.' , 'akismet' ), $akismet_user->user_email ) ); ?><br /><span class="akismet-jetpack-email"><?php echo esc_html( $akismet_user->user_email ); ?></span></p>
 		<?php } elseif ( $akismet_user->status == 'suspended' ) { ?>
 		<div class="akismet-right">
 			<p><a href="https://akismet.com/contact" class="akismet-button akismet-is-primary"><?php esc_html_e( 'Contact Akismet support' , 'akismet' ); ?></a></p>
 		</div>		
 		<p>
-			<span class="akismet-alert-text"><?php echo esc_html( sprintf( __( 'Your subscription for %s is suspended.' , 'akismet' ), $akismet_user->user_email ) ); ?></span>
+			<span class="akismet-alert-text"><?php
+				/* translators: %s is the WordPress.com email address */
+                echo esc_html( sprintf( __( 'Your subscription for %s is suspended.' , 'akismet' ), $akismet_user->user_email ) ); ?></span>
 			<?php esc_html_e( 'No worries! Get in touch and we&#8217;ll sort this out.', 'akismet' ); ?>
 		</p>
 		<?php } else { // ask do they want to use akismet account found using jetpack wpcom connection ?>			
@@ -41,7 +53,9 @@
 			<input type="submit" class="akismet-button akismet-is-primary" value="<?php esc_attr_e( 'Connect with Jetpack' , 'akismet' ); ?>"/>
 		</form>
 		<?php echo get_avatar( $akismet_user->user_email, null, null, null, array( 'class' => 'akismet-jetpack-gravatar' ) ); ?>
-		<p><?php echo sprintf( esc_html( __( 'You are connected as %s.', 'akismet' ) ), '<b>' . esc_html( $akismet_user->user_login ) . '</b>' ); ?><br /><span class="akismet-jetpack-email"><?php echo esc_html( $akismet_user->user_email ); ?></span></p>
+		<p><?php
+			/* translators: %s is the WordPress.com username */
+            echo sprintf( esc_html( __( 'You are connected as %s.', 'akismet' ) ), '<b>' . esc_html( $akismet_user->user_login ) . '</b>' ); ?><br /><span class="akismet-jetpack-email"><?php echo esc_html( $akismet_user->user_email ); ?></span></p>
 		<?php }	?>
 	</div>
 	<div class="akismet-ak-connect">
