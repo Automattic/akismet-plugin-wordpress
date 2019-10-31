@@ -291,59 +291,64 @@ jQuery( function ( $ ) {
 	/**
 	 * Sets the comment form privacy notice display to hide when one clicks Core's dismiss button on the related admin notice.
 	 */
-	$( '#akismet-privacy-notice-admin-notice' ).on( 'click', '.notice-dismiss', function(){
-		$.ajax({
-                        url: './options-general.php?page=akismet-key-config&akismet_comment_form_privacy_notice=hide',
-		});
+	$( '#akismet-privacy-notice-admin-notice' ).on( 'click', '.notice-dismiss', function () {
+		$.ajax( {
+			url: './options-general.php?page=akismet-key-config&akismet_comment_form_privacy_notice=hide',
+		} );
 	});
 
-	$( ".akismet-could-be-primary" ).each( function () {
+	$( '.akismet-could-be-primary' ).each( function () {
 		var form = $( this ).closest( 'form' );
 
 		form.data( 'initial-state', form.serialize() );
 
 		form.on( 'change keyup', function () {
 			var self = $( this );
-			var submit_button = self.find( ".akismet-could-be-primary" );
+			var submit_button = self.find( '.akismet-could-be-primary' );
 
 			if ( self.serialize() != self.data( 'initial-state' ) ) {
-				submit_button.addClass( "akismet-is-primary" );
+				submit_button.addClass( 'akismet-is-primary' );
 			}
 			else {
-				submit_button.removeClass( "akismet-is-primary" );
+				submit_button.removeClass( 'akismet-is-primary' );
 			}
 		} );
 	} );
-	
+
 	/**
 	 * Shows the Enter API key form
 	 */
-	$( '.akismet-enter-api-key-box a' ).on( 'click', function() {
+	$( '.akismet-enter-api-key-box a' ).on( 'click', function ( e ) {
+		e.preventDefault();
+
 		var div = $( '.enter-api-key' );
-		div.show( 1000 );
+		div.show( 500 );
 		div.find( 'input[name=key]' ).focus();
-		return false;
-	} );	
-	
+
+		$( this ).hide();
+	} );
+
 	/**
 	 * Hides the Connect with Jetpack form | Shows the Activate Akismet Account form
 	 */
-	$( 'a.toggle-ak-connect' ).on( 'click', function() {
+	$( 'a.toggle-ak-connect' ).on( 'click', function ( e ) {
+		e.preventDefault();
+
 		$( '.akismet-ak-connect' ).slideToggle('slow');
 		$( 'a.toggle-ak-connect' ).hide();
 		$( '.akismet-jp-connect' ).hide();
 		$( 'a.toggle-jp-connect' ).show();
-		return false;
 	} );
-	
+
 	/**
 	 * Shows the Connect with Jetpack form | Hides the Activate Akismet Account form
 	 */
-	$( 'a.toggle-jp-connect' ).on( 'click', function() {
+	$( 'a.toggle-jp-connect' ).on( 'click', function ( e ) {
+		e.preventDefault();
+
 		$( '.akismet-jp-connect' ).slideToggle('slow');
 		$( 'a.toggle-jp-connect' ).hide();
 		$( '.akismet-ak-connect' ).hide();
 		$( 'a.toggle-ak-connect' ).show();
-		return false;
 	} );
 });
