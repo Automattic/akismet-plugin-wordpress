@@ -31,7 +31,8 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 == Changelog ==
 
 = 4.1.4 =
-* Made it that we only redirect the user to the Akismet setup screen upon plugin activation if the plugin was activated manually from within the plugin related screens, to help users with non-standard install workflows (such as wpcli).
+* Only redirect to the Akismet setup screen upon plugin activation if the plugin was activated manually from within the plugin-related screens, to help users with non-standard install workflows, like WP-CLI.
+* Update the layout of the initial setup screen to be more readable on small screens.
 
 = 4.1.3 =
 *Release Date - 31 October 2019*
