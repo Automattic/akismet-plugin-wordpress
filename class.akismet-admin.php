@@ -574,9 +574,9 @@ class Akismet_Admin {
 	public static function comment_status_meta_box( $comment ) {
 		$history = Akismet::get_comment_history( $comment->comment_ID );
 
-		if ( $history ) {
-			echo '<div class="akismet-history" style="margin: 13px;">';
+		echo '<div class="akismet-history" style="margin: 13px;">';
 
+		if ( $history ) {
 			foreach ( $history as $row ) {
 				$time = date( 'D d M Y @ h:i:m a', $row['time'] ) . ' GMT';
 				
@@ -665,8 +665,13 @@ class Akismet_Admin {
 				echo '</div>';
 			}
 
+		} else {
+			echo '<div style="margin-bottom: 10px;">';
+			_e( 'No comment history.', 'akismet' );
 			echo '</div>';
 		}
+
+		echo '</div>';
 	}
 
 	public static function plugin_action_links( $links, $file ) {
