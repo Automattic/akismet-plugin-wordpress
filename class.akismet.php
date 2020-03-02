@@ -137,6 +137,11 @@ class Akismet {
 	}
 
 	public static function auto_check_comment( $commentdata ) {
+		// If no key is configured, then there's no point in doing any of this.
+		if ( ! self::get_api_key() ) {
+			return $commentdata;
+		}
+
 		self::$last_comment_result = null;
 
 		$comment = $commentdata;
