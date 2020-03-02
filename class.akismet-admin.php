@@ -398,8 +398,23 @@ class Akismet_Admin {
 		
 		echo '</div>';
 		echo '<div class="alignleft actions">';
+
+		$classes = array(
+			'button-secondary',
+			'checkforspam',
+		);
+
+		if ( ! Akismet::get_api_key() ) {
+			$link = admin_url( 'options-general.php?page=akismet-key-config' );
+
+			$classes[] = 'checkforspam-pending-config';
+		}
+
+		if ( $comments_count->moderated == 0 ) {
+			$classes[] = 'button-disabled';
+		}
 		echo '<a
-				class="button-secondary checkforspam' . ( $comments_count->moderated == 0 ? ' button-disabled' : '' ) . '"
+				class="' . esc_attr( implode( ' ', $classes ) ) . '"
 				href="' . esc_url( $link ) . '"
 				data-active-label="' . esc_attr( __( 'Checking for Spam', 'akismet' ) ) . '"
 				data-progress-label-format="' . esc_attr( __( '(%1$s%)', 'akismet' ) ) . '"
@@ -1061,12 +1076,13 @@ class Akismet_Admin {
 		elseif ( $hook_suffix == 'edit-comments.php' && wp_next_scheduled( 'akismet_schedule_cron_recheck' ) ) {
 			self::display_spam_check_warning();
 		}
-		else if ( isset( $_GET['akismet_recheck_complete'] ) ) {
+		
+		if ( isset( $_GET['akismet_recheck_complete'] ) ) {
 			$recheck_count = (int) $_GET['recheck_count'];
 			$spam_count = (int) $_GET['spam_count'];
 			
 			if ( $recheck_count === 0 ) {
-				$message = __( 'There were no comments to check. Akismet will only check comments in the Pending queue.', 'akismet' );
+				$message = __( 'There were no comments to check. Akismet will only check comments awaiting moderation.', 'akismet' );
 			}
 			else {
 				$message = sprintf( _n( 'Akismet checked %s comment.', 'Akismet checked %s comments.', $recheck_count, 'akismet' ), number_format( $recheck_count ) );

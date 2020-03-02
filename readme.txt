@@ -34,7 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Only redirect to the Akismet setup screen upon plugin activation if the plugin was activated manually from within the plugin-related screens, to help users with non-standard install workflows, like WP-CLI.
 * Update the layout of the initial setup screen to be more readable on small screens.
 * Handle getting no comment history more gracefully.
-* If no API key has been entered, don't make requests that require an API key.
+* If no API key has been entered, don't run code that expects an API key.
 
 = 4.1.3 =
 *Release Date - 31 October 2019*
