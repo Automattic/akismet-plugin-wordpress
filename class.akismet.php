@@ -477,6 +477,40 @@ class Akismet {
 		if ( empty( $history ) || empty( $history[ 0 ] ) ) {
 			return false;
 		}
+		
+		/*
+		// To see all variants when testing.
+		$history[] = array( 'time' => 445856401, 'message' => 'Old versions of Akismet stored the message as a literal string in the commentmeta.', 'event' => null );
+		$history[] = array( 'time' => 445856402, 'event' => 'recheck-spam' );
+		$history[] = array( 'time' => 445856403, 'event' => 'check-spam' );
+		$history[] = array( 'time' => 445856404, 'event' => 'recheck-ham' );
+		$history[] = array( 'time' => 445856405, 'event' => 'check-ham' );
+		$history[] = array( 'time' => 445856406, 'event' => 'wp-blacklisted' );
+		$history[] = array( 'time' => 445856407, 'event' => 'report-spam' );
+		$history[] = array( 'time' => 445856408, 'event' => 'report-spam', 'user' => 'sam' );
+		$history[] = array( 'message' => 'sam reported this comment as spam (hardcoded message).', 'time' => 445856400, 'event' => 'report-spam', 'user' => 'sam' );
+		$history[] = array( 'time' => 445856409, 'event' => 'report-ham', 'user' => 'sam' );
+		$history[] = array( 'message' => 'sam reported this comment as ham (hardcoded message).', 'time' => 445856400, 'event' => 'report-ham', 'user' => 'sam' ); //
+		$history[] = array( 'time' => 445856410, 'event' => 'cron-retry-spam' );
+		$history[] = array( 'time' => 445856411, 'event' => 'cron-retry-ham' );
+		$history[] = array( 'time' => 445856412, 'event' => 'check-error' ); //
+		$history[] = array( 'time' => 445856413, 'event' => 'check-error', 'meta' => array( 'response' => 'The server was taking a nap.' ) );
+		$history[] = array( 'time' => 445856414, 'event' => 'recheck-error' ); // Should not generate a message.
+		$history[] = array( 'time' => 445856415, 'event' => 'recheck-error', 'meta' => array( 'response' => 'The server was taking a nap.' ) );
+		$history[] = array( 'time' => 445856416, 'event' => 'status-changedtrash' );
+		$history[] = array( 'time' => 445856417, 'event' => 'status-changedspam' );
+		$history[] = array( 'time' => 445856418, 'event' => 'status-changedhold' );
+		$history[] = array( 'time' => 445856419, 'event' => 'status-changedapprove' );
+		$history[] = array( 'time' => 445856420, 'event' => 'status-changed-trash' );
+		$history[] = array( 'time' => 445856421, 'event' => 'status-changed-spam' );
+		$history[] = array( 'time' => 445856422, 'event' => 'status-changed-hold' );
+		$history[] = array( 'time' => 445856423, 'event' => 'status-changed-approve' );
+		$history[] = array( 'time' => 445856424, 'event' => 'status-trash', 'user' => 'sam' );
+		$history[] = array( 'time' => 445856425, 'event' => 'status-spam', 'user' => 'sam' );
+		$history[] = array( 'time' => 445856426, 'event' => 'status-hold', 'user' => 'sam' );
+		$history[] = array( 'time' => 445856427, 'event' => 'status-approve', 'user' => 'sam' );
+		*/
+		
 		usort( $history, array( 'Akismet', '_cmp_time' ) );
 		return $history;
 	}

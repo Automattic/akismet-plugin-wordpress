@@ -589,8 +589,6 @@ class Akismet_Admin {
 	public static function comment_status_meta_box( $comment ) {
 		$history = Akismet::get_comment_history( $comment->comment_ID );
 
-		echo '<div class="akismet-history" style="margin: 13px;">';
-
 		if ( $history ) {
 			foreach ( $history as $row ) {
 				$time = date( 'D d M Y @ h:i:m a', $row['time'] ) . ' GMT';
@@ -603,56 +601,62 @@ class Akismet_Admin {
 					// 1) Save space.
 					// 2) The message can be translated into the current language of the blog, not stuck 
 					//    in the language of the blog when the comment was made.
-					$message = $row['message'];
+					$message = esc_html( $row['message'] );
 				}
 				
 				// If possible, use a current translation.
 				switch ( $row['event'] ) {
 					case 'recheck-spam';
-						$message = __( 'Akismet re-checked and caught this comment as spam.', 'akismet' );
+						$message = esc_html( __( 'Akismet re-checked and caught this comment as spam.', 'akismet' ) );
 					break;
 					case 'check-spam':
-						$message = __( 'Akismet caught this comment as spam.', 'akismet' );
+						$message = esc_html( __( 'Akismet caught this comment as spam.', 'akismet' ) );
 					break;
 					case 'recheck-ham':
-						$message = __( 'Akismet re-checked and cleared this comment.', 'akismet' );
+						$message = esc_html( __( 'Akismet re-checked and cleared this comment.', 'akismet' ) );
 					break;
 					case 'check-ham':
-						$message = __( 'Akismet cleared this comment.', 'akismet' );
+						$message = esc_html( __( 'Akismet cleared this comment.', 'akismet' ) );
 					break;
 					case 'wp-blacklisted':
-						$message = __( 'Comment was caught by wp_blacklist_check.', 'akismet' );
+						$message = sprintf( esc_html( __( 'Comment was caught by %s.', 'akismet' ) ), '<code>wp_blacklist_check</code>' );
 					break;
 					case 'report-spam':
 						if ( isset( $row['user'] ) ) {
-							$message = sprintf( __( '%s reported this comment as spam.', 'akismet' ), $row['user'] );
+							$message = esc_html( sprintf( __( '%s reported this comment as spam.', 'akismet' ), $row['user'] ) );
 						}
 						else if ( ! $message ) {
-							$message = __( 'This comment was reported as spam.', 'akismet' );
+							$message = esc_html( __( 'This comment was reported as spam.', 'akismet' ) );
 						}
 					break;
 					case 'report-ham':
 						if ( isset( $row['user'] ) ) {
-							$message = sprintf( __( '%s reported this comment as not spam.', 'akismet' ), $row['user'] );
+							$message = esc_html( sprintf( __( '%s reported this comment as not spam.', 'akismet' ), $row['user'] ) );
 						}
 						else if ( ! $message ) {
-							$message = __( 'This comment was reported as not spam.', 'akismet' );
+							$message = esc_html( __( 'This comment was reported as not spam.', 'akismet' ) );
 						}
 					break;
 					case 'cron-retry-spam':
-						$message = __( 'Akismet caught this comment as spam during an automatic retry.' , 'akismet');
+						$message = esc_html( __( 'Akismet caught this comment as spam during an automatic retry.' , 'akismet') );
 					break;
 					case 'cron-retry-ham':
-						$message = __( 'Akismet cleared this comment during an automatic retry.', 'akismet');
+						$message = esc_html( __( 'Akismet cleared this comment during an automatic retry.', 'akismet') );
 					break;
 					case 'check-error':
 						if ( isset( $row['meta'], $row['meta']['response'] ) ) {
-							$message = sprintf( __( 'Akismet was unable to check this comment (response: %s) but will automatically retry later.', 'akismet'), $row['meta']['response'] );
+							$message = sprintf( esc_html( __( 'Akismet was unable to check this comment (response: %s) but will automatically retry later.', 'akismet') ), '<code>' . esc_html( $row['meta']['response'] ) . '</code>' );
+						}
+						else {
+							$message = esc_html( __( 'Akismet was unable to check this comment but will automatically retry later.', 'akismet' ) );
 						}
 					break;
 					case 'recheck-error':
 						if ( isset( $row['meta'], $row['meta']['response'] ) ) {
-							$message = sprintf( __( 'Akismet was unable to recheck this comment (response: %s).', 'akismet'), $row['meta']['response'] );
+							$message = sprintf( esc_html( __( 'Akismet was unable to recheck this comment (response: %s).', 'akismet') ), '<code>' . esc_html( $row['meta']['response'] ) . '</code>' );
+						}
+						else {
+							$message = esc_html( __( 'Akismet was unable to recheck this comment.', 'akismet' ) );
 						}
 					break;
 					default:
@@ -660,33 +664,33 @@ class Akismet_Admin {
 							// Half of these used to be saved without the dash after 'status-changed'.
 							// See https://plugins.trac.wordpress.org/changeset/1150658/akismet/trunk
 							$new_status = preg_replace( '/^status-changed-?/', '', $row['event'] );
-							$message = sprintf( __( 'Comment status was changed to %s', 'akismet' ), $new_status );
+							$message = sprintf( esc_html( __( 'Comment status was changed to %s', 'akismet' ) ), '<code>' . esc_html( $new_status ) . '</code>' );
 						}
 						else if ( preg_match( '/^status-/', $row['event'] ) ) {
 							$new_status = preg_replace( '/^status-/', '', $row['event'] );
 
 							if ( isset( $row['user'] ) ) {
-								$message = sprintf( __( '%1$s changed the comment status to %2$s.', 'akismet' ), $row['user'], $new_status );
+								$message = sprintf( esc_html( __( '%1$s changed the comment status to %2$s.', 'akismet' ) ), $row['user'], '<code>' . esc_html( $new_status ) . '</code>' );
 							}
 						}
 					break;
 					
 				}
 
-				echo '<div style="margin-bottom: 13px;">';
+				if ( ! empty( $message ) ) {
+					echo '<p>';
 					echo '<span style="color: #999;" alt="' . $time . '" title="' . $time . '">' . sprintf( esc_html__('%s ago', 'akismet'), human_time_diff( $row['time'] ) ) . '</span>';
 					echo ' - ';
-					echo esc_html( $message );
-				echo '</div>';
+					echo $message; // esc_html() is done above so that we can use HTML in some messages.
+					echo '</p>';
+				}
 			}
-
-		} else {
-			echo '<div style="margin-bottom: 10px;">';
-			_e( 'No comment history.', 'akismet' );
-			echo '</div>';
 		}
-
-		echo '</div>';
+		else {
+			echo '<p>';
+			echo esc_html( __( 'No comment history.', 'akismet' ) );
+			echo '</p>';
+		}
 	}
 
 	public static function plugin_action_links( $links, $file ) {
