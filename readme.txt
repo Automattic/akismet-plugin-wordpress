@@ -35,6 +35,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Update the layout of the initial setup screen to be more readable on small screens.
 * Handle getting no comment history more gracefully.
 * If no API key has been entered, don't run code that expects an API key.
+* Improve the readability of the comment history entries.
 
 = 4.1.3 =
 *Release Date - 31 October 2019*

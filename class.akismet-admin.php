@@ -591,7 +591,7 @@ class Akismet_Admin {
 
 		if ( $history ) {
 			foreach ( $history as $row ) {
-				$time = date( 'D d M Y @ h:i:m a', $row['time'] ) . ' GMT';
+				$time = date( 'D d M Y @ h:i:s a', $row['time'] ) . ' GMT';
 				
 				$message = '';
 				
