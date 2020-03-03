@@ -922,6 +922,11 @@ class Akismet {
 		 * has not been set and that Akismet should just choose the default behavior for that
 		 * situation.
 		 */
+		
+		if ( ! self::get_api_key() ) {
+			return;
+		}
+		
 		$akismet_comment_nonce_option = apply_filters( 'akismet_comment_nonce', get_option( 'akismet_comment_nonce' ) );
 
 		if ( $akismet_comment_nonce_option == 'true' || $akismet_comment_nonce_option == '' ) {
@@ -1246,6 +1251,10 @@ class Akismet {
 
 	public static function load_form_js() {
 		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+			return;
+		}
+
+		if ( ! self::get_api_key() ) {
 			return;
 		}
 
