@@ -548,6 +548,10 @@ class Akismet {
 	public static function check_db_comment( $id, $recheck_reason = 'recheck_queue' ) {
 		global $wpdb;
 
+		if ( ! self::get_api_key() ) {
+			return new WP_Error( 'akismet-not-configured', __( 'Akismet is not configured. Please enter an API key.', 'akismet' ) );
+		}
+
 		$c = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $id ), ARRAY_A );
 		
 		if ( ! $c ) {
