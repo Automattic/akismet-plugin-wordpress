@@ -685,11 +685,6 @@ class Akismet {
 	public static function submit_spam_comment( $comment_id ) {
 		global $wpdb, $current_user, $current_site;
 
-		// If the user hasn't configured Akismet, ignore it when they mark something as spam.
-		if ( ! self::get_api_key() ) {
-			return;
-		}
-
 		$comment_id = (int) $comment_id;
 
 		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ) );
@@ -699,6 +694,13 @@ class Akismet {
 
 		if ( 'spam' != $comment->comment_approved )
 			return;
+
+		self::update_comment_history( $comment_id, '', 'report-spam' );
+
+		// If the user hasn't configured Akismet, there's nothing else to do at this point.
+		if ( ! self::get_api_key() ) {
+			return;
+		}
 
 		// use the original version stored in comment_meta if available
 		$as_submitted = self::sanitize_comment_as_submitted( get_comment_meta( $comment_id, 'akismet_as_submitted', true ) );
@@ -732,9 +734,10 @@ class Akismet {
 		}
 
 		$response = Akismet::http_post( Akismet::build_query( $comment ), 'submit-spam' );
+
+		update_comment_meta( $comment_id, 'akismet_user_result', 'true' );
+
 		if ( $comment->reporter ) {
-			self::update_comment_history( $comment_id, '', 'report-spam' );
-			update_comment_meta( $comment_id, 'akismet_user_result', 'true' );
 			update_comment_meta( $comment_id, 'akismet_user', $comment->reporter );
 		}
 
@@ -744,16 +747,18 @@ class Akismet {
 	public static function submit_nonspam_comment( $comment_id ) {
 		global $wpdb, $current_user, $current_site;
 
-		// If the user hasn't configured Akismet, ignore it when they mark something as ham.
-		if ( ! self::get_api_key() ) {
-			return;
-		}
-
 		$comment_id = (int) $comment_id;
 
 		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ) );
 		if ( !$comment ) // it was deleted
 			return;
+
+		self::update_comment_history( $comment_id, '', 'report-ham' );
+
+		// If the user hasn't configured Akismet, there's nothing else to do at this point.
+		if ( ! self::get_api_key() ) {
+			return;
+		}
 
 		// use the original version stored in comment_meta if available
 		$as_submitted = self::sanitize_comment_as_submitted( get_comment_meta( $comment_id, 'akismet_as_submitted', true ) );
@@ -787,9 +792,10 @@ class Akismet {
 		}
 
 		$response = self::http_post( Akismet::build_query( $comment ), 'submit-ham' );
+
+		update_comment_meta( $comment_id, 'akismet_user_result', 'false' );
+
 		if ( $comment->reporter ) {
-			self::update_comment_history( $comment_id, '', 'report-ham' );
-			update_comment_meta( $comment_id, 'akismet_user_result', 'false' );
 			update_comment_meta( $comment_id, 'akismet_user', $comment->reporter );
 		}
 
