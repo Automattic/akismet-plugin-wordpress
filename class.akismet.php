@@ -685,6 +685,11 @@ class Akismet {
 	public static function submit_spam_comment( $comment_id ) {
 		global $wpdb, $current_user, $current_site;
 
+		// If the user hasn't configured Akismet, ignore it when they mark something as spam.
+		if ( ! self::get_api_key() ) {
+			return;
+		}
+
 		$comment_id = (int) $comment_id;
 
 		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ) );
@@ -738,6 +743,11 @@ class Akismet {
 
 	public static function submit_nonspam_comment( $comment_id ) {
 		global $wpdb, $current_user, $current_site;
+
+		// If the user hasn't configured Akismet, ignore it when they mark something as ham.
+		if ( ! self::get_api_key() ) {
+			return;
+		}
 
 		$comment_id = (int) $comment_id;
 
