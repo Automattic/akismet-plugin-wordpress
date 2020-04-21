@@ -77,4 +77,4 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Hooked into the new "Personal Data Eraser" functionality from WordPress 4.9.6.
 * Added functionality to clear outdated alerts from Akismet.com.
 
-For older changelog entries, please see the additional changelog.txt file delivered with the plugin.
+For older changelog entries, please see the [additional changelog.txt file](https://plugins.svn.wordpress.org/akismet/trunk/changelog.txt) delivered with the plugin.
