@@ -3,7 +3,7 @@ Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eo
 Tags: akismet, comments, spam, antispam, anti-spam, anti spam, comment moderation, comment spam, contact form spam, spam comments
 Requires at least: 4.6
 Tested up to: 5.4
-Stable tag: 4.1.4
+Stable tag: 4.1.5
 License: GPLv2 or later
 
 Akismet checks your comments and contact form submissions against our global database of spam to protect you and your site from malicious content.
@@ -31,7 +31,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 == Changelog ==
 
 = 4.1.5 =
-*Release Date - TBD*
+*Release Date - 29 April 2020*
 
 * Based on user feedback, we have dropped the in-admin notice explaining the availability of the "privacy notice" option in the AKismet settings screen. The option itself is available, but after displaying the notice for the last 2 years, it is now considered a known fact.
 * Updated the "Requires at least" to WP 4.6, based on recommendations from https://wp-info.org/tools/checkplugini18n.php?slug=akismet
