@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Disable "Check for Spam" button until the page is loaded to avoid errors with clicking through to queue recheck endpoint directly.
+* Add filter "akismet_enable_mshots" to allow disabling screenshot popups on the edit comments admin page.
 
 = 4.1.5 =
 *Release Date - 29 April 2020*

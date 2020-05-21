@@ -137,7 +137,7 @@ class Akismet_Admin {
 
 			wp_register_script( 'akismet.js', plugin_dir_url( __FILE__ ) . '_inc/akismet.js', array('jquery'), AKISMET_VERSION );
 			wp_enqueue_script( 'akismet.js' );
-			
+		
 			$inline_js = array(
 				'comment_author_url_nonce' => wp_create_nonce( 'comment_author_url_nonce' ),
 				'strings' => array(
@@ -151,6 +151,10 @@ class Akismet_Admin {
 
 			if ( isset( $_GET['akismet_recheck'] ) && wp_verify_nonce( $_GET['akismet_recheck'], 'akismet_recheck' ) ) {
 				$inline_js['start_recheck'] = true;
+			}
+
+			if ( apply_filters( 'akismet_enable_mshots', true ) ) {
+				$inline_js['enable_mshots'] = true;
 			}
 
 			wp_localize_script( 'akismet.js', 'WPAkismet', $inline_js );
