@@ -146,8 +146,8 @@ jQuery( function ( $ ) {
 		} );
 	} );
 
-	$( '.checkforspam' ).click( function( e ) {
-		if ( $( this ).hasClass( 'checkforspam-pending-config' ) ) {
+	$( '.checkforspam.enable-on-load' ).click( function( e ) {
+		if ( $( this ).hasClass( 'ajax-disabled' ) ) {
 			// Akismet hasn't been configured yet. Allow the user to proceed to the button's link.
 			return;
 		}
@@ -167,6 +167,7 @@ jQuery( function ( $ ) {
 
 		akismet_check_for_spam(0, 100);
 	});
+	$( '.checkforspam.enable-on-load' ).removeClass( 'button-disabled' );
 
 	var spam_count = 0;
 	var recheck_count = 0;
