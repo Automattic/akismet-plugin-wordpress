@@ -411,20 +411,16 @@ class Akismet_Admin {
 
 		echo '<a
 				class="' . esc_attr( implode( ' ', $classes ) ) . '"
-				href="' . esc_url( $link ) . '"
-				data-active-label="' . esc_attr( __( 'Checking for Spam', 'akismet' ) ) . '"
-				data-progress-label-format="' . esc_attr( __( '(%1$s%)', 'akismet' ) ) . '"
+				href="' . esc_url( $link ) . '"' .
+				/* translators: The placeholder is for showing how much of the process has completed, as a percent. e.g., "Checking for Spam (40%)" */
+				' data-progress-label="' . esc_attr( __( 'Checking for Spam (%1$s%)', 'akismet' ) ) . '"
 				data-success-url="' . esc_attr( remove_query_arg( array( 'akismet_recheck', 'akismet_recheck_error' ), add_query_arg( array( 'akismet_recheck_complete' => 1, 'recheck_count' => urlencode( '__recheck_count__' ), 'spam_count' => urlencode( '__spam_count__' ) ) ) ) ) . '"
 				data-failure-url="' . esc_attr( remove_query_arg( array( 'akismet_recheck', 'akismet_recheck_complete' ), add_query_arg( array( 'akismet_recheck_error' => 1 ) ) ) ) . '"
 				data-pending-comment-count="' . esc_attr( $comments_count->moderated ) . '"
 				data-nonce="' . esc_attr( wp_create_nonce( 'akismet_check_for_spam' ) ) . '"
 				' . ( ! in_array( 'ajax-disabled', $classes ) ? 'onclick="return false;"' : '' ) . '
-				>';
-			echo '<span class="akismet-label">' . esc_html__('Check for Spam', 'akismet') . '</span>';
-			echo '<span class="checkforspam-progress"></span>';
-		echo '</a>';
+				>' . esc_html__('Check for Spam', 'akismet') . '</a>';
 		echo '<span class="checkforspam-spinner"></span>';
-
 	}
 
 	public static function recheck_queue() {

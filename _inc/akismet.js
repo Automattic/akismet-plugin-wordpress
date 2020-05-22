@@ -164,9 +164,6 @@ jQuery( function ( $ ) {
 		$('.checkforspam').addClass('button-disabled').addClass( 'checking' );
 		$('.checkforspam-spinner').addClass( 'spinner' ).addClass( 'is-active' );
 
-		// Update the label on the "Check for Spam" button to use the active "Checking for Spam" language.
-		$( '.checkforspam .akismet-label' ).text( $( '.checkforspam' ).data( 'active-label' ) );
-
 		akismet_check_for_spam(0, 100);
 	});
 	$( '.checkforspam.enable-on-load' ).removeClass( 'button-disabled' );
@@ -184,7 +181,7 @@ jQuery( function ( $ ) {
 		var percentage_complete = Math.round( ( recheck_count / check_for_spam_buttons.data( 'pending-comment-count' ) ) * 1000 ) / 10;
 		
 		// Update the progress counter on the "Check for Spam" button.
-		$( '.checkforspam-progress' ).text( check_for_spam_buttons.data( 'progress-label-format' ).replace( '%1$s', percentage_complete ) );
+		$( '.checkforspam' ).text( check_for_spam_buttons.data( 'progress-label' ).replace( '%1$s', percentage_complete ) );
 
 		$.post(
 			ajaxurl,
