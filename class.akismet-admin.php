@@ -74,7 +74,7 @@ class Akismet_Admin {
 		if ( get_option( 'Activated_Akismet' ) ) {
 			delete_option( 'Activated_Akismet' );
 			if ( ! headers_sent() ) {
-				wp_redirect( add_query_arg( array( 'page' => 'akismet-key-config', 'view' => 'start' ), class_exists( 'Jetpack' ) ? admin_url( 'admin.php' ) : admin_url( 'options-general.php' ) ) );
+				wp_redirect( add_query_arg( array( 'page' => 'akismet-key-config', 'view' => 'start' ), admin_url( 'admin.php' ) ) );
 			}
 		}
 
@@ -404,7 +404,7 @@ class Akismet_Admin {
 			$classes[] = 'enable-on-load';
 
 			if ( ! Akismet::get_api_key() ) {
-				$link = admin_url( 'options-general.php?page=akismet-key-config' );
+				$link = admin_url( 'admin.php?page=akismet-key-config' );
 				$classes[] = 'ajax-disabled';
 			}
 		}
@@ -815,7 +815,7 @@ class Akismet_Admin {
 		elseif ( $page == 'delete_key' )
 			$args = array( 'page' => 'akismet-key-config', 'view' => 'start', 'action' => 'delete-key', '_wpnonce' => wp_create_nonce( self::NONCE ) );
 
-		$url = add_query_arg( $args, class_exists( 'Jetpack' ) ? admin_url( 'admin.php' ) : admin_url( 'options-general.php' ) );
+		$url = add_query_arg( $args, admin_url( 'admin.php' ) );
 
 		return $url;
 	}
