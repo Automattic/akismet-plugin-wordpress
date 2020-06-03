@@ -410,8 +410,8 @@ class Akismet_Admin {
 		}
 
 		echo '<a
-				class="' . esc_attr( implode( ' ', $classes ) ) . '"
-				href="' . esc_url( $link ) . '"' .
+				class="' . esc_attr( implode( ' ', $classes ) ) . '"' .
+				( ! empty( $link ) ? ' href="' . esc_url( $link ) . '"' : '' ) .
 				/* translators: The placeholder is for showing how much of the process has completed, as a percent. e.g., "Checking for Spam (40%)" */
 				' data-progress-label="' . esc_attr( __( 'Checking for Spam (%1$s%)', 'akismet' ) ) . '"
 				data-success-url="' . esc_attr( remove_query_arg( array( 'akismet_recheck', 'akismet_recheck_error' ), add_query_arg( array( 'akismet_recheck_complete' => 1, 'recheck_count' => urlencode( '__recheck_count__' ), 'spam_count' => urlencode( '__spam_count__' ) ) ) ) ) . '"
