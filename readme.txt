@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.1.7 =
+*Release Date - TBD*
+
+* Show the "Set up your Akismet account" banner on the comments admin screen, where it's relevant to mention if Akismet hasn't been configured.
+
 = 4.1.6 =
 *Release Date - 4 June 2020*
 
