@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Show the "Set up your Akismet account" banner on the comments admin screen, where it's relevant to mention if Akismet hasn't been configured.
+* Don't use wp_blacklist_check when the new wp_check_comment_disallowed_list function is available.
 
 = 4.1.6 =
 *Release Date - 4 June 2020*

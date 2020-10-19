@@ -612,7 +612,11 @@ class Akismet_Admin {
 						$message = esc_html( __( 'Akismet cleared this comment.', 'akismet' ) );
 					break;
 					case 'wp-blacklisted':
-						$message = sprintf( esc_html( __( 'Comment was caught by %s.', 'akismet' ) ), '<code>wp_blacklist_check</code>' );
+					case 'wp-disallowed':
+						$message = sprintf(
+							esc_html( __( 'Comment was caught by %s.', 'akismet' ) ),
+							function_exists( 'wp_check_comment_disallowed_list' ) ? '<code>wp_check_comment_disallowed_list</code>' : '<code>wp_blacklist_check</code>'
+						);
 					break;
 					case 'report-spam':
 						if ( isset( $row['user'] ) ) {

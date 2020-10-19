@@ -321,10 +321,20 @@ class Akismet {
 						// Status could be spam or trash, depending on the WP version and whether this change applies:
 						// https://core.trac.wordpress.org/changeset/34726
 						if ( $comment->comment_approved == 'spam' || $comment->comment_approved == 'trash' ) {
-							if ( wp_blacklist_check($comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent) )
+							if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
+								if ( wp_check_comment_disallowed_list( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent ) ) {
+									self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
+								}
+								else {
+									self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
+								}
+							}
+							else if ( function_exists( 'wp_blacklist_check' ) && wp_blacklist_check( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent ) ) {
 								self::update_comment_history( $comment->comment_ID, '', 'wp-blacklisted' );
-							else
-								self::update_comment_history( $comment->comment_ID, '', 'status-changed-'.$comment->comment_approved );
+							}
+							else {
+								self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
+							}
 						}
 					} // abnormal result: error
 					else {
@@ -486,6 +496,7 @@ class Akismet {
 		$history[] = array( 'time' => 445856404, 'event' => 'recheck-ham' );
 		$history[] = array( 'time' => 445856405, 'event' => 'check-ham' );
 		$history[] = array( 'time' => 445856406, 'event' => 'wp-blacklisted' );
+		$history[] = array( 'time' => 445856406, 'event' => 'wp-disallowed' );
 		$history[] = array( 'time' => 445856407, 'event' => 'report-spam' );
 		$history[] = array( 'time' => 445856408, 'event' => 'report-spam', 'user' => 'sam' );
 		$history[] = array( 'message' => 'sam reported this comment as spam (hardcoded message).', 'time' => 445856400, 'event' => 'report-spam', 'user' => 'sam' );
