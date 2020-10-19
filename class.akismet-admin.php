@@ -614,6 +614,7 @@ class Akismet_Admin {
 					case 'wp-blacklisted':
 					case 'wp-disallowed':
 						$message = sprintf(
+							/* translators: The placeholder is a WordPress PHP function name. */
 							esc_html( __( 'Comment was caught by %s.', 'akismet' ) ),
 							function_exists( 'wp_check_comment_disallowed_list' ) ? '<code>wp_check_comment_disallowed_list</code>' : '<code>wp_blacklist_check</code>'
 						);
