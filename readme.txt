@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.1.8 =
+*Release Date - TBD*
+
+* Fixed missing fields in submit-spam and submit-ham calls that could lead to reduced accuracy.
+
 = 4.1.7 =
 *Release Date - 22 October 2020*
 
