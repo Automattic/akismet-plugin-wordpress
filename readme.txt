@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.1.9 =
+*Release Date - TBD*
+
+* Improved handling of pingbacks in XML-RPC multicalls
+
 = 4.1.8 =
 *Release Date - 6 January 2021*
 
