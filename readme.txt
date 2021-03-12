@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.1.10 =
+*Release Date - TBD*
+
+* Simplified the code around checking comments in REST API and XML-RPC requests.
+
 = 4.1.9 =
 *Release Date - 2 March 2021*
 
