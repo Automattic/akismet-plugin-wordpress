@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Simplified the code around checking comments in REST API and XML-RPC requests.
+* Updated Plus plan terminology in notices to match current subscription names.
 
 = 4.1.9 =
 *Release Date - 2 March 2021*
