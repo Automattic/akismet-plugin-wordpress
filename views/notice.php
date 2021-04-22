@@ -113,7 +113,8 @@
 </div>
 <?php elseif ( $type == 'existing-key-invalid' ) :?>
 <div class="akismet-alert akismet-critical">
-	<h3 class="akismet-key-status"><?php esc_html_e( 'Your API key is no longer valid. Please enter a new key or contact support@akismet.com.' , 'akismet'); ?></h3>
+	<h3 class="akismet-key-status"><?php echo esc_html( __( 'Your API key is no longer valid.' , 'akismet' ) ); ?></h3>
+	<p class="akismet-description"><?php printf( __( 'Please enter a new key or <a href="%s" target="_blank">contact Akismet support</a>.' , 'akismet' ), 'https://akismet.com/contact/' ); ?></p>
 </div>
 <?php elseif ( $type == 'new-key-failed' ) :?>
 <div class="akismet-alert akismet-critical">
