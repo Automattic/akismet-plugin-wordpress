@@ -1287,7 +1287,7 @@ class Akismet {
 	}
 	
 	/**
-	 * Mark form.js as async. Because nothing depends on it, it can run at any time
+	 * Mark form.js as deferred. Because nothing depends on it, it can run at any time
 	 * after it's loaded, and the browser won't have to wait for it to load to continue
 	 * parsing the rest of the page.
 	 */
@@ -1296,7 +1296,7 @@ class Akismet {
 			return $tag;
 		}
 		
-		return preg_replace( '/^<script /i', '<script async="async" ', $tag );
+		return preg_replace( '/^<script /i', '<script defer ', $tag );
 	}
 	
 	public static function inject_ak_js( $post_id ) {
