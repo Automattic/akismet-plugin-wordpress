@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.1.11 =
+*Release Date - TBD*
+
+* Added support for Akismet API usage notifications on Akismet settings and edit-comments admin pages.
+
 = 4.1.10 =
 *Release Date - 6 July 2021*
 

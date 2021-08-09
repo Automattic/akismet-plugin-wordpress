@@ -5,6 +5,12 @@ class Akismet {
 	const API_PORT = 80;
 	const MAX_DELAY_BEFORE_MODERATION_EMAIL = 86400; // One day in seconds
 
+	const LIMIT_NOTICE_FIRST_MONTH_OVER_LIMIT        = 10501;
+	const LIMIT_NOTICE_SECOND_MONTH_OVER_LIMIT       = 10502;
+	const LIMIT_NOTICE_THIRD_MONTH_APPROACHING_LIMIT = 10504;
+	const LIMIT_NOTICE_THIRD_MONTH_OVER_LIMIT        = 10508;
+	const LIMIT_NOTICE_FOUR_PLUS_MONTHS_OVER_LIMIT   = 10516;
+
 	private static $last_comment = '';
 	private static $initiated = false;
 	private static $prevent_moderation_email_for_these_comments = array();
@@ -1254,21 +1260,31 @@ class Akismet {
 
 	// given a response from an API call like check_key_status(), update the alert code options if an alert is present.
 	public static function update_alert( $response ) {
-		$code = $msg = null;
-		if ( isset( $response[0]['x-akismet-alert-code'] ) ) {
-			$code = $response[0]['x-akismet-alert-code'];
-			$msg  = $response[0]['x-akismet-alert-msg'];
-		}
+		$alert_option_prefix = 'akismet_alert_';
+		$alert_header_prefix = 'x-akismet-alert-';
+		$alert_header_names  = array(
+			'code',
+			'msg',
+			'api-calls',
+			'usage-limit',
+			'upgrade-plan',
+			'upgrade-url',
+		);
 
-		// only call update_option() if the value has changed
-		if ( $code != get_option( 'akismet_alert_code' ) ) {
-			if ( ! $code ) {
-				delete_option( 'akismet_alert_code' );
-				delete_option( 'akismet_alert_msg' );
+		foreach( $alert_header_names as $alert_header_name ) {
+			$value = null;
+			if ( isset( $response[0][$alert_header_prefix . $alert_header_name] ) ) {
+				$value = $response[0][$alert_header_prefix . $alert_header_name];
 			}
-			else {
-				update_option( 'akismet_alert_code', $code );
-				update_option( 'akismet_alert_msg', $msg );
+
+			$option_name = $alert_option_prefix . str_replace( '-', '_', $alert_header_name );
+			if ( $value != get_option( $option_name ) ) {
+				if ( ! $value ) {
+					delete_option( $option_name );
+				}
+				else {
+					update_option( $option_name, $value );
+				}
 			}
 		}
 	}
