@@ -34,7 +34,8 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Added support for Akismet API usage notifications on Akismet settings and edit-comments admin pages.
-
+* Added support for the deleted_comment action when bulk-deleting comments from Spam
+ 
 = 4.1.10 =
 *Release Date - 6 July 2021*
 

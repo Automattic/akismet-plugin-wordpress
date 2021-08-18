@@ -414,6 +414,10 @@ class Akismet {
 
 			clean_comment_cache( $comment_ids );
 			do_action( 'akismet_delete_comment_batch', count( $comment_ids ) );
+			
+			foreach ( $comment_ids as $comment_id ) {
+				do_action( 'deleted_comment', comment_id );
+			}
 		}
 
 		if ( apply_filters( 'akismet_optimize_table', ( mt_rand(1, 5000) == 11), $wpdb->comments ) ) // lucky number
