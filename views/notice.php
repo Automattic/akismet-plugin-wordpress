@@ -150,10 +150,10 @@
 		switch ( $code ) {
 			case Akismet::LIMIT_NOTICE_FIRST_MONTH_OVER_LIMIT:
 			case Akismet::LIMIT_NOTICE_SECOND_MONTH_OVER_LIMIT:
-				esc_html_e( 'Your Akismet account usage is over the plan limit', 'akismet' );
+				esc_html_e( 'Your Akismet account usage is over your plan\'s limit', 'akismet' );
 				break;
 			case Akismet::LIMIT_NOTICE_THIRD_MONTH_APPROACHING_LIMIT:
-				esc_html_e( 'Your Akismet account usage is approaching the plan limit', 'akismet' );
+				esc_html_e( 'Your Akismet account usage is approaching your plan\'s limit', 'akismet' );
 				break;
 			case Akismet::LIMIT_NOTICE_THIRD_MONTH_OVER_LIMIT:
 			case Akismet::LIMIT_NOTICE_FOUR_PLUS_MONTHS_OVER_LIMIT:
@@ -168,7 +168,7 @@
 		switch ( $code ) {
 			case Akismet::LIMIT_NOTICE_FIRST_MONTH_OVER_LIMIT:
 				printf(
-					__( 'Since %s, your account made %s API calls, compared to your plan limit of %s. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
+					__( 'Since %s, your account made %s API calls, compared to your plan\'s limit of %s. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
 					esc_html( gmdate( 'F' ) . ' 1' ),
 					number_format( $api_calls ),
 					number_format( $usage_limit ),
@@ -176,14 +176,14 @@
 				);
 				break;
 			case Akismet::LIMIT_NOTICE_SECOND_MONTH_OVER_LIMIT:
-				esc_html_e( 'Your Akismet usage has been over the plan limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan.', 'akismet' );
+				esc_html_e( 'Your Akismet usage has been over your plan\'s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan.', 'akismet' );
 				break;
 			case Akismet::LIMIT_NOTICE_THIRD_MONTH_APPROACHING_LIMIT:
-				esc_html_e( 'Your Akismet usage is nearing the plan limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' );
+				esc_html_e( 'Your Akismet usage is nearing your plan\'s limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' );
 				break;
 			case Akismet::LIMIT_NOTICE_THIRD_MONTH_OVER_LIMIT:
 			case Akismet::LIMIT_NOTICE_FOUR_PLUS_MONTHS_OVER_LIMIT:
-				esc_html_e( 'Your Akismet usage has been over the plan limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' );
+				esc_html_e( 'Your Akismet usage has been over your plan\'s limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' );
 				break;
 			default:
 		}
