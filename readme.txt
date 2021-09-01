@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.1.12 =
+*Release Date - TBD*
+
+* Fixed "Use of undefined constant" notice.
+
 = 4.1.11 =
 *Release Date - 23 August 2021*
 
