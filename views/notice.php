@@ -176,14 +176,23 @@
 				);
 				break;
 			case 'SECOND_MONTH_OVER_LIMIT':
-				esc_html_e( 'Your Akismet usage has been over your plan\'s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan.', 'akismet' );
+				printf(
+					__( 'Your Akismet usage has been over your plan\'s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
+					'https://docs.akismet.com/akismet-api-usage-limits/'
+				);
 				break;
 			case 'THIRD_MONTH_APPROACHING_LIMIT':
-				esc_html_e( 'Your Akismet usage is nearing your plan\'s limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' );
+				printf(
+					__( 'Your Akismet usage is nearing your plan\'s limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
+					'https://docs.akismet.com/akismet-api-usage-limits/'
+				);
 				break;
 			case 'THIRD_MONTH_OVER_LIMIT':
 			case 'FOUR_PLUS_MONTHS_OVER_LIMIT':
-				esc_html_e( 'Your Akismet usage has been over your plan\'s limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' );
+				printf(
+					__( 'Your Akismet usage has been over your plan\'s limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
+					'https://docs.akismet.com/akismet-api-usage-limits/'
+				);
 				break;
 			default:
 		}

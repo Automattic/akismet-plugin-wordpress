@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.1.13 =
+*Release Date - TBD*
+
+* Added links to additional information on API usage notifications.
+
 = 4.1.12 =
 *Release Date - 3 September 2021*
 
