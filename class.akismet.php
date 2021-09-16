@@ -42,10 +42,7 @@ class Akismet {
 
 		add_action( 'comment_form',  array( 'Akismet',  'add_comment_nonce' ), 1 );
 
-		add_action( 'admin_head-edit-comments.php', array( 'Akismet', 'load_form_js' ) );
-		add_action( 'comment_form', array( 'Akismet', 'load_form_js' ) );
 		add_action( 'comment_form', array( 'Akismet', 'inject_ak_js' ) );
-		add_filter( 'script_loader_tag', array( 'Akismet', 'set_form_js_async' ), 10, 3 );
 
 		add_filter( 'comment_moderation_recipients', array( 'Akismet', 'disable_moderation_emails_if_unreachable' ), 1000, 2 );
 		add_filter( 'pre_comment_approved', array( 'Akismet', 'last_comment_status' ), 10, 2 );
@@ -1295,35 +1292,14 @@ class Akismet {
 		}
 	}
 
-	public static function load_form_js() {
-		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
-			return;
-		}
-
-		if ( ! self::get_api_key() ) {
-			return;
-		}
-
-		wp_register_script( 'akismet-form', plugin_dir_url( __FILE__ ) . '_inc/form.js', array(), AKISMET_VERSION, true );
-		wp_enqueue_script( 'akismet-form' );
-	}
+	public static function load_form_js() { /* deprecated */ }
 	
-	/**
-	 * Mark form.js as deferred. Because nothing depends on it, it can run at any time
-	 * after it's loaded, and the browser won't have to wait for it to load to continue
-	 * parsing the rest of the page.
-	 */
-	public static function set_form_js_async( $tag, $handle, $src ) {
-		if ( 'akismet-form' !== $handle ) {
-			return $tag;
-		}
-		
-		return preg_replace( '/^<script /i', '<script defer ', $tag );
-	}
+	public static function set_form_js_async( $tag, $handle, $src ) { return $tag; /* deprecated */ }
 	
 	public static function inject_ak_js( $post_id ) {
 		echo '<input type="hidden" id="ak_js" name="ak_js" value="' . mt_rand( 0, 250 ) . '"/>';
 		echo '<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100" style="display: none !important;"></textarea>';
+		echo '<script>document.getElementById( "ak_js" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
 	}
 
 	private static function bail_on_activation( $message, $deactivate = true ) {
