@@ -1129,10 +1129,12 @@ class Akismet {
 		if ( ! empty( self::$prevent_moderation_email_for_these_comments ) && ! empty( $emails ) ) {
 			$comment = get_comment( $comment_id );
 
-			foreach ( self::$prevent_moderation_email_for_these_comments as $possible_match ) {
-				if ( self::comments_match( $possible_match, $comment ) ) {
-					update_comment_meta( $comment_id, 'akismet_delayed_moderation_email', true );
-					return array();
+			if ( $comment ) {
+				foreach ( self::$prevent_moderation_email_for_these_comments as $possible_match ) {
+					if ( self::comments_match( $possible_match, $comment ) ) {
+						update_comment_meta( $comment_id, 'akismet_delayed_moderation_email', true );
+						return array();
+					}
 				}
 			}
 		}
