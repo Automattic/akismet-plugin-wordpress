@@ -41,8 +41,7 @@ class Akismet {
 		add_action( 'akismet_schedule_cron_recheck', array( 'Akismet', 'cron_recheck' ) );
 
 		add_action( 'comment_form',  array( 'Akismet',  'add_comment_nonce' ), 1 );
-
-		add_action( 'comment_form', array( 'Akismet', 'inject_ak_js' ) );
+		add_action( 'comment_form', array( 'Akismet', 'output_custom_form_fields' ) );
 
 		add_filter( 'comment_moderation_recipients', array( 'Akismet', 'disable_moderation_emails_if_unreachable' ), 1000, 2 );
 		add_filter( 'pre_comment_approved', array( 'Akismet', 'last_comment_status' ), 10, 2 );
@@ -54,6 +53,17 @@ class Akismet {
 		
 		// Jetpack compatibility
 		add_filter( 'jetpack_options_whitelist', array( 'Akismet', 'add_to_jetpack_options_whitelist' ) );
+		add_filter( 'jetpack_contact_form_html', array( 'Akismet', 'inject_custom_form_fields' ) );
+		add_filter( 'jetpack_contact_form_akismet_values', array( 'Akismet', 'prepare_custom_form_values' ) );
+		
+		// Gravity Forms
+		add_filter( 'gform_get_form_filter', array( 'Akismet', 'inject_custom_form_fields' ) );
+		add_filter( 'gform_akismet_fields', array( 'Akismet', 'prepare_custom_form_values' ) );
+
+		// Contact Form 7
+		add_filter( 'wpcf7_form_elements', array( 'Akismet', 'append_custom_form_fields' ) );
+		add_filter( 'wpcf7_akismet_parameters', array( 'Akismet', 'prepare_custom_form_values' ) );
+
 		add_action( 'update_option_wordpress_api_key', array( 'Akismet', 'updated_option' ), 10, 2 );
 		add_action( 'add_option_wordpress_api_key', array( 'Akismet', 'added_option' ), 10, 2 );
 
@@ -1298,10 +1308,60 @@ class Akismet {
 	
 	public static function set_form_js_async( $tag, $handle, $src ) { return $tag; /* deprecated */ }
 	
-	public static function inject_ak_js( $post_id ) {
-		echo '<input type="hidden" id="ak_js" name="ak_js" value="' . mt_rand( 0, 250 ) . '"/>';
-		echo '<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100" style="display: none !important;"></textarea>';
-		echo '<script>document.getElementById( "ak_js" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
+	public static function get_akismet_form_fields() {
+		$fields = '';
+		
+		$prefix = 'ak_';
+		
+		// Contact Form 7 uses _wpcf7 as a prefix to know which fields to exclude from comment_content.
+		if ( 'wpcf7_form_elements' === current_filter() ) {
+			$prefix = '_wpcf7_ak_';
+		}
+		
+		$fields .= '<input type="hidden" id="ak_js" name="' . $prefix . 'js" value="' . mt_rand( 0, 250 ) . '"/>';
+		$fields .= '<textarea name="' . $prefix . 'hp_textarea" cols="45" rows="8" maxlength="100" style="display: none !important;"></textarea>';
+		$fields .= '<script>document.getElementById( "ak_js" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
+		
+		return $fields;
+	}
+	
+	public static function output_custom_form_fields( $post_id ) {
+		echo Akismet::get_akismet_form_fields();
+	}
+	
+	public static function inject_custom_form_fields( $html ) {
+		$html = str_replace( '</form>', Akismet::get_akismet_form_fields() . '</form>', $html );
+
+		return $html;
+	}
+
+	public static function append_custom_form_fields( $html ) {
+		$html .= Akismet::get_akismet_form_fields();
+
+		return $html;
+	}
+
+	/**
+	 * Ensure that any Akismet-added form fields are included in the comment-check call.
+	 *
+	 * @param array $form
+	 * @return array $form
+	 */
+	public static function prepare_custom_form_values( $form ) {
+		$prefix = 'ak_';
+
+		// Contact Form 7 uses _wpcf7 as a prefix to know which fields to exclude from comment_content.
+		if ( 'wpcf7_akismet_parameters' === current_filter() ) {
+			$prefix = '_wpcf7_ak_';
+		}
+
+		foreach ( $_POST as $key => $val ) {
+			if ( 0 === strpos( $key, $prefix ) ) {
+				$form[ 'POST_ak_' . substr( $key, strlen( $prefix ) ) ] = $val;
+			}
+		}
+
+		return $form;
 	}
 
 	private static function bail_on_activation( $message, $deactivate = true ) {
