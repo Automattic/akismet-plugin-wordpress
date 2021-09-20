@@ -1038,7 +1038,7 @@ class Akismet_Admin {
 		}
 
 		$alert_code = get_option( 'akismet_alert_code' );
-		if ( isset( Akismet::$LIMIT_NOTICES[ $alert_code ] ) ) {
+		if ( isset( Akismet::$limit_notices[ $alert_code ] ) ) {
 			$notices[] = self::get_usage_limit_alert_data();
 		}
 
@@ -1080,7 +1080,7 @@ class Akismet_Admin {
 			Akismet::verify_key( Akismet::get_api_key() ); //verify that the key is still in alert state
 
 			$alert_code = get_option( 'akismet_alert_code' );
-			if ( isset( Akismet::$LIMIT_NOTICES[ $alert_code ] ) ) {
+			if ( isset( Akismet::$limit_notices[ $alert_code ] ) ) {
 				self::display_usage_limit_alert();
 			} elseif ( $alert_code > 0 ) {
 				self::display_alert();

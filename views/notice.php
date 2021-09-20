@@ -167,7 +167,7 @@
 	</p>
 	<?php endif; ?>
 </div>
-<?php elseif ( $type == 'usage-limit' && isset( Akismet::$LIMIT_NOTICES[ $code ] ) ) : ?>
+<?php elseif ( $type == 'usage-limit' && isset( Akismet::$limit_notices[ $code ] ) ) : ?>
 <div class="error akismet-usage-limit-alert">
 	<div class="akismet-usage-limit-logo">
 		<img src="<?php echo esc_url( plugins_url( '../_inc/img/logo-a-2x.png', __FILE__ ) ); ?>" alt="Akismet" />
@@ -175,7 +175,7 @@
 	<div class="akismet-usage-limit-text">
 		<h3>
 		<?php
-		switch ( Akismet::$LIMIT_NOTICES[ $code ] ) {
+		switch ( Akismet::$limit_notices[ $code ] ) {
 			case 'FIRST_MONTH_OVER_LIMIT':
 			case 'SECOND_MONTH_OVER_LIMIT':
 				esc_html_e( 'Your Akismet account usage is over your plan&#8217;s limit', 'akismet' );
@@ -193,7 +193,7 @@
 		</h3>
 		<p>
 		<?php
-		switch ( Akismet::$LIMIT_NOTICES[ $code ] ) {
+		switch ( Akismet::$limit_notices[ $code ] ) {
 			case 'FIRST_MONTH_OVER_LIMIT':
 				printf(
 					/* translators: The first placeholder is a date, the second is a (formatted) number, the third is another formatted number, and the fourth is a URL. */

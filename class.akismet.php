@@ -5,7 +5,7 @@ class Akismet {
 	const API_PORT = 80;
 	const MAX_DELAY_BEFORE_MODERATION_EMAIL = 86400; // One day in seconds
 
-	public static $LIMIT_NOTICES = array(
+	public static $limit_notices = array(
 		10501 => 'FIRST_MONTH_OVER_LIMIT',
 		10502 => 'SECOND_MONTH_OVER_LIMIT',
 		10504 => 'THIRD_MONTH_APPROACHING_LIMIT',
