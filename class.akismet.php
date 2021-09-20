@@ -1330,17 +1330,17 @@ class Akismet {
 	}
 
 	public static function output_custom_form_fields( $post_id ) {
-		echo Akismet::get_akismet_form_fields();
+		echo self::get_akismet_form_fields();
 	}
 
 	public static function inject_custom_form_fields( $html ) {
-		$html = str_replace( '</form>', Akismet::get_akismet_form_fields() . '</form>', $html );
+		$html = str_replace( '</form>', self::get_akismet_form_fields() . '</form>', $html );
 
 		return $html;
 	}
 
 	public static function append_custom_form_fields( $html ) {
-		$html .= Akismet::get_akismet_form_fields();
+		$html .= self::get_akismet_form_fields();
 
 		return $html;
 	}
