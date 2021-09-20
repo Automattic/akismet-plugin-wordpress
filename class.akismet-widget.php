@@ -101,7 +101,7 @@ class Akismet_Widget extends WP_Widget {
 	<div class="a-stats">
 		<a href="https://akismet.com" target="_blank" rel="noopener" title="">
 			<?php
-			
+
 			printf(
 				/* translators: The placeholder is the number of pieces of spam blocked by Akismet. */
 				_n(
@@ -112,7 +112,7 @@ class Akismet_Widget extends WP_Widget {
 				),
 				number_format_i18n( $count )
 			);
-			
+
 			?>
 		</a>
 	</div>

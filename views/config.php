@@ -53,7 +53,7 @@
 			</div>
 		<?php endif;?>
 
-		<?php if ( $akismet_user ):?>
+		<?php if ( $akismet_user ) : ?>
 			<div class="akismet-card">
 				<div class="akismet-section-header">
 					<div class="akismet-section-header__label">
