@@ -102,15 +102,22 @@ class Akismet_Widget extends WP_Widget {
 		<a href="https://akismet.com" target="_blank" rel="noopener" title="">
 			<?php
 
-			printf(
-				/* translators: The placeholder is the number of pieces of spam blocked by Akismet. */
-				_n(
-					'<strong class="count">%1$s spam</strong> blocked by <strong>Akismet</strong>',
-					'<strong class="count">%1$s spam</strong> blocked by <strong>Akismet</strong>',
-					$count,
-					'akismet'
+			echo wp_kses(
+				sprintf(
+					/* translators: The placeholder is the number of pieces of spam blocked by Akismet. */
+					_n(
+						'<strong class="count">%1$s spam</strong> blocked by <strong>Akismet</strong>',
+						'<strong class="count">%1$s spam</strong> blocked by <strong>Akismet</strong>',
+						$count,
+						'akismet'
+					),
+					number_format_i18n( $count )
 				),
-				number_format_i18n( $count )
+				array(
+					'strong' => array(
+						'class' => true,
+					),
+				)
 			);
 
 			?>

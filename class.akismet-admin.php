@@ -897,6 +897,7 @@ class Akismet_Admin {
 			'usage_limit'  => get_option( 'akismet_alert_usage_limit' ),
 			'upgrade_plan' => get_option( 'akismet_alert_upgrade_plan' ),
 			'upgrade_url'  => get_option( 'akismet_alert_upgrade_url' ),
+			'upgrade_type' => get_option( 'akismet_alert_upgrade_type' ),
 		);
 	}
 

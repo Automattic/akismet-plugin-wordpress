@@ -36,6 +36,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Added links to additional information on API usage notifications.
 * Reduced the number of network requests required for a comment page when running Akismet.
 * Improved compatibility with the most popular contact form plugins.
+* Improved API usage buttons for clarity on what upgrade is needed.
 
 = 4.1.12 =
 *Release Date - 3 September 2021*

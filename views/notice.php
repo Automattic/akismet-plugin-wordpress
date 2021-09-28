@@ -117,10 +117,18 @@
 	<p class="akismet-description">
 		<?php
 
-		printf(
-			/* translators: The placeholder is a URL. */
-			__( 'Please enter a new key or <a href="%s" target="_blank">contact Akismet support</a>.', 'akismet' ),
-			'https://akismet.com/contact/'
+		echo wp_kses(
+			sprintf(
+				/* translators: The placeholder is a URL. */
+				__( 'Please enter a new key or <a href="%s" target="_blank">contact Akismet support</a>.', 'akismet' ),
+				'https://akismet.com/contact/'
+			),
+			array(
+				'a' => array(
+					'href' => true,
+					'target' => true,
+				),
+			)
 		);
 
 		?>
@@ -132,10 +140,18 @@
 	<p class="akismet-description">
 		<?php
 
-		printf(
-			/* translators: The placeholder is a URL. */
-			__( 'The connection to akismet.com could not be established. Please refer to <a href="%s" target="_blank">our guide about firewalls</a> and check your server configuration.', 'akismet' ),
-			'https://blog.akismet.com/akismet-hosting-faq/'
+		echo wp_kses(
+			sprintf(
+				/* translators: The placeholder is a URL. */
+				__( 'The connection to akismet.com could not be established. Please refer to <a href="%s" target="_blank">our guide about firewalls</a> and check your server configuration.', 'akismet' ),
+				'https://blog.akismet.com/akismet-hosting-faq/'
+			),
+			array(
+				'a' => array(
+					'href' => true,
+					'target' => true,
+				),
+			)
 		);
 
 		?>
@@ -148,10 +164,18 @@
 	<p class="akismet-description">
 		<?php
 
-		printf(
-			/* translators: The placeholder is a URL. */
-			__( 'Your Plus subscription allows the use of Akismet on only one site. Please <a href="%s" target="_blank">purchase additional Plus subscriptions</a> or upgrade to an Enterprise subscription that allows the use of Akismet on unlimited sites.', 'akismet' ),
-			'https://docs.akismet.com/billing/add-more-sites/'
+		echo wp_kses(
+			sprintf(
+				/* translators: The placeholder is a URL. */
+				__( 'Your Plus subscription allows the use of Akismet on only one site. Please <a href="%s" target="_blank">purchase additional Plus subscriptions</a> or upgrade to an Enterprise subscription that allows the use of Akismet on unlimited sites.', 'akismet' ),
+				'https://docs.akismet.com/billing/add-more-sites/'
+			),
+			array(
+				'a' => array(
+					'href' => true,
+					'target' => true,
+				),
+			)
 		);
 
 		?>
@@ -195,36 +219,45 @@
 		<?php
 		switch ( Akismet::$limit_notices[ $code ] ) {
 			case 'FIRST_MONTH_OVER_LIMIT':
-				printf(
-					/* translators: The first placeholder is a date, the second is a (formatted) number, the third is another formatted number, and the fourth is a URL. */
-					__( 'Since %1$s, your account made %2$s API calls, compared to your plan&#8217;s limit of %3$s. <a href="%4$s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
-					esc_html( gmdate( 'F' ) . ' 1' ),
-					number_format( $api_calls ),
-					number_format( $usage_limit ),
-					'https://docs.akismet.com/akismet-api-usage-limits/'
+				echo esc_html(
+					sprintf(
+						/* translators: The first placeholder is a date, the second is a (formatted) number, the third is another formatted number. */
+						__( 'Since %1$s, your account made %2$s API calls, compared to your plan&#8217;s limit of %3$s.', 'akismet' ),
+						esc_html( gmdate( 'F' ) . ' 1' ),
+						number_format( $api_calls ),
+						number_format( $usage_limit )
+					)
 				);
+
+				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
+				echo '</a>';
+
 				break;
 			case 'SECOND_MONTH_OVER_LIMIT':
-				printf(
-					/* translators: The placeholder is a URL. */
-					__( 'Your Akismet usage has been over your plan&#8217;s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
-					'https://docs.akismet.com/akismet-api-usage-limits/'
-				);
+				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan.', 'akismet' ) );
+
+				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
+				echo '</a>';
+
 				break;
 			case 'THIRD_MONTH_APPROACHING_LIMIT':
-				printf(
-					/* translators: The placeholder is a URL. */
-					__( 'Your Akismet usage is nearing your plan&#8217;s limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
-					'https://docs.akismet.com/akismet-api-usage-limits/'
-				);
+				echo esc_html( __( 'Your Akismet usage is nearing your plan&#8217;s limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' ) );
+
+				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
+				echo '</a>';
+
 				break;
 			case 'THIRD_MONTH_OVER_LIMIT':
 			case 'FOUR_PLUS_MONTHS_OVER_LIMIT':
-				printf(
-					/* translators: The placeholder is a URL. */
-					__( 'Your Akismet usage has been over your plan&#8217;s limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam. <a href="%s" target="_blank">Learn more</a> about usage limits.', 'akismet' ),
-					'https://docs.akismet.com/akismet-api-usage-limits/'
-				);
+				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' ) );
+
+				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
+				echo '</a>';
+
 				break;
 			default:
 		}
@@ -232,16 +265,22 @@
 		</p>
 	</div>
 	<div class="akismet-usage-limit-cta">
-		<?php
-
-		printf(
-			/* translators: The first placeholder is a URL, the second is the name of a subscription level, like "Plus" or "Enterprise" . */
-			__( '<a href="%1$s" class="button" target="_blank">Upgrade to %2$s</a>', 'akismet' ),
-			esc_attr( $upgrade_url ),
-			esc_html( $upgrade_plan )
-		);
-
-		?>
+		<a href="<?php echo esc_attr( $upgrade_url ); ?>" class="button" target="_blank">
+			<?php
+			// If only a qty upgrade is required, show a more generic message.
+			if ( ! empty( $upgrade_type ) && 'qty' === $upgrade_type ) {
+				esc_html_e( 'Upgrade your Subscription Level', 'akismet' );
+			} else {
+				echo esc_html(
+					sprintf(
+						/* translators: The placeholder is the name of a subscription level, like "Plus" or "Enterprise" . */
+						__( 'Upgrade to %s', 'akismet' ),
+						$upgrade_plan
+					)
+				);
+			}
+			?>
+		</a>
 	</div>
 </div>
 <?php endif; ?>

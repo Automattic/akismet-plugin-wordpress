@@ -1284,6 +1284,7 @@ class Akismet {
 			'usage-limit',
 			'upgrade-plan',
 			'upgrade-url',
+			'upgrade-type',
 		);
 
 		foreach ( $alert_header_names as $alert_header_name ) {
@@ -1330,6 +1331,7 @@ class Akismet {
 	}
 
 	public static function output_custom_form_fields( $post_id ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput
 		echo self::get_akismet_form_fields();
 	}
 
@@ -1359,6 +1361,7 @@ class Akismet {
 			$prefix = '_wpcf7_ak_';
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $key => $val ) {
 			if ( 0 === strpos( $key, $prefix ) ) {
 				$form[ 'POST_ak_' . substr( $key, strlen( $prefix ) ) ] = $val;
