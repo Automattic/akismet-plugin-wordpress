@@ -1,7 +1,7 @@
 === Akismet Spam Protection ===
 Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eoigal, cfinke, automattic, jgs, procifer, stephdau
 Tags: comments, spam, antispam, anti-spam, contact form, anti spam, comment moderation, comment spam, contact form spam, spam comments
-Requires at least: 4.6
+Requires at least: 5.0
 Tested up to: 5.8
 Stable tag: 4.1.12
 License: GPLv2 or later
