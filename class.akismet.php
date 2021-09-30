@@ -1323,9 +1323,11 @@ class Akismet {
 			$prefix = '_wpcf7_ak_';
 		}
 
+		$fields .= '<p style="display: none !important;">';
 		$fields .= '<input type="hidden" id="ak_js" name="' . $prefix . 'js" value="' . mt_rand( 0, 250 ) . '"/>';
-		$fields .= '<textarea name="' . $prefix . 'hp_textarea" cols="45" rows="8" maxlength="100" style="display: none !important;"></textarea>';
+		$fields .= '<label>&#916;<textarea name="' . $prefix . 'hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label>';
 		$fields .= '<script>document.getElementById( "ak_js" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
+		$fields .= '</p>';
 
 		return $fields;
 	}
