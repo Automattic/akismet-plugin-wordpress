@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.2.1 =
+*Release Date - TBD*
+
+* Fixed a bug causing AMP validation to fail on certain pages with forms.
+
 = 4.2 =
 *Release Date - 30 September 2021*
 
