@@ -64,6 +64,10 @@ class Akismet {
 		add_filter( 'wpcf7_form_elements', array( 'Akismet', 'append_custom_form_fields' ) );
 		add_filter( 'wpcf7_akismet_parameters', array( 'Akismet', 'prepare_custom_form_values' ) );
 
+		// Formidable Forms
+		add_filter( 'frm_filter_final_form', array( 'Akismet', 'inject_custom_form_fields' ) );
+		add_filter( 'frm_akismet_values', array( 'Akismet', 'prepare_custom_form_values' ) );
+
 		add_action( 'update_option_wordpress_api_key', array( 'Akismet', 'updated_option' ), 10, 2 );
 		add_action( 'add_option_wordpress_api_key', array( 'Akismet', 'added_option' ), 10, 2 );
 

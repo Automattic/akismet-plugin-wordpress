@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.2.2 =
+*Release Date - TBD*
+
+* Improved compatibility with Formidable Forms
+
 = 4.2.1 =
 *Release Date - 1 October 2021*
 
