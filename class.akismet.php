@@ -1331,8 +1331,14 @@ class Akismet {
 		$fields .= '<label>&#916;<textarea name="' . $prefix . 'hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label>';
 
 		if ( ! function_exists( 'amp_is_request' ) || ! amp_is_request() ) {
-			$fields .= '<input type="hidden" id="ak_js" name="' . $prefix . 'js" value="' . mt_rand( 0, 250 ) . '"/>';
-			$fields .= '<script>document.getElementById( "ak_js" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
+			// Keep track of how many ak_js fields are in this page so that we don't re-use
+			// the same ID.
+			static $field_count = 0;
+
+			$field_count++;
+
+			$fields .= '<input type="hidden" id="ak_js_' . $field_count . '" name="' . $prefix . 'js" value="' . mt_rand( 0, 250 ) . '"/>';
+			$fields .= '<script>document.getElementById( "ak_js_' . $field_count . '" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
 		}
 
 		$fields .= '</p>';

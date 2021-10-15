@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Improved compatibility with Formidable Forms
+* Fixed a bug that could cause issues when multiple contact forms appear on one page.
 
 = 4.2.1 =
 *Release Date - 1 October 2021*
