@@ -414,8 +414,12 @@ class Akismet {
 
 			$wpdb->queries = array();
 
+			$comments = array();
+
 			foreach ( $comment_ids as $comment_id ) {
-				do_action( 'delete_comment', $comment_id );
+				$comments[ $comment_id ] = get_comment( $comment_id );
+
+				do_action( 'delete_comment', $comment_id, $comments[ $comment_id ] );
 				do_action( 'akismet_batch_delete_count', __FUNCTION__ );
 			}
 
@@ -425,12 +429,13 @@ class Akismet {
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->comments} WHERE comment_id IN ( " . $format_string . " )", $comment_ids ) );
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->commentmeta} WHERE comment_id IN ( " . $format_string . " )", $comment_ids ) );
 
+			foreach ( $comment_ids as $comment_id ) {
+				do_action( 'deleted_comment', $comment_id, $comments[ $comment_id ] );
+				unset( $comments[ $comment_id ] );
+			}
+
 			clean_comment_cache( $comment_ids );
 			do_action( 'akismet_delete_comment_batch', count( $comment_ids ) );
-
-			foreach ( $comment_ids as $comment_id ) {
-				do_action( 'deleted_comment', $comment_id );
-			}
 		}
 
 		if ( apply_filters( 'akismet_optimize_table', ( mt_rand(1, 5000) == 11), $wpdb->comments ) ) // lucky number
