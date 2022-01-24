@@ -513,11 +513,38 @@ class Akismet {
 	public static function get_user_comments_approved( $user_id, $comment_author_email, $comment_author, $comment_author_url ) {
 		global $wpdb;
 
-		if ( !empty( $user_id ) )
-			return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE user_id = %d AND comment_approved = 1", $user_id ) );
+		/**
+		 * Which comment types should be ignored when counting a user's approved comments?
+		 *
+		 * Some plugins add entries to the comments table that are not actual
+		 * comments that could have been checked by Akismet. Allow these comments
+		 * to be excluded from the "approved comment count" query in order to
+		 * avoid artificially inflating the approved comment count.
+		 *
+		 * @param array $comment_types An array of comment types that won't be considered
+		 *                             when counting a user's approved comments.
+		 *
+		 * @since 4.2.2
+		 */
+		$excluded_comment_types = apply_filters( 'akismet_excluded_comment_types', array() );
 
-		if ( !empty( $comment_author_email ) )
-			return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_author_email = %s AND comment_author = %s AND comment_author_url = %s AND comment_approved = 1", $comment_author_email, $comment_author, $comment_author_url ) );
+		$comment_type_where = '';
+
+		if ( is_array( $excluded_comment_types ) && ! empty( $excluded_comment_types ) ) {
+			$excluded_comment_types = array_unique( $excluded_comment_types );
+
+			foreach ( $excluded_comment_types as $excluded_comment_type ) {
+				$comment_type_where .= $wpdb->prepare( ' AND comment_type <> %s ', $excluded_comment_type );
+			}
+		}
+
+		if ( ! empty( $user_id ) ) {
+			return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE user_id = %d AND comment_approved = 1" . $comment_type_where, $user_id ) );
+		}
+
+		if ( ! empty( $comment_author_email ) ) {
+			return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_author_email = %s AND comment_author = %s AND comment_author_url = %s AND comment_approved = 1" . $comment_type_where, $comment_author_email, $comment_author, $comment_author_url ) );
+		}
 
 		return 0;
 	}

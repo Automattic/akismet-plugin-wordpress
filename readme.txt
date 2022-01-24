@@ -36,6 +36,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Improved compatibility with Formidable Forms
 * Fixed a bug that could cause issues when multiple contact forms appear on one page.
 * Updated delete_comment and deleted_comment actions to pass two arguments to match WordPress core since 4.9.0.
+* Add a filter that allows comment types to be excluded when counting users' approved comments.
 
 = 4.2.1 =
 *Release Date - 1 October 2021*
