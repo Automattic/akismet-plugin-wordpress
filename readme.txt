@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.2.3 =
+*Release Date - TBD*
+
+* Improved compatibility with Fluent Forms
+
 = 4.2.2 =
 *Release Date - 24 January 2022*
 
