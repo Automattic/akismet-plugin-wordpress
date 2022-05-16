@@ -30,6 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 4.2.4 =
+*Release Date - TBD*
+
+* Improved translator instructions for comment history.
+
 = 4.2.3 =
 *Release Date - 25 April 2022*
 
