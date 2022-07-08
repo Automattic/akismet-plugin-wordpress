@@ -1,5 +1,5 @@
 === Akismet Spam Protection ===
-Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eoigal, cfinke, automattic, jgs, procifer, stephdau
+Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eoigal, cfinke, automattic, jgs, procifer, stephdau, kbrownkd
 Tags: comments, spam, antispam, anti-spam, contact form, anti spam, comment moderation, comment spam, contact form spam, spam comments
 Requires at least: 5.0
 Tested up to: 6.0
@@ -29,6 +29,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 1, 2, 3: You're done!
 
 == Changelog ==
+
+= 4.2.5 =
+*Release Date - TBD*
+
+* Fix a bug that added unnecessary comment history entries after comment rechecks.
 
 = 4.2.4 =
 *Release Date - 20 May 2022*
