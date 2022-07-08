@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Fix a bug that added unnecessary comment history entries after comment rechecks.
+* Add a notice that displays when WP-Cron is disabled.
 
 = 4.2.4 =
 *Release Date - 20 May 2022*
