@@ -30,6 +30,12 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.0.1 =
+
+*Release Date - TBD*
+
+* Add an empty state for the Statistics section on the admin page.
+
 = 5.0 =
 *Release Date - 26 July 2022*
 
