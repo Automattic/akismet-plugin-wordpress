@@ -34,7 +34,8 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 *Release Date - TBD*
 
-* Add an empty state for the Statistics section on the admin page.
+* Added an empty state for the Statistics section on the admin page.
+* Fixed a bug that broke some admin page links when Jetpack plugins are active.
 
 = 5.0 =
 *Release Date - 26 July 2022*
