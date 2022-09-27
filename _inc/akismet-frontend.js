@@ -5,6 +5,22 @@
  */
 
 ( function() {
+	// Passive event listeners are guaranteed to never call e.preventDefault(),
+	// but they're not supported in all browsers.  Use this feature detection
+	// to determine whether they're available for use.
+	var supportsPassive = false;
+
+	try {
+		var opts = Object.defineProperty( {}, 'passive', {
+			get : function() {
+				supportsPassive = true;
+			}
+		} );
+
+		window.addEventListener( 'testPassive', null, opts );
+		window.removeEventListener( 'testPassive', null, opts );
+	} catch ( e ) {}
+
 	function init() {
 		var input_begin = '';
 
@@ -101,7 +117,7 @@
 					field.setAttribute( 'value', input_fields[ field_name ] );
 					this.appendChild( field );
 				}
-			} );
+			}, supportsPassive ? { passive: true } : false  );
 
 			form.addEventListener( 'keydown', function ( e ) {
 				// If you hold a key down, some browsers send multiple keydown events in a row.
@@ -129,7 +145,7 @@
 				}
 
 				lastKeydown = keydownTime;
-			} );
+			}, supportsPassive ? { passive: true } : false  );
 
 			form.addEventListener( 'keyup', function ( e ) {
 				if ( ! ( e.key in keydowns ) ) {
@@ -167,24 +183,24 @@
 				delete keydowns[ e.key ];
 
 				lastKeyup = keyupTime;
-			} );
+			}, supportsPassive ? { passive: true } : false  );
 
 			form.addEventListener( "focusin", function ( e ) {
 				lastKeydown = null;
 				lastKeyup = null;
 				keydowns = {};
-			} );
+			}, supportsPassive ? { passive: true } : false  );
 
 			form.addEventListener( "focusout", function ( e ) {
 				lastKeydown = null;
 				lastKeyup = null;
 				keydowns = {};
-			} );
+			}, supportsPassive ? { passive: true } : false  );
 		}
 
 		document.addEventListener( 'mousedown', function ( e ) {
 			lastMousedown = ( new Date() ).getTime();
-		} );
+		}, supportsPassive ? { passive: true } : false  );
 
 		document.addEventListener( 'mouseup', function ( e ) {
 			if ( ! lastMousedown ) {
@@ -209,7 +225,7 @@
 			lastKeydown = null;
 			lastKeyup = null;
 			keydowns = {};
-		} );
+		}, supportsPassive ? { passive: true } : false  );
 
 		document.addEventListener( 'mousemove', function ( e ) {
 			if ( mousemoveTimer ) {
@@ -244,7 +260,7 @@
 				mousemoveStart = null;
 				mousemoveTimer = null;
 			}, 250, e, mousemoveStart );
-		} );
+		}, supportsPassive ? { passive: true } : false  );
 
 		document.addEventListener( 'touchmove', function ( e ) {
 			if ( touchmoveCountTimer ) {
@@ -254,11 +270,11 @@
 			touchmoveCountTimer = setTimeout( function () {
 				touchmoveCount++;
 			}, 250 );
-		} );
+		}, supportsPassive ? { passive: true } : false );
 
 		document.addEventListener( 'touchstart', function ( e ) {
 			lastTouchStart = ( new Date() ).getTime();
-		} );
+		}, supportsPassive ? { passive: true } : false );
 
 		document.addEventListener( 'touchend', function ( e ) {
 			if ( ! lastTouchStart ) {
@@ -283,7 +299,7 @@
 			lastKeydown = null;
 			lastKeyup = null;
 			keydowns = {};
-		} );
+		}, supportsPassive ? { passive: true } : false );
 
 		document.addEventListener( 'scroll', function ( e ) {
 			if ( scrollCountTimer ) {
@@ -293,7 +309,7 @@
 			scrollCountTimer = setTimeout( function () {
 				scrollCount++;
 			}, 250 );
-		} );
+		}, supportsPassive ? { passive: true } : false );
 	}
 
 	/**
