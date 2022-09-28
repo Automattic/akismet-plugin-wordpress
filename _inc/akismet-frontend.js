@@ -60,6 +60,18 @@
 		for ( var i = 0; i < forms.length; i++ ) {
 			var form = forms[i];
 
+			var formAction = form.getAttribute( 'action' );
+
+			// Ignore forms that POST directly to other domains; these could be things like payment forms.
+			if ( formAction ) {
+				// Check that the form is posting to an external URL, not a path.
+				if ( formAction.indexOf( 'http://' ) == 0 || formAction.indexOf( 'https://' ) == 0 ) {
+					if ( formAction.indexOf( 'http://' + window.location.hostname + '/' ) != 0 && formAction.indexOf( 'https://' + window.location.hostname + '/' ) != 0 ) {
+						continue;
+					}
+				}
+			}
+
 			form.addEventListener( 'submit', function () {
 				var ak_bkp = prepare_timestamp_array_for_request( keypresses );
 				var ak_bmc = prepare_timestamp_array_for_request( mouseclicks );
