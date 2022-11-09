@@ -34,6 +34,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Improved compatibility with themes that hide or show UI elements based on mouse movements.
+* Increased security of API keys by sending them in request bodies instead of subdomains.
 
 = 5.0.1 =
 *Release Date - 28 September 2022*
