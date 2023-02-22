@@ -30,10 +30,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
-= 5.0.3 =
+= 5.1 =
 *Release Date - TBD*
 
 * Removed unnecessary limit notices from admin page.
+* Improved spam detection by including post taxonomies in the comment-check call.
 
 = 5.0.2 =
 *Release Date - 1 December 2022*

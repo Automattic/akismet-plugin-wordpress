@@ -232,6 +232,25 @@ class Akismet {
 		if ( ! is_null( $post ) ) {
 			// $post can technically be null, although in the past, it's always been an indicator of another plugin interfering.
 			$comment[ 'comment_post_modified_gmt' ] = $post->post_modified_gmt;
+
+			// Tags and categories are important context in which to consider the comment.
+			$comment['comment_context'] = array();
+
+			$tag_names = wp_get_post_tags( $post->ID, array( 'fields' => 'names' ) );
+
+			if ( $tag_names && ! is_wp_error( $tag_names ) ) {
+				foreach ( $tag_names as $tag_name ) {
+					$comment['comment_context'][] = $tag_name;
+				}
+			}
+
+			$category_names = wp_get_post_categories( $post->ID, array( 'fields' => 'names' ) );
+
+			if ( $category_names && ! is_wp_error( $category_names ) ) {
+				foreach ( $category_names as $category_name ) {
+					$comment['comment_context'][] = $category_name;
+				}
+			}
 		}
 
 		$response = self::http_post( Akismet::build_query( $comment ), 'comment-check' );
