@@ -35,6 +35,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 * Removed unnecessary limit notices from admin page.
 * Improved spam detection by including post taxonomies in the comment-check call.
+* Removed API keys from stats iframes to avoid possible inadvertant exposure.
 
 = 5.0.2 =
 *Release Date - 1 December 2022*
