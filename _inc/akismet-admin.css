@@ -18,11 +18,10 @@
 
 .akismet-masthead {
 	box-shadow: none;
-	min-height: 100px;
 }
 
 .akismet-masthead__logo {
-	margin-top: 20px;
+	margin: 20px 0;
 }
 
 .akismet-section-header {
