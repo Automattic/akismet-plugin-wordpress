@@ -32,6 +32,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.3.1 =
+*Release Date - TBD*
+
+* Fix a minor error that occurs when another plugin removes all comment actions from the dashboard.
+
 = 5.3 =
 *Release Date - 14 September 2023*
 

@@ -555,7 +555,7 @@ class Akismet_Admin {
 		}
 
 		// add a History item to the hover links, just after Edit
-		if ( $akismet_result ) {
+		if ( $akismet_result && is_array( $a ) ) {
 			$b = array();
 			foreach ( $a as $k => $item ) {
 				$b[ $k ] = $item;
