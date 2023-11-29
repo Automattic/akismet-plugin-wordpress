@@ -135,20 +135,20 @@ class Akismet_Admin {
 			'plugins.php',
 		) ) ) ) {
 			$akismet_css_path = is_rtl() ? '_inc/rtl/akismet-rtl.css' : '_inc/akismet.css';
-			wp_register_style( 'akismet', plugin_dir_url( __FILE__ ) . $akismet_css_path, array(), filemtime( dirname( __FILE__ ) . '/' . $akismet_css_path ) );
+			wp_register_style( 'akismet', plugin_dir_url( __FILE__ ) . $akismet_css_path, array(), self::get_asset_file_version( $akismet_css_path ) );
 			wp_enqueue_style( 'akismet' );
 
-			wp_register_style( 'akismet-font-inter', plugin_dir_url( __FILE__ ) . '_inc/fonts/inter.css', array(), filemtime( dirname( __FILE__ ) . '/_inc/fonts/inter.css' ) );
+			wp_register_style( 'akismet-font-inter', plugin_dir_url( __FILE__ ) . '_inc/fonts/inter.css', array(), self::get_asset_file_version( '_inc/fonts/inter.css' ) );
 			wp_enqueue_style( 'akismet-font-inter' );
 
 			$akismet_admin_css_path = is_rtl() ? '_inc/rtl/akismet-admin-rtl.css' : '_inc/akismet-admin.css';
-			wp_register_style( 'akismet-admin', plugin_dir_url( __FILE__ ) . $akismet_admin_css_path, array(), filemtime( dirname( __FILE__ ) . '/' . $akismet_admin_css_path ) );
+			wp_register_style( 'akismet-admin', plugin_dir_url( __FILE__ ) . $akismet_admin_css_path, array(), self::get_asset_file_version( $akismet_admin_css_path ) );
 			wp_enqueue_style( 'akismet-admin' );
 
-			wp_register_script( 'akismet.js', plugin_dir_url( __FILE__ ) . '_inc/akismet.js', array( 'jquery' ), AKISMET_VERSION );
+			wp_register_script( 'akismet.js', plugin_dir_url( __FILE__ ) . '_inc/akismet.js', array( 'jquery' ), self::get_asset_file_version( '_inc/akismet.js' ) );
 			wp_enqueue_script( 'akismet.js' );
 
-			wp_register_script( 'akismet-admin.js', plugin_dir_url( __FILE__ ) . '_inc/akismet-admin.js', array(), filemtime( dirname( __FILE__ ) . '/_inc/akismet-admin.js' ) );
+			wp_register_script( 'akismet-admin.js', plugin_dir_url( __FILE__ ) . '_inc/akismet-admin.js', array(), self::get_asset_file_version( '/_inc/akismet-admin.js' ) );
 			wp_enqueue_script( 'akismet-admin.js' );
 
 			$inline_js = array(
@@ -1331,5 +1331,25 @@ class Akismet_Admin {
 	 */
 	public static function get_notice_kses_allowed_elements() {
 		return self::$allowed;
+	}
+
+	/**
+	 * Return a version to append to the URL of an asset file (e.g. CSS and images).
+	 *
+	 * @param string $relative_path Relative path to asset file
+	 * @return string
+	 */
+	public static function get_asset_file_version( $relative_path ) {
+
+		$full_path = AKISMET__PLUGIN_DIR . $relative_path;
+
+		// If the AKISMET_VERSION contains a lower-case letter, it's a development version (e.g. 5.3.1a2).
+		// Use the file modified time in development.
+		if ( preg_match( '/[a-z]/', AKISMET_VERSION ) && file_exists( $full_path ) ) {
+			return filemtime( $full_path );
+		}
+
+		// Otherwise, use the AKISMET_VERSION.
+		return AKISMET_VERSION;
 	}
 }
