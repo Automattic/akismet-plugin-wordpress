@@ -189,13 +189,9 @@ $kses_allow_link_href = array(
 											esc_html__( 'spam folder', 'akismet' )
 										);
 
+										// The _n() needs to be on one line so the i18n tooling can extract the translator comment.
 										/* translators: %1$s: spam folder link, %2$d: delete interval in days */
-										$delete_message = _n(
-											'Spam in the %1$s older than %2$d day is deleted automatically.',
-											'Spam in the %1$s older than %2$d days is deleted automatically.',
-											$delete_interval,
-											'akismet'
-										);
+										$delete_message = _n( 'Spam in the %1$s older than %2$d day is deleted automatically.', 'Spam in the %1$s older than %2$d days is deleted automatically.', $delete_interval, 'akismet' );
 
 										printf(
 											wp_kses( $delete_message, $kses_allow_link_href ),
