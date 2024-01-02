@@ -852,7 +852,14 @@ class Akismet_Admin {
 	public static function get_akismet_user( $api_key ) {
 		$akismet_user = false;
 
-		$subscription_verification = Akismet::http_post( Akismet::build_query( array( 'key' => $api_key, 'blog' => get_option( 'home' ) ) ), 'get-subscription' );
+		$request_args = array(
+			'key' => $api_key,
+			'blog' => get_option( 'home' ),
+		);
+
+		$request_args = apply_filters( 'akismet_request_args', $request_args, 'get-subscription' );
+
+		$subscription_verification = Akismet::http_post( Akismet::build_query( $request_args ), 'get-subscription' );
 
 		if ( ! empty( $subscription_verification[1] ) ) {
 			if ( 'invalid' !== $subscription_verification[1] ) {
@@ -867,7 +874,15 @@ class Akismet_Admin {
 		$stat_totals = array();
 
 		foreach( array( '6-months', 'all' ) as $interval ) {
-			$response = Akismet::http_post( Akismet::build_query( array( 'blog' => get_option( 'home' ), 'key' => $api_key, 'from' => $interval ) ), 'get-stats' );
+			$request_args = array(
+				'blog' => get_option( 'home' ),
+				'key' => $api_key,
+				'from' => $interval,
+			);
+
+			$request_args = apply_filters( 'akismet_request_args', $request_args, 'get-stats' );
+
+			$response = Akismet::http_post( Akismet::build_query( $request_args ), 'get-stats' );
 
 			if ( ! empty( $response[1] ) ) {
 				$stat_totals[$interval] = json_decode( $response[1] );
@@ -878,11 +893,18 @@ class Akismet_Admin {
 	}
 
 	public static function verify_wpcom_key( $api_key, $user_id, $extra = array() ) {
-		$akismet_account = Akismet::http_post( Akismet::build_query( array_merge( array(
-			'user_id'          => $user_id,
-			'api_key'          => $api_key,
-			'get_account_type' => 'true'
-		), $extra ) ), 'verify-wpcom-key' );
+		$request_args = array_merge(
+			array(
+				'user_id' => $user_id,
+				'api_key' => $api_key,
+				'get_account_type' => 'true',
+			),
+			$extra
+		);
+
+		$request_args = apply_filters( 'akismet_request_args', $request_args, 'verify-wpcom-key' );
+
+		$akismet_account = Akismet::http_post( Akismet::build_query( $request_args ), 'verify-wpcom-key' );
 
 		if ( ! empty( $akismet_account[1] ) )
 			$akismet_account = json_decode( $akismet_account[1] );

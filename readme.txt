@@ -38,6 +38,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Make the plugin more resilient when asset files are missing (as seen in WordPress Playground).
 * Add a link to the 'Account overview' page on akismet.com.
 * Fix a minor error that occurs when another plugin removes all comment actions from the dashboard.
+* Add the akismet_request_args filter to allow request args in Akismet API requests to be filtered.
 
 = 5.3 =
 *Release Date - 14 September 2023*
