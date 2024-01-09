@@ -1462,7 +1462,7 @@ class Akismet {
 			$prefix = '_wpcf7_ak_';
 		}
 
-		$fields .= '<p style="display: none !important;">';
+		$fields .= '<p style="display: none !important;" class="akismet-fields-container" data-prefix="' . esc_attr( $prefix ) . '">';
 		$fields .= '<label>&#916;<textarea name="' . $prefix . 'hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label>';
 
 		if ( ! function_exists( 'amp_is_request' ) || ! amp_is_request() ) {
