@@ -667,6 +667,18 @@ class Akismet_Admin {
 								$message = esc_html( __( 'Akismet was unable to recheck this comment.', 'akismet' ) );
 							}
 							break;
+						case 'webhook-spam':
+							$message = esc_html( __( 'Akismet caught this comment as spam and updated its status via webhook.', 'akismet' ) );
+							break;
+						case 'webhook-ham':
+							$message = esc_html( __( 'Akismet cleared this comment and updated its status via webhook.', 'akismet' ) );
+							break;
+						case 'webhook-spam-noaction':
+							$message = esc_html( __( 'Akismet determined this comment was spam during a recheck. It did not update the comment status because it had already been modified by another user or plugin.', 'akismet' ) );
+							break;
+						case 'webhook-ham-noaction':
+							$message = esc_html( __( 'Akismet cleared this comment during a recheck. It did not update the comment status because it had already been modified by another user or plugin.', 'akismet' ) );
+							break;
 						default:
 							if ( preg_match( '/^status-changed/', $row['event'] ) ) {
 								// Half of these used to be saved without the dash after 'status-changed'.
