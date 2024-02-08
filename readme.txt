@@ -36,6 +36,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Add support for webhooks to update comments' spam statuses.
+* Improve the empty state shown to new users when no spam has been caught yet.
 
 = 5.3.1 =
 *Release Date - 17 January 2024*
