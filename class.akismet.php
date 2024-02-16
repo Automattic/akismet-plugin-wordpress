@@ -1605,7 +1605,7 @@ p {
 	public static function view( $name, array $args = array() ) {
 		$args = apply_filters( 'akismet_view_arguments', $args, $name );
 		
-		foreach ( $args AS $key => $val ) {
+		foreach ( $args as $key => $val ) {
 			$$key = $val;
 		}
 		
