@@ -539,7 +539,7 @@ class Akismet_REST_API {
 		/**
 		 * Allow plugins to do things with a successfully processed webhook request, like logging.
 		 *
-		 * @since 5.4
+		 * @since 5.3.2
 		 *
 		 * @param WP_REST_Request $request The REST request object.
 		 */
