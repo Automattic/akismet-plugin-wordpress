@@ -36,6 +36,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 *Release Date - TBD*
 
 * Improve the empty state shown to new users when no spam has been caught yet.
+* Update the message shown to users without a current subscription.
 * Add foundations for future webhook support.
 
 = 5.3.1 =
