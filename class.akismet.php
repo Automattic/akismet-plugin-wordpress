@@ -887,13 +887,16 @@ class Akismet {
 
 		$comment_id = (int) $comment_id;
 
-		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ) );
+		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ), ARRAY_A );
 
-		if ( !$comment ) // it was deleted
+		if ( ! $comment ) {
+			// it was deleted
 			return;
+		}
 
-		if ( 'spam' != $comment->comment_approved )
+		if ( 'spam' != $comment['comment_approved'] ) {
 			return;
+		}
 
 		self::update_comment_history( $comment_id, '', 'report-spam' );
 
@@ -905,32 +908,36 @@ class Akismet {
 		// use the original version stored in comment_meta if available
 		$as_submitted = self::sanitize_comment_as_submitted( get_comment_meta( $comment_id, 'akismet_as_submitted', true ) );
 
-		if ( $as_submitted && is_array( $as_submitted ) && isset( $as_submitted['comment_content'] ) )
-			$comment = (object) array_merge( (array)$comment, $as_submitted );
-
-		$comment->blog         = get_option( 'home' );
-		$comment->blog_lang    = get_locale();
-		$comment->blog_charset = get_option('blog_charset');
-		$comment->permalink    = get_permalink($comment->comment_post_ID);
-
-		if ( is_object($current_user) )
-			$comment->reporter = $current_user->user_login;
-
-		if ( is_object($current_site) )
-			$comment->site_domain = $current_site->domain;
-
-		$comment->user_role = '';
-		if ( ! empty( $comment->user_ID ) ) {
-			$comment->user_role = Akismet::get_user_roles( $comment->user_ID );
+		if ( $as_submitted && is_array( $as_submitted ) && isset( $as_submitted['comment_content'] ) ) {
+			$comment = array_merge( $comment, $as_submitted );
 		}
 
-		if ( self::is_test_mode() )
-			$comment->is_test = 'true';
+		$comment['blog'] = get_option( 'home' );
+		$comment['blog_lang'] = get_locale();
+		$comment['blog_charset'] = get_option( 'blog_charset' );
+		$comment['permalink'] = get_permalink( $comment['comment_post_ID'] );
 
-		$post = get_post( $comment->comment_post_ID );
+		if ( is_object( $current_user ) ) {
+			$comment['reporter'] = $current_user->user_login;
+		}
+
+		if ( is_object( $current_site ) ) {
+			$comment['site_domain'] = $current_site->domain;
+		}
+
+		$comment['user_role'] = '';
+		if ( ! empty( $comment['user_ID'] ) ) {
+			$comment['user_role'] = self::get_user_roles( $comment['user_ID'] );
+		}
+
+		if ( self::is_test_mode() ) {
+			$comment['is_test'] = 'true';
+		}
+
+		$post = get_post( $comment['comment_post_ID'] );
 
 		if ( ! is_null( $post ) ) {
-			$comment->comment_post_modified_gmt = $post->post_modified_gmt;
+			$comment['comment_post_modified_gmt'] = $post->post_modified_gmt;
 		}
 
 		$comment = apply_filters( 'akismet_request_args', $comment, 'submit-spam' );
@@ -939,8 +946,8 @@ class Akismet {
 
 		update_comment_meta( $comment_id, 'akismet_user_result', 'true' );
 
-		if ( $comment->reporter ) {
-			update_comment_meta( $comment_id, 'akismet_user', $comment->reporter );
+		if ( $comment['reporter'] ) {
+			update_comment_meta( $comment_id, 'akismet_user', $comment['reporter'] );
 		}
 
 		do_action('akismet_submit_spam_comment', $comment_id, $response[1]);
@@ -951,9 +958,12 @@ class Akismet {
 
 		$comment_id = (int) $comment_id;
 
-		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ) );
-		if ( !$comment ) // it was deleted
+		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ), ARRAY_A );
+
+		if ( ! $comment ) {
+			// it was deleted
 			return;
+		}
 
 		self::update_comment_history( $comment_id, '', 'report-ham' );
 
@@ -965,32 +975,36 @@ class Akismet {
 		// use the original version stored in comment_meta if available
 		$as_submitted = self::sanitize_comment_as_submitted( get_comment_meta( $comment_id, 'akismet_as_submitted', true ) );
 
-		if ( $as_submitted && is_array($as_submitted) && isset($as_submitted['comment_content']) )
-			$comment = (object) array_merge( (array)$comment, $as_submitted );
-
-		$comment->blog         = get_option( 'home' );
-		$comment->blog_lang    = get_locale();
-		$comment->blog_charset = get_option('blog_charset');
-		$comment->permalink    = get_permalink( $comment->comment_post_ID );
-		$comment->user_role    = '';
-
-		if ( is_object($current_user) )
-			$comment->reporter = $current_user->user_login;
-
-		if ( is_object($current_site) )
-			$comment->site_domain = $current_site->domain;
-
-		if ( ! empty( $comment->user_ID ) ) {
-			$comment->user_role = Akismet::get_user_roles( $comment->user_ID );
+		if ( $as_submitted && is_array( $as_submitted ) && isset( $as_submitted['comment_content'] ) ) {
+			$comment = array_merge( $comment, $as_submitted );
 		}
 
-		if ( Akismet::is_test_mode() )
-			$comment->is_test = 'true';
+		$comment['blog'] = get_option( 'home' );
+		$comment['blog_lang'] = get_locale();
+		$comment['blog_charset'] = get_option( 'blog_charset' );
+		$comment['permalink'] = get_permalink( $comment['comment_post_ID'] );
+		$comment['user_role'] = '';
 
-		$post = get_post( $comment->comment_post_ID );
+		if ( is_object( $current_user ) ) {
+			$comment['reporter'] = $current_user->user_login;
+		}
+
+		if ( is_object( $current_site ) ) {
+			$comment['site_domain'] = $current_site->domain;
+		}
+
+		if ( ! empty( $comment['user_ID'] ) ) {
+			$comment['user_role'] = self::get_user_roles( $comment['user_ID'] );
+		}
+
+		if ( self::is_test_mode() ) {
+			$comment['is_test'] = 'true';
+		}
+
+		$post = get_post( $comment['comment_post_ID'] );
 
 		if ( ! is_null( $post ) ) {
-			$comment->comment_post_modified_gmt = $post->post_modified_gmt;
+			$comment['comment_post_modified_gmt'] = $post->post_modified_gmt;
 		}
 
 		$comment = apply_filters( 'akismet_request_args', $comment, 'submit-ham' );
@@ -999,8 +1013,8 @@ class Akismet {
 
 		update_comment_meta( $comment_id, 'akismet_user_result', 'false' );
 
-		if ( $comment->reporter ) {
-			update_comment_meta( $comment_id, 'akismet_user', $comment->reporter );
+		if ( $comment['reporter'] ) {
+			update_comment_meta( $comment_id, 'akismet_user', $comment['reporter'] );
 		}
 
 		do_action('akismet_submit_nonspam_comment', $comment_id, $response[1]);
