@@ -1,6 +1,6 @@
 === Akismet Anti-spam: Spam Protection ===
 Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eoigal, cfinke, automattic, jgs, procifer, stephdau, kbrownkd, bluefuton, akismetantispam
-Tags: comments, spam, antispam, anti-spam, contact form, anti spam, comment moderation, comment spam, contact form spam, spam comments
+Tags: comments, spam, antispam, anti-spam, contact form
 Requires at least: 5.8
 Tested up to: 6.5
 Stable tag: 5.3.2
