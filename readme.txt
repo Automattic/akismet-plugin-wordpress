@@ -32,6 +32,10 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.3.3 =
+
+* Make setup step clearer for new users.
+
 = 5.3.2 =
 *Release Date - 21 March 2024*
 
