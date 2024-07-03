@@ -224,6 +224,21 @@ class Akismet {
 
 		self::$last_comment_result = null;
 
+		// Skip the Akismet check if the comment matches the Disallowed Keys list.
+		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
+			$comment_author       = isset( $commentdata['comment_author'] ) ? $commentdata['comment_author'] : '';
+			$comment_author_email = isset( $commentdata['comment_author_email'] ) ? $commentdata['comment_author_email'] : '';
+			$comment_author_url   = isset( $commentdata['comment_author_url'] ) ? $commentdata['comment_author_url'] : '';
+			$comment_content      = isset( $commentdata['comment_content'] ) ? $commentdata['comment_content'] : '';
+			$comment_author_ip    = isset( $commentdata['comment_author_IP'] ) ? $commentdata['comment_author_IP'] : '';
+			$comment_agent        = isset( $commentdata['comment_agent'] ) ? $commentdata['comment_agent'] : '';
+
+			if ( wp_check_comment_disallowed_list( $comment_author, $comment_author_email, $comment_author_url, $comment_content, $comment_author_ip, $comment_agent ) ) {
+				self::set_last_comment( $commentdata );
+				return $commentdata;
+			}
+		}
+
 		$comment = $commentdata;
 
 		$comment['user_ip']      = self::get_ip_address();
@@ -427,7 +442,7 @@ class Akismet {
 				load_plugin_textdomain( 'akismet' );
 
 				// normal result: true or false
-				if ( self::$last_comment['akismet_result'] == 'true' ) {
+				if ( isset( self::$last_comment['akismet_result'] ) && self::$last_comment['akismet_result'] == 'true' ) {
 					update_comment_meta( $comment->comment_ID, 'akismet_result', 'true' );
 					self::update_comment_history( $comment->comment_ID, '', 'check-spam' );
 					if ( $comment->comment_approved != 'spam' ) {
@@ -437,7 +452,7 @@ class Akismet {
 							'status-changed-' . $comment->comment_approved
 						);
 					}
-				} elseif ( self::$last_comment['akismet_result'] == 'false' ) {
+				} elseif ( isset( self::$last_comment['akismet_result'] ) && self::$last_comment['akismet_result'] == 'false' ) {
 					update_comment_meta( $comment->comment_ID, 'akismet_result', 'false' );
 					self::update_comment_history( $comment->comment_ID, '', 'check-ham' );
 					// Status could be spam or trash, depending on the WP version and whether this change applies:
@@ -449,11 +464,25 @@ class Akismet {
 							} else {
 								self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
 							}
-						} else if ( function_exists( 'wp_blacklist_check' ) && wp_blacklist_check( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent ) ) {
-							self::update_comment_history( $comment->comment_ID, '', 'wp-blacklisted' );
 						} else {
 							self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
 						}
+					}
+				} elseif ( ! isset( self::$last_comment['akismet_result'] ) ) {
+					// akismet_result isn't set, so the comment wasn't sent to Akismet.
+					update_comment_meta( $comment->comment_ID, 'akismet_skipped', 'true' );
+					$caught_by_disallowed_list = false;
+
+					if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
+						$caught_by_disallowed_list = wp_check_comment_disallowed_list( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent );
+					}
+
+					if ( $caught_by_disallowed_list ) {
+						self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
+						self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped-disallowed' );
+					} else {
+						// Add a generic skipped history item.
+						self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped' );
 					}
 				} else {
 					 // abnormal result: error

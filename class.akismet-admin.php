@@ -533,9 +533,13 @@ class Akismet_Admin {
 	}
 
 	public static function comment_row_action( $a, $comment ) {
-		$akismet_result = get_comment_meta( $comment->comment_ID, 'akismet_result', true );
+		$akismet_result  = get_comment_meta( $comment->comment_ID, 'akismet_result', true );
+		if ( ! $akismet_result && get_comment_meta( $comment->comment_ID, 'akismet_skipped', true ) ) {
+			$akismet_result = 'skipped'; // Akismet chose to skip the comment-check request.
+		}
+
 		$akismet_error  = get_comment_meta( $comment->comment_ID, 'akismet_error', true );
-		$user_result    = get_comment_meta( $comment->comment_ID, 'akismet_user_result', true);
+		$user_result    = get_comment_meta( $comment->comment_ID, 'akismet_user_result', true );
 		$comment_status = wp_get_comment_status( $comment->comment_ID );
 		$desc = null;
 		if ( $akismet_error ) {
@@ -678,6 +682,12 @@ class Akismet_Admin {
 							break;
 						case 'webhook-ham-noaction':
 							$message = esc_html( __( 'Akismet cleared this comment during a recheck. It did not update the comment status because it had already been modified by another user or plugin.', 'akismet' ) );
+							break;
+						case 'akismet-skipped':
+							$message = esc_html( __( 'This comment was not sent to Akismet when it was submitted because it was caught by something else.', 'akismet' ) );
+							break;
+						case 'akismet-skipped-disallowed':
+							$message = esc_html( __( 'This comment was not sent to Akismet when it was submitted because it was caught by the comment disallowed list.', 'akismet' ) );
 							break;
 						default:
 							if ( preg_match( '/^status-changed/', $row['event'] ) ) {

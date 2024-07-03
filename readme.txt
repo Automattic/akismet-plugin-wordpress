@@ -36,6 +36,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 * Make setup step clearer for new users.
 * Remove the stats section from the configuration page if the site has been revoked from the key.
+* Skip the Akismet comment check when the comment matches something in the disallowed list.
 
 = 5.3.2 =
 *Release Date - 21 March 2024*
