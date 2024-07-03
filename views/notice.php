@@ -9,6 +9,10 @@ $kses_allow_link   = array(
 );
 $kses_allow_strong = array( 'strong' => true );
 
+if ( ! isset( $type ) ) {
+	$type = false; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+}
+
 /*
  * Some notices (plugin, spam-check, spam-check-cron-disabled, alert and usage-limit) are shown elsewhere in wp-admin,
  * so look different to the standard notices.
