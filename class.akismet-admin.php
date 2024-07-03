@@ -897,7 +897,14 @@ class Akismet_Admin {
 			$response = Akismet::http_post( Akismet::build_query( $request_args ), 'get-stats' );
 
 			if ( ! empty( $response[1] ) ) {
-				$stat_totals[$interval] = json_decode( $response[1] );
+				$data = json_decode( $response[1] );
+				/*
+				 * The json decoded response should be an object. If it's not an object, something's wrong, and the data
+				 * shouldn't be added to the stats_totals array.
+				 */
+				if ( is_object( $data ) ) {
+					$stat_totals[ $interval ] = $data;
+				}
 			}
 		}
 
