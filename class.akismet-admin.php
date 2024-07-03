@@ -1114,6 +1114,12 @@ class Akismet_Admin {
 		$alert_code = get_option( 'akismet_alert_code' );
 		if ( isset( Akismet::$limit_notices[ $alert_code ] ) ) {
 			$notices[] = self::get_usage_limit_alert_data();
+		} elseif ( $alert_code > 0 ) {
+			$notices[] = array(
+				'type' => 'alert',
+				'code' => (int) get_option( 'akismet_alert_code' ),
+				'msg'  => get_option( 'akismet_alert_msg' ),
+			);
 		}
 
 		/*

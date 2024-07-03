@@ -1438,8 +1438,16 @@ class Akismet {
 		}
 		
 		$simplified_response = array( $response['headers'], $response['body'] );
-		
-		self::update_alert( $simplified_response );
+
+		$alert_code_check_paths = array(
+			'verify-key',
+			'comment-check',
+			'get-stats',
+		);
+
+		if ( in_array( $path, $alert_code_check_paths ) ) {
+			self::update_alert( $simplified_response );
+		}
 
 		return $simplified_response;
 	}
