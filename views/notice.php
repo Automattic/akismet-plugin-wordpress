@@ -312,8 +312,11 @@ if ( ! isset( $type ) ) {
 	<div class="akismet-usage-limit-cta">
 		<a href="<?php echo esc_attr( $upgrade_url ); ?>" class="button" target="_blank">
 			<?php
-			// If only a qty upgrade is required, show a more generic message.
-			if ( ! empty( $upgrade_type ) && 'qty' === $upgrade_type ) {
+			if ( isset( $upgrade_via_support ) && $upgrade_via_support ) {
+				// Direct user to contact support.
+				esc_html_e( 'Contact Akismet support', 'akismet' );
+			} elseif ( ! empty( $upgrade_type ) && 'qty' === $upgrade_type ) {
+				// If only a qty upgrade is required, show a more generic message.
 				esc_html_e( 'Upgrade your subscription level', 'akismet' );
 			} else {
 				echo esc_html(

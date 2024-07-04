@@ -969,14 +969,15 @@ class Akismet_Admin {
 
 	public static function get_usage_limit_alert_data() {
 		return array(
-			'type'         => 'usage-limit',
-			'code'         => (int) get_option( 'akismet_alert_code' ),
-			'msg'          => get_option( 'akismet_alert_msg' ),
-			'api_calls'    => get_option( 'akismet_alert_api_calls' ),
-			'usage_limit'  => get_option( 'akismet_alert_usage_limit' ),
-			'upgrade_plan' => get_option( 'akismet_alert_upgrade_plan' ),
-			'upgrade_url'  => get_option( 'akismet_alert_upgrade_url' ),
-			'upgrade_type' => get_option( 'akismet_alert_upgrade_type' ),
+			'type'                => 'usage-limit',
+			'code'                => (int) get_option( 'akismet_alert_code' ),
+			'msg'                 => get_option( 'akismet_alert_msg' ),
+			'api_calls'           => get_option( 'akismet_alert_api_calls' ),
+			'usage_limit'         => get_option( 'akismet_alert_usage_limit' ),
+			'upgrade_plan'        => get_option( 'akismet_alert_upgrade_plan' ),
+			'upgrade_url'         => get_option( 'akismet_alert_upgrade_url' ),
+			'upgrade_type'        => get_option( 'akismet_alert_upgrade_type' ),
+			'upgrade_via_support' => get_option( 'akismet_alert_upgrade_via_support' ) === 'true',
 		);
 	}
 

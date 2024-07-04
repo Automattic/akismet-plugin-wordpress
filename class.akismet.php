@@ -1493,6 +1493,7 @@ class Akismet {
 			'upgrade-plan',
 			'upgrade-url',
 			'upgrade-type',
+			'upgrade-via-support',
 		);
 
 		foreach ( $alert_header_names as $alert_header_name ) {
