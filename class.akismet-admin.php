@@ -1140,7 +1140,6 @@ class Akismet_Admin {
 		*/
 		// $notices[] = array( 'type' => 'active-notice', 'time_saved' => 'Cleaning up spam takes time. Akismet has saved you 1 minute!' );
 		// $notices[] = array( 'type' => 'plugin' );
-		// $notices[] = array( 'type' => 'spam-check', 'link_text' => 'Link text.' );
 		// $notices[] = array( 'type' => 'notice', 'notice_header' => 'This is the notice header.', 'notice_text' => 'This is the notice text.' );
 		// $notices[] = array( 'type' => 'missing-functions' );
 		// $notices[] = array( 'type' => 'servers-be-down' );
@@ -1154,6 +1153,7 @@ class Akismet_Admin {
 		// $notices[] = array( 'type' => 'existing-key-invalid' );
 		// $notices[] = array( 'type' => 'new-key-failed' );
 		// $notices[] = array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_plan' => 'Enterprise', 'upgrade_url' => 'https://akismet.com/account/', 'code' => 10502 );
+		// $notices[] = array( 'type' => 'spam-check', 'link_text' => 'Link text.' );
 		// $notices[] = array( 'type' => 'spam-check-cron-disabled' );
 		// $notices[] = array( 'type' => 'alert', 'code' => 123 );
 
@@ -1168,6 +1168,11 @@ class Akismet_Admin {
 			// This page manages the notices and puts them inline where they make sense.
 			return;
 		}
+
+		// To see notice variants while testing.
+		// Akismet::view( 'notice', array( 'type' => 'spam-check-cron-disabled' ) );
+		// Akismet::view( 'notice', array( 'type' => 'spam-check' ) );
+		// Akismet::view( 'notice', array( 'type' => 'alert', 'code' => 123, 'msg' => 'Message' ) );
 
 		if ( in_array( $hook_suffix, array( 'edit-comments.php' ) ) && (int) get_option( 'akismet_alert_code' ) > 0 ) {
 			Akismet::verify_key( Akismet::get_api_key() ); //verify that the key is still in alert state

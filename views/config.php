@@ -20,7 +20,7 @@ $kses_allow_link_href = array(
 		<?php } ?>
 		<?php if ( ! empty( $notices ) ) { ?>
 			<?php foreach ( $notices as $notice ) { ?>
-				<?php Akismet::view( 'notice', $notice ); ?>
+				<?php Akismet::view( 'notice', array_merge( $notice, array( 'parent_view' => $name ) ) ); ?>
 			<?php } ?>
 		<?php } ?>
 
