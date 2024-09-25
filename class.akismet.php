@@ -1663,9 +1663,11 @@ p {
 		
 		load_plugin_textdomain( 'akismet' );
 
-		$file = AKISMET__PLUGIN_DIR . 'views/'. $name . '.php';
+		$file = AKISMET__PLUGIN_DIR . 'views/' . basename( $name ) . '.php';
 
-		include( $file );
+		if ( file_exists( $file ) ) {
+			include $file;
+		}
 	}
 
 	/**
