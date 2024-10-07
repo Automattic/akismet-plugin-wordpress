@@ -1118,7 +1118,7 @@ class Akismet_Admin {
 			}
 		}
 
-		if ( !isset( self::$notices['status'] ) && in_array( $akismet_user->status, array( 'cancelled', 'suspended', 'missing', 'no-sub' ) ) ) {
+		if ( ! Akismet::predefined_api_key() && ! isset( self::$notices['status'] ) && in_array( $akismet_user->status, array( 'cancelled', 'suspended', 'missing', 'no-sub' ) ) ) {
 			$notices[] = array( 'type' => $akismet_user->status );
 		}
 
