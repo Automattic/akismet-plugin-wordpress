@@ -18,26 +18,17 @@ if ( ! isset( $type ) ) {
  */
 ?>
 <?php if ( $type === 'plugin' ) : ?>
-<div class="updated" id="akismet_setup_prompt">
-	<form name="akismet_activate" action="<?php echo esc_url( Akismet_Admin::get_page_url() ); ?>" method="POST">
-		<div class="akismet_activate">
-			<div class="aa_a">A</div>
-			<div class="aa_button_container">
-				<div class="aa_button_border">
-					<input type="submit" class="aa_button" value="<?php esc_attr_e( 'Set up your Akismet account', 'akismet' ); ?>" />
+	<?php // Displayed on edit-comments.php to users who have not set up Akismet yet. ?>
+	<div class="updated" id="akismet-setup-prompt">
+		<form name="akismet_activate" action="<?php echo esc_url( Akismet_Admin::get_page_url() ); ?>" method="post">
+			<div class="akismet-activate">
+				<input type="submit" class="akismet-activate__button akismet-button" value="<?php esc_attr_e( 'Set up your Akismet account', 'akismet' ); ?>" />
+				<div class="akismet-activate__description">
+					<?php esc_html_e( 'Almost done! Configure Akismet and say goodbye to spam', 'akismet' ); ?>
 				</div>
 			</div>
-			<div class="aa_description">
-				<?php
-				echo wp_kses(
-					__( '<strong>Almost done</strong> - configure Akismet and say goodbye to spam', 'akismet' ),
-					$kses_allow_strong
-				);
-				?>
-			</div>
-		</div>
-	</form>
-</div>
+		</form>
+	</div>
 
 <?php elseif ( $type === 'spam-check' ) : ?>
 	<?php // This notice is only displayed on edit-comments.php. ?>

@@ -145,6 +145,21 @@ class Akismet_Admin {
 			wp_register_style( 'akismet-admin', plugin_dir_url( __FILE__ ) . $akismet_admin_css_path, array(), self::get_asset_file_version( $akismet_admin_css_path ) );
 			wp_enqueue_style( 'akismet-admin' );
 
+			// Enqueue the Akismet activation banner background separately so we can
+			// include the right path to the image. This is shown on edit-comments.php only.
+			if ( $hook_suffix === 'edit-comments.php' ) {
+				$activation_banner_url = esc_url(
+					plugin_dir_url( __FILE__ ) . '_inc/img/akismet-activation-banner-elements.png'
+				);
+				$inline_css = <<< AKISMET_INLINE_CSS
+				.akismet-activate {
+					background-image: url({$activation_banner_url});
+				}
+				AKISMET_INLINE_CSS;
+
+				wp_add_inline_style( 'akismet-admin', $inline_css );
+			}
+
 			wp_register_script( 'akismet.js', plugin_dir_url( __FILE__ ) . '_inc/akismet.js', array( 'jquery' ), self::get_asset_file_version( '_inc/akismet.js' ) );
 			wp_enqueue_script( 'akismet.js' );
 

@@ -32,6 +32,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.4.0 =
+*Release Date - TBC*
+
+* Improve activation notice on Comments for users who haven't set up their API key yet.
+
 = 5.3.3 =
 *Release Date - 10 July 2024*
 
