@@ -4,6 +4,7 @@ class Akismet {
 	const API_HOST = 'rest.akismet.com';
 	const API_PORT = 80;
 	const MAX_DELAY_BEFORE_MODERATION_EMAIL = 86400; // One day in seconds
+	const ALERT_CODE_COMMERCIAL = 30001;
 
 	public static $limit_notices = array(
 		10501 => 'FIRST_MONTH_OVER_LIMIT',

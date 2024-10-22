@@ -1172,6 +1172,7 @@ class Akismet_Admin {
 		// $notices[] = array( 'type' => 'spam-check', 'link_text' => 'Link text.' );
 		// $notices[] = array( 'type' => 'spam-check-cron-disabled' );
 		// $notices[] = array( 'type' => 'alert', 'code' => 123 );
+		// $notices[] = array( 'type' => 'alert', 'code' => Akismet::ALERT_CODE_COMMERCIAL );
 
 		Akismet::log( compact( 'stat_totals', 'akismet_user' ) );
 		Akismet::view( 'config', compact( 'api_key', 'akismet_user', 'stat_totals', 'notices' ) );

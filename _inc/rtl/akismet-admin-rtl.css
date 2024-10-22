@@ -1,4 +1,4 @@
-/* This file was automatically generated on Oct 01 2024 00:54:30 */
+/* This file was automatically generated on Oct 10 2024 01:39:01 */
 
 body {
 	--akismet-color-charcoal: #272635;
@@ -15,6 +15,7 @@ body {
 	--akismet-color-notice-dark-green: #69bf82;
 	--akismet-color-notice-light-red: #ffdbde;
 	--akismet-color-notice-dark-red: #ff6676;
+	--akismet-color-notice-yellow: #e5c133;
 }
 
 #akismet-plugin-container {
@@ -26,8 +27,14 @@ body {
 	color: var(--akismet-color-mid-green);
 }
 
+#akismet-plugin-container a.akismet-button {
+	background-color: var(--akismet-color-mid-green);
+	color: var(--akismet-color-white);
+}
+
 #akismet-plugin-container button:focus-visible,
-#akismet-plugin-container input:focus-visible {
+#akismet-plugin-container input:focus-visible,
+#akismet-plugin-container a:focus-visible {
 	border: 0;
 	box-shadow: none;
 	outline: 2px solid var(--akismet-color-light-blue);
@@ -302,10 +309,35 @@ body {
 	border-right-color: var(--akismet-color-notice-dark-red);
 }
 
+.akismet-alert.is-commercial {
+	background-color: var(--akismet-color-white);
+	border-color: var(--akismet-color-mid-grey);
+	border-bottom-width: 1px;
+	border-right-color: var(--akismet-color-notice-yellow);
+	display: flex;
+	padding-bottom: 1em;
+}
+
 #akismet-plugin-container .akismet-alert.is-good a,
 #akismet-plugin-container .akismet-alert.is-bad a {
 	/* For better contrast - green isn't great */
 	color: var(--akismet-color-grey-80);
+}
+
+.akismet-alert-header {
+	font-size: 16px;
+	margin-bottom: 0.5em;
+}
+
+.akismet-alert-button-wrapper {
+	align-self: center;
+	margin-right: 2em;
+	min-width: 120px;
+}
+
+.akismet-alert-info {
+	text-wrap: pretty;
+	margin: 0.5em 0;
 }
 
 /* Setup - API key input */
