@@ -460,6 +460,10 @@ h3.akismet-enter-api-key-box__header {
 		padding-right: 134px;
 	}
 
+	.akismet-activate__button {
+		white-space: normal;
+	}
+
 	.akismet-activate__description {
 		font-size: 14px;
 		margin-right: 1em;
@@ -468,6 +472,11 @@ h3.akismet-enter-api-key-box__header {
 
 /* Gutenberg small breakpoint */
 @media screen and (max-width: 600px) {
+	.akismet-activate__button,
+	.akismet-activate__button:hover {
+		font-size: 13px;
+	}
+
 	.akismet-activate__description {
 		display: none;
 	}

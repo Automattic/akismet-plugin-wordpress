@@ -1,4 +1,4 @@
-/* This file was automatically generated on Oct 10 2024 01:39:01 */
+/* This file was automatically generated on Nov 05 2024 03:06:40 */
 
 body {
 	--akismet-color-charcoal: #272635;
@@ -462,6 +462,10 @@ h3.akismet-enter-api-key-box__header {
 		padding-left: 134px;
 	}
 
+	.akismet-activate__button {
+		white-space: normal;
+	}
+
 	.akismet-activate__description {
 		font-size: 14px;
 		margin-left: 1em;
@@ -470,6 +474,11 @@ h3.akismet-enter-api-key-box__header {
 
 /* Gutenberg small breakpoint */
 @media screen and (max-width: 600px) {
+	.akismet-activate__button,
+	.akismet-activate__button:hover {
+		font-size: 13px;
+	}
+
 	.akismet-activate__description {
 		display: none;
 	}
