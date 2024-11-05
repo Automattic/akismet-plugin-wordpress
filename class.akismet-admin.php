@@ -146,8 +146,8 @@ class Akismet_Admin {
 			wp_enqueue_style( 'akismet-admin' );
 
 			// Enqueue the Akismet activation banner background separately so we can
-			// include the right path to the image. This is shown on edit-comments.php only.
-			if ( $hook_suffix === 'edit-comments.php' ) {
+			// include the right path to the image. Shown on edit-comments.php and plugins.php.
+			if ( $hook_suffix === 'edit-comments.php' || $hook_suffix === 'plugins.php' ) {
 				$activation_banner_url = esc_url(
 					plugin_dir_url( __FILE__ ) . '_inc/img/akismet-activation-banner-elements.png'
 				);
