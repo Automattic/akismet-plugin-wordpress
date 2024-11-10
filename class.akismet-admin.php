@@ -31,6 +31,17 @@ class Akismet_Admin {
 		'strong' => array(),
 	);
 
+	/**
+	 * List of pages where activation banner should be displayed.
+	 *
+	 * @var array
+	 */
+	private static $activation_banner_pages = array(
+		'edit-comments.php',
+		'options-discussion.php',
+		'plugins.php',
+	);
+
 	public static function init() {
 		if ( ! self::$initiated ) {
 			self::init_hooks();
@@ -136,14 +147,15 @@ class Akismet_Admin {
 			$hook_suffix,
 			apply_filters(
 				'akismet_admin_page_hook_suffixes',
-				array(
-					'index.php', // dashboard
-					'edit-comments.php',
-					'comment.php',
-					'post.php',
-					'settings_page_akismet-key-config',
-					'jetpack_page_akismet-key-config',
-					'plugins.php',
+				array_merge(
+					array(
+						'index.php', // dashboard
+						'comment.php',
+						'post.php',
+						'settings_page_akismet-key-config',
+						'jetpack_page_akismet-key-config',
+					),
+					self::$activation_banner_pages,
 				)
 			)
 		) ) {
@@ -160,7 +172,7 @@ class Akismet_Admin {
 
 			// Enqueue the Akismet activation banner background separately so we can
 			// include the right path to the image. Shown on edit-comments.php and plugins.php.
-			if ( $hook_suffix === 'edit-comments.php' || $hook_suffix === 'plugins.php' ) {
+			if ( in_array( $hook_suffix, self::$activation_banner_pages, true ) ) {
 				$activation_banner_url = esc_url(
 					plugin_dir_url( __FILE__ ) . '_inc/img/akismet-activation-banner-elements.png'
 				);
@@ -1289,7 +1301,7 @@ class Akismet_Admin {
 			} elseif ( $alert_code > 0 ) {
 				self::display_alert();
 			}
-		} elseif ( ( 'plugins.php' === $hook_suffix || 'edit-comments.php' === $hook_suffix ) && ! Akismet::get_api_key() ) {
+		} elseif ( in_array( $hook_suffix, self::$activation_banner_pages, true ) && ! Akismet::get_api_key() ) {
 			// Show the "Set Up Akismet" banner on the comments and plugin pages if no API key has been set.
 			self::display_api_key_warning();
 		} elseif ( $hook_suffix == 'edit-comments.php' && wp_next_scheduled( 'akismet_schedule_cron_recheck' ) ) {
