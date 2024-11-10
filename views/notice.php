@@ -61,7 +61,7 @@ if ( ! isset( $type ) ) {
 			<p class="akismet-alert-info">
 				<?php
 					/* translators: The placeholder is a URL to the contact form. */
-					echo wp_kses( sprintf( __( 'If you believe your site should not be classified as commercial, <a href="%s">please get in touch</a>.', 'akismet' ), esc_url( 'https://akismet.com/contact/' ) ), $kses_allow_link );
+					echo wp_kses( sprintf( __( 'If you believe your site should not be classified as commercial, <a href="%s">please get in touch</a>.', 'akismet' ), esc_url( 'https://akismet.com/contact/?purpose=commercial' ) ), $kses_allow_link );
 				?>
 			</p>
 		</div>
