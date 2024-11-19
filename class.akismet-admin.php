@@ -155,7 +155,7 @@ class Akismet_Admin {
 						'settings_page_akismet-key-config',
 						'jetpack_page_akismet-key-config',
 					),
-					self::$activation_banner_pages,
+					self::$activation_banner_pages
 				)
 			)
 		) ) {
@@ -176,11 +176,9 @@ class Akismet_Admin {
 				$activation_banner_url = esc_url(
 					plugin_dir_url( __FILE__ ) . '_inc/img/akismet-activation-banner-elements.png'
 				);
-				$inline_css            = <<< AKISMET_INLINE_CSS
-				.akismet-activate {
-					background-image: url({$activation_banner_url});
-				}
-				AKISMET_INLINE_CSS;
+				$inline_css            = '.akismet-activate {' . PHP_EOL .
+				'background-image: url(' . $activation_banner_url . ');' . PHP_EOL .
+				'}';
 
 				wp_add_inline_style( 'akismet-admin', $inline_css );
 			}
