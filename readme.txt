@@ -32,6 +32,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.3.7 =
+*Release Date - TBD*
+
+* Simplify the logic used during a comment-check request to compare comments.
+
 = 5.3.6 =
 *Release Date - 4 February 2025*
 
