@@ -1,4 +1,4 @@
-/* This file was automatically generated on Aug 29 2025 01:35:40 */
+/* This file was automatically generated on Sep 10 2025 03:27:44 */
 
 body {
 	--akismet-color-charcoal: #272635;
@@ -86,9 +86,13 @@ body {
 	text-transform: none;
 }
 
-.akismet-new-snapshot .akismet-new-snapshot__number {
+.akismet-new-snapshot__number {
 	color: var(--akismet-color-charcoal);
+	display: block;
+	font-size: 32px;
+	font-weight: 400;
 	letter-spacing: -1px;
+	line-height: 1.5em;
 	text-align: right;
 }
 
