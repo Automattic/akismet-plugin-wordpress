@@ -111,11 +111,20 @@ class Akismet_Admin {
 	}
 
 	public static function admin_menu() {
-		if ( class_exists( 'Jetpack' ) ) {
+		if ( self::is_jetpack_active() ) {
 			add_action( 'jetpack_admin_menu', array( 'Akismet_Admin', 'load_menu' ) );
 		} else {
 			self::load_menu();
 		}
+	}
+
+	/**
+	 * Check if Jetpack is active.
+	 *
+	 * @return bool True if Jetpack class exists, false otherwise.
+	 */
+	public static function is_jetpack_active(): bool {
+		return class_exists( 'Jetpack' );
 	}
 
 	public static function admin_head() {
@@ -131,7 +140,7 @@ class Akismet_Admin {
 	}
 
 	public static function load_menu() {
-		if ( class_exists( 'Jetpack' ) ) {
+		if ( self::is_jetpack_active() ) {
 			$hook = add_submenu_page( 'jetpack', __( 'Akismet Anti-spam', 'akismet' ), __( 'Akismet Anti-spam', 'akismet' ), 'manage_options', 'akismet-key-config', array( 'Akismet_Admin', 'display_page' ) );
 		} else {
 			$hook = add_options_page( __( 'Akismet Anti-spam', 'akismet' ), __( 'Akismet Anti-spam', 'akismet' ), 'manage_options', 'akismet-key-config', array( 'Akismet_Admin', 'display_page' ) );
@@ -1383,7 +1392,7 @@ class Akismet_Admin {
 	 * @return array|false
 	 */
 	private static function get_jetpack_user() {
-		if ( ! class_exists( 'Jetpack' ) ) {
+		if ( ! self::is_jetpack_active() ) {
 			return false;
 		}
 
