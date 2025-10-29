@@ -309,8 +309,9 @@ $kses_allow_link_href = array(
 								Akismet::view(
 									'get',
 									array(
-										'text'     => ( $akismet_user->account_type === 'free-api-key' && $akismet_user->status === 'active' ? __( 'Upgrade', 'akismet' ) : __( 'Change', 'akismet' ) ),
-										'redirect' => 'upgrade',
+										'text'        => ( $akismet_user->account_type === 'free-api-key' && $akismet_user->status === 'active' ? __( 'Upgrade', 'akismet' ) : __( 'Change', 'akismet' ) ),
+										'redirect'    => 'upgrade',
+										'utm_content' => ( $akismet_user->account_type === 'free-api-key' && $akismet_user->status === 'active' ? 'config_upgrade' : 'config_change' ),
 									)
 								);
 								?>

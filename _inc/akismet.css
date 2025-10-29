@@ -430,6 +430,11 @@ table.comments td.comment p a:after {
 	padding-bottom: 1.5rem;
 }
 
+.akismet-setup-instructions > a.akismet-button {
+	display: inline-block;
+	margin-bottom: 1.5rem;
+}
+
 div.error.akismet-usage-limit-alert {
 	padding: 25px 45px 25px 15px;
 	display: flex;
