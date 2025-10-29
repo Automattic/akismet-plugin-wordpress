@@ -381,7 +381,15 @@ class Akismet_Admin {
 				self::$notices['status'] = 'new-key-invalid';
 			}
 		} elseif ( in_array( $key_status, array( 'invalid', 'failed' ) ) ) {
-			self::$notices['status'] = 'new-key-' . $key_status;
+			// When verify-key returns 'invalid', it could be truly invalid OR suspended.
+			// Check get-subscription to distinguish between these cases.
+			$akismet_user = self::get_akismet_user( $api_key );
+
+			if ( $akismet_user && isset( $akismet_user->status ) && $akismet_user->status === 'suspended' ) {
+				self::$notices['status'] = 'suspended';
+			} else {
+				self::$notices['status'] = 'new-key-' . $key_status;
+			}
 		}
 	}
 
