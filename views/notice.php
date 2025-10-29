@@ -5,6 +5,7 @@ $kses_allow_link   = array(
 	'a' => array(
 		'href'   => true,
 		'target' => true,
+		'class'  => true,
 	),
 );
 $kses_allow_strong = array( 'strong' => true );
@@ -79,8 +80,14 @@ if ( ! isset( $type ) ) {
 	<p><?php echo isset( $msg ) ? esc_html( $msg ) : ''; ?></p>
 	<p>
 		<?php
-		/* translators: the placeholder is a clickable URL that leads to more information regarding an error code. */
-		printf( esc_html__( 'For more information: %s', 'akismet' ), '<a href="https://akismet.com/errors/' . esc_attr( $code ) . '">https://akismet.com/errors/' . esc_attr( $code ) . '</a>' );
+		echo wp_kses(
+			sprintf(
+				/* translators: The placeholder is a URL. */
+				__( 'For more information, see the <a class="akismet-settings__external-link" href="%s">error documentation on akismet.com</a>', 'akismet' ),
+				esc_url( 'https://akismet.com/developers/detailed-docs/errors/akismet-error-' . absint( $code ) . '/' )
+			),
+			$kses_allow_link
+		);
 		?>
 	</p>
 </div>
@@ -121,7 +128,7 @@ if ( ! isset( $type ) ) {
 	<p>
 		<?php
 		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'We cannot process your payment. Please <a href="%s" target="_blank">update your payment details</a>.', 'akismet' ), esc_url( 'https://akismet.com/account/' ) ), $kses_allow_link );
+		echo wp_kses( sprintf( __( 'We cannot process your payment. Please <a href="%s" target="_blank">update your payment details</a>.', 'akismet' ), esc_url( 'https://wordpress.com/me/purchases/payment-methods' ) ), $kses_allow_link );
 		?>
 	</p>
 </div>
@@ -132,7 +139,7 @@ if ( ! isset( $type ) ) {
 	<p>
 		<?php
 		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'Please visit your <a href="%s" target="_blank">Akismet account page</a> to reactivate your subscription.', 'akismet' ), esc_url( 'https://akismet.com/account/' ) ), $kses_allow_link );
+		echo wp_kses( sprintf( __( 'Please visit <a href="%s" target="_blank">Akismet.com</a> to purchase a new subscription.', 'akismet' ), esc_url( 'https://akismet.com/pricing/' ) ), $kses_allow_link );
 		?>
 	</p>
 </div>
@@ -243,7 +250,7 @@ if ( ! isset( $type ) ) {
 			sprintf(
 				/* translators: The placeholder is a URL. */
 				__( 'The connection to akismet.com could not be established. Please refer to <a href="%s" target="_blank">our guide about firewalls</a> and check your server configuration.', 'akismet' ),
-				'https://blog.akismet.com/akismet-hosting-faq/'
+				'https://akismet.com/akismet-hosting-faq/'
 			),
 			$kses_allow_link
 		);
@@ -289,7 +296,7 @@ if ( ! isset( $type ) ) {
 					)
 				);
 				echo '&nbsp;';
-				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo '<a href="https://akismet.com/support/general/akismet-api-usage-limits/" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
 				echo '</a>';
 
@@ -297,7 +304,7 @@ if ( ! isset( $type ) ) {
 			case 'SECOND_MONTH_OVER_LIMIT':
 				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo '<a href="https://akismet.com/support/general/akismet-api-usage-limits/" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
 				echo '</a>';
 
@@ -305,7 +312,7 @@ if ( ! isset( $type ) ) {
 			case 'THIRD_MONTH_APPROACHING_LIMIT':
 				echo esc_html( __( 'Your Akismet usage is nearing your plan&#8217;s limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo '<a href="https://akismet.com/support/general/akismet-api-usage-limits/" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
 				echo '</a>';
 
@@ -314,7 +321,7 @@ if ( ! isset( $type ) ) {
 			case 'FOUR_PLUS_MONTHS_OVER_LIMIT':
 				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a href="https://docs.akismet.com/akismet-api-usage-limits/" target="_blank">';
+				echo '<a href="https://akismet.com/support/general/akismet-api-usage-limits/" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits.', 'akismet' ) );
 				echo '</a>';
 

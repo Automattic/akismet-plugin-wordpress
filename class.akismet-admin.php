@@ -234,7 +234,7 @@ class Akismet_Admin {
 							'<p><strong>' . esc_html__( 'Akismet Setup', 'akismet' ) . '</strong></p>' .
 							'<p>' . esc_html__( 'You need to enter an API key to activate the Akismet service on your site.', 'akismet' ) . '</p>' .
 							/* translators: %s: a link to the signup page with the text 'Akismet.com'. */
-							'<p>' . sprintf( __( 'Sign up for an account on %s to get an API Key.', 'akismet' ), '<a href="https://akismet.com/plugin-signup/" target="_blank">Akismet.com</a>' ) . '</p>',
+							'<p>' . sprintf( __( 'Sign up for an account on %s to get an API Key.', 'akismet' ), '<a href="https://akismet.com/pricing/" target="_blank">Akismet.com</a>' ) . '</p>',
 					)
 				);
 
@@ -306,7 +306,7 @@ class Akismet_Admin {
 		// Help Sidebar
 		$current_screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'For more information:', 'akismet' ) . '</strong></p>' .
-			'<p><a href="https://akismet.com/faq/" target="_blank">' . esc_html__( 'Akismet FAQ', 'akismet' ) . '</a></p>' .
+			'<p><a href="https://akismet.com/resources/" target="_blank">' . esc_html__( 'Akismet FAQ', 'akismet' ) . '</a></p>' .
 			'<p><a href="https://akismet.com/support/" target="_blank">' . esc_html__( 'Akismet Support', 'akismet' ) . '</a></p>'
 		);
 	}
