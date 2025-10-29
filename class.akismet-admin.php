@@ -968,6 +968,20 @@ class Akismet_Admin {
 		return add_query_arg( $args, menu_page_url( 'akismet-key-config', false ) );
 	}
 
+	/**
+	 * Get Akismet user subscription information.
+	 *
+	 * @param string $api_key The Akismet API key.
+	 * @return object|false Object with subscription info, or false if key is invalid.
+	 *
+	 * The returned object contains these properties:
+	 * - account_id (int|false): WordPress.com user ID, or false if unavailable.
+	 * - status (string): Account status - 'active', 'active-dunning', 'no-sub', 'cancelled', 'suspended', 'missing', or 'notice'.
+	 * - account_name (string): Subscription plan display name.
+	 * - account_type (string): Account type slug.
+	 * - next_billing_date (int|false): Unix timestamp of next billing date, or false if none.
+	 * - limit_reached (bool): Whether the usage limit has been reached.
+	 */
 	public static function get_akismet_user( $api_key ) {
 		$akismet_user = false;
 
