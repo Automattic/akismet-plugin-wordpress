@@ -66,9 +66,17 @@ if ( ! isset( $type ) ) {
 			</p>
 		</div>
 		<div class="akismet-alert-button-wrapper">
-			<a href="https://akismet.com/pricing/?flow=upgrade&amp;utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=commercial_upgrade" class="akismet-alert-button akismet-button">
-			<?php esc_html_e( 'Upgrade plan', 'akismet' ); ?>
-			</a>
+			<?php
+			Akismet::view(
+				'get',
+				array(
+					'text'         => __( 'Upgrade plan', 'akismet' ),
+					'classes'      => array( 'akismet-alert-button', 'akismet-button' ),
+					'redirect'     => 'upgrade',
+					'utm_content'  => 'commercial_upgrade',
+				)
+			);
+			?>
 		</div>
 	</div>
 
