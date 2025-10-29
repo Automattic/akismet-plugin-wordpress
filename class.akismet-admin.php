@@ -366,7 +366,7 @@ class Akismet_Admin {
 			$akismet_user = self::get_akismet_user( $api_key );
 
 			if ( $akismet_user ) {
-				if ( in_array( $akismet_user->status, array( 'active', 'active-dunning', 'no-sub' ) ) ) {
+				if ( in_array( $akismet_user->status, array( 'active', 'active-dunning', 'no-sub', 'cancelled' ) ) ) {
 					update_option( 'wordpress_api_key', $api_key );
 				}
 
