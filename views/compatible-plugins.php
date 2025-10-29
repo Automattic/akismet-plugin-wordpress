@@ -25,7 +25,7 @@ if ( is_array( $compatible_plugins ) ) :
 			echo '<p>';
 
 			if ( 0 === $compatible_plugin_count ) {
-				echo '<a class="akismet-settings__external-link" href="https://akismet.com/developers/plugins-and-libraries/">';
+				echo '<a class="akismet-settings__external-link" href="https://akismet.com/developers/plugins-and-libraries/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=compatible_plugins">';
 				echo esc_html( __( 'See supported integrations', 'akismet' ) );
 				echo '</a>';
 			} else {
