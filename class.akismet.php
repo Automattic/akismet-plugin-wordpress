@@ -13,6 +13,7 @@ class Akismet {
 	const ALERT_CODE_COMMERCIAL             = 30001;
 
 	// User account status constants
+	const USER_STATUS_ACTIVE    = 'active';
 	const USER_STATUS_NO_SUB    = 'no-sub';
 	const USER_STATUS_MISSING   = 'missing';
 	const USER_STATUS_CANCELLED = 'cancelled';

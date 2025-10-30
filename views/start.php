@@ -15,7 +15,7 @@
 			<?php
 			if ( Akismet::predefined_api_key() ) {
 				Akismet::view( 'predefined' );
-			} elseif ( $akismet_user && in_array( $akismet_user->status, array( 'active', 'active-dunning', 'no-sub', 'missing', 'cancelled', 'suspended' ) ) ) {
+			} elseif ( $akismet_user && in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning', Akismet::USER_STATUS_NO_SUB, Akismet::USER_STATUS_MISSING, Akismet::USER_STATUS_CANCELLED, Akismet::USER_STATUS_SUSPENDED ) ) ) {
 				Akismet::view( 'connect-jp', compact( 'akismet_user' ) );
 			} else {
 				Akismet::view( 'activate' );

@@ -47,7 +47,7 @@ if ( ! isset( $type ) ) {
 		<p><?php esc_html_e( 'WP-Cron has been disabled using the DISABLE_WP_CRON constant. Comment rechecks may not work properly.', 'akismet' ); ?></p>
 	</div>
 
-<?php elseif ( $type === 'alert' && $code === Akismet::ALERT_CODE_COMMERCIAL && $parent_view === 'config' ) : ?>
+<?php elseif ( $type === 'alert' && $code === Akismet::ALERT_CODE_COMMERCIAL && isset( $parent_view ) && $parent_view === 'config' ) : ?>
 	<?php // Display a different commercial warning alert on the config page ?>
 	<div class="akismet-card akismet-alert is-commercial">
 		<div>

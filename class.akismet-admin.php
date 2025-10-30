@@ -366,11 +366,11 @@ class Akismet_Admin {
 			$akismet_user = self::get_akismet_user( $api_key );
 
 			if ( $akismet_user ) {
-				if ( in_array( $akismet_user->status, array( 'active', 'active-dunning', 'no-sub', 'cancelled' ) ) ) {
+				if ( in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning', Akismet::USER_STATUS_NO_SUB ) ) ) {
 					update_option( 'wordpress_api_key', $api_key );
 				}
 
-				if ( $akismet_user->status == 'active' ) {
+				if ( $akismet_user->status == Akismet::USER_STATUS_ACTIVE ) {
 					self::$notices['status'] = 'new-key-valid';
 				} elseif ( $akismet_user->status == 'notice' ) {
 					self::$notices['status'] = $akismet_user;
@@ -385,8 +385,8 @@ class Akismet_Admin {
 			// Check get-subscription to distinguish between these cases.
 			$akismet_user = self::get_akismet_user( $api_key );
 
-			if ( $akismet_user && isset( $akismet_user->status ) && $akismet_user->status === 'suspended' ) {
-				self::$notices['status'] = 'suspended';
+			if ( $akismet_user && isset( $akismet_user->status ) && $akismet_user->status === Akismet::USER_STATUS_SUSPENDED ) {
+				self::$notices['status'] = Akismet::USER_STATUS_SUSPENDED;
 			} else {
 				self::$notices['status'] = 'new-key-' . $key_status;
 			}
@@ -1072,7 +1072,7 @@ class Akismet_Admin {
 
 				if ( is_object( $akismet_user ) ) {
 					self::save_key( $akismet_user->api_key );
-					return in_array( $akismet_user->status, array( 'active', 'active-dunning', 'no-sub' ) );
+					return in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning', Akismet::USER_STATUS_NO_SUB ) );
 				}
 			}
 		}
@@ -1197,11 +1197,11 @@ class Akismet_Admin {
 
 		/*
 		// To see all variants when testing.
-		$akismet_user->status = 'no-sub';
+		$akismet_user->status = Akismet::USER_STATUS_NO_SUB;
 		Akismet::view( 'start', compact( 'akismet_user' ) );
-		$akismet_user->status = 'cancelled';
+		$akismet_user->status = Akismet::USER_STATUS_CANCELLED;
 		Akismet::view( 'start', compact( 'akismet_user' ) );
-		$akismet_user->status = 'suspended';
+		$akismet_user->status = Akismet::USER_STATUS_SUSPENDED;
 		Akismet::view( 'start', compact( 'akismet_user' ) );
 		$akismet_user->status = 'other';
 		Akismet::view( 'start', compact( 'akismet_user' ) );
@@ -1240,7 +1240,7 @@ class Akismet_Admin {
 		$notices = array();
 
 		if ( empty( self::$notices ) ) {
-			if ( ! empty( $stat_totals['all'] ) && isset( $stat_totals['all']->time_saved ) && $akismet_user->status == 'active' && $akismet_user->account_type == 'free-api-key' ) {
+			if ( ! empty( $stat_totals['all'] ) && isset( $stat_totals['all']->time_saved ) && $akismet_user->status == Akismet::USER_STATUS_ACTIVE && $akismet_user->account_type == 'free-api-key' ) {
 
 				$time_saved = false;
 
@@ -1269,7 +1269,7 @@ class Akismet_Admin {
 			}
 		}
 
-		if ( ! Akismet::predefined_api_key() && ! isset( self::$notices['status'] ) && in_array( $akismet_user->status, array( 'cancelled', 'suspended', 'missing', 'no-sub' ) ) ) {
+		if ( ! Akismet::predefined_api_key() && ! isset( self::$notices['status'] ) && in_array( $akismet_user->status, array( Akismet::USER_STATUS_CANCELLED, Akismet::USER_STATUS_SUSPENDED, Akismet::USER_STATUS_MISSING, Akismet::USER_STATUS_NO_SUB ) ) ) {
 			$notices[] = array( 'type' => $akismet_user->status );
 		}
 
@@ -1296,10 +1296,10 @@ class Akismet_Admin {
 		// $notices[] = array( 'type' => 'missing-functions' );
 		// $notices[] = array( 'type' => 'servers-be-down' );
 		// $notices[] = array( 'type' => 'active-dunning' );
-		// $notices[] = array( 'type' => 'cancelled' );
-		// $notices[] = array( 'type' => 'suspended' );
-		// $notices[] = array( 'type' => 'missing' );
-		// $notices[] = array( 'type' => 'no-sub' );
+		// $notices[] = array( 'type' => Akismet::USER_STATUS_CANCELLED );
+		// $notices[] = array( 'type' => Akismet::USER_STATUS_SUSPENDED );
+		// $notices[] = array( 'type' => Akismet::USER_STATUS_MISSING );
+		// $notices[] = array( 'type' => Akismet::USER_STATUS_NO_SUB );
 		// $notices[] = array( 'type' => 'new-key-valid' );
 		// $notices[] = array( 'type' => 'new-key-invalid' );
 		// $notices[] = array( 'type' => 'existing-key-invalid' );
