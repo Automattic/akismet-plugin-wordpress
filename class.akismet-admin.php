@@ -366,14 +366,14 @@ class Akismet_Admin {
 			$akismet_user = self::get_akismet_user( $api_key );
 
 			if ( $akismet_user ) {
-				if ( in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning', Akismet::USER_STATUS_NO_SUB ) ) ) {
+				if ( in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning' ) ) ) {
 					update_option( 'wordpress_api_key', $api_key );
 				}
 
 				if ( $akismet_user->status == Akismet::USER_STATUS_ACTIVE ) {
 					self::$notices['status'] = 'new-key-valid';
-				} elseif ( $akismet_user->status == 'notice' ) {
-					self::$notices['status'] = $akismet_user;
+				} elseif ( $akismet_user->status == Akismet::USER_STATUS_NO_SUB ) {
+					self::$notices['status'] = 'no-sub';
 				} else {
 					self::$notices['status'] = $akismet_user->status;
 				}
@@ -981,7 +981,7 @@ class Akismet_Admin {
 	 * Get Akismet user subscription information.
 	 *
 	 * @param string $api_key The Akismet API key.
-	 * @return object|false Object with subscription info, or false if key is invalid.
+	 * @return object|false Object with subscription info, or false if key is invalid or has no subscription.
 	 *
 	 * The returned object contains these properties:
 	 * - account_id (int|false): WordPress.com user ID, or false if unavailable.
@@ -992,8 +992,6 @@ class Akismet_Admin {
 	 * - limit_reached (bool): Whether the usage limit has been reached.
 	 */
 	public static function get_akismet_user( $api_key ) {
-		$akismet_user = false;
-
 		$request_args = array(
 			'key'  => $api_key,
 			'blog' => get_option( 'home' ),
@@ -1003,9 +1001,14 @@ class Akismet_Admin {
 
 		$subscription_verification = Akismet::http_post( Akismet::build_query( $request_args ), 'get-subscription' );
 
+		$akismet_user = false;
+
 		if ( ! empty( $subscription_verification[1] ) ) {
 			if ( 'invalid' !== $subscription_verification[1] ) {
-				$akismet_user = json_decode( $subscription_verification[1] );
+				$decoded = json_decode( $subscription_verification[1] );
+				if ( is_object( $decoded ) ) {
+					$akismet_user = $decoded;
+				}
 			}
 		}
 
