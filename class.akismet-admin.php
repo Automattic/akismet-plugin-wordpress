@@ -1093,15 +1093,16 @@ class Akismet_Admin {
 
 	public static function get_usage_limit_alert_data() {
 		return array(
-			'type'                => 'usage-limit',
-			'code'                => (int) get_option( 'akismet_alert_code' ),
-			'msg'                 => get_option( 'akismet_alert_msg' ),
-			'api_calls'           => get_option( 'akismet_alert_api_calls' ),
-			'usage_limit'         => get_option( 'akismet_alert_usage_limit' ),
-			'upgrade_plan'        => get_option( 'akismet_alert_upgrade_plan' ),
-			'upgrade_url'         => get_option( 'akismet_alert_upgrade_url' ),
-			'upgrade_type'        => get_option( 'akismet_alert_upgrade_type' ),
-			'upgrade_via_support' => get_option( 'akismet_alert_upgrade_via_support' ) === 'true',
+			'type'                   => 'usage-limit',
+			'code'                   => (int) get_option( 'akismet_alert_code' ),
+			'msg'                    => get_option( 'akismet_alert_msg' ),
+			'api_calls'              => get_option( 'akismet_alert_api_calls' ),
+			'usage_limit'            => get_option( 'akismet_alert_usage_limit' ),
+			'upgrade_plan'           => get_option( 'akismet_alert_upgrade_plan' ),
+			'upgrade_url'            => get_option( 'akismet_alert_upgrade_url' ),
+			'upgrade_type'           => get_option( 'akismet_alert_upgrade_type' ),
+			'upgrade_via_support'    => get_option( 'akismet_alert_upgrade_via_support' ) === 'true',
+			'recommended_plan_name'  => get_option( 'akismet_alert_recommended_plan_name' ),
 		);
 	}
 
@@ -1305,6 +1306,8 @@ class Akismet_Admin {
 		// $notices[] = array( 'type' => 'existing-key-invalid' );
 		// $notices[] = array( 'type' => 'new-key-failed' );
 		// $notices[] = array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_plan' => 'Enterprise', 'upgrade_url' => 'https://akismet.com/account/', 'code' => 10502 );
+		// $notices[] = array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_type' => 'qty', 'upgrade_plan' => 'Business', 'upgrade_url' => 'https://akismet.com/account/', 'code' => 10504, 'recommended_plan_name' => 'Akismet Pro (500)' );
+		// $notices[] = array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_type' => 'qty', 'upgrade_plan' => 'Business', 'upgrade_url' => 'https://akismet.com/pricing/', 'code' => 10508 );
 		// $notices[] = array( 'type' => 'spam-check', 'link_text' => 'Link text.' );
 		// $notices[] = array( 'type' => 'spam-check-cron-disabled' );
 		// $notices[] = array( 'type' => 'alert', 'code' => 123 );
@@ -1326,6 +1329,9 @@ class Akismet_Admin {
 		// Akismet::view( 'notice', array( 'type' => 'spam-check-cron-disabled' ) );
 		// Akismet::view( 'notice', array( 'type' => 'spam-check' ) );
 		// Akismet::view( 'notice', array( 'type' => 'alert', 'code' => 123, 'msg' => 'Message' ) );
+		// Akismet::view( 'notice', array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_plan' => 'Enterprise', 'upgrade_url' => 'https://akismet.com/account/', 'code' => 10502 ) );
+		// Akismet::view( 'notice', array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_type' => 'qty', 'upgrade_plan' => 'Business', 'upgrade_url' => 'https://akismet.com/account/', 'code' => 10504, 'recommended_plan_name' => 'Akismet Pro (500)' ) );
+		// Akismet::view( 'notice', array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_type' => 'qty', 'upgrade_plan' => 'Business', 'upgrade_url' => 'https://akismet.com/pricing/', 'code' => 10508 ) );
 
 		if ( in_array( $hook_suffix, array( 'edit-comments.php' ) ) && (int) get_option( 'akismet_alert_code' ) > 0 ) {
 			Akismet::verify_key( Akismet::get_api_key() ); // verify that the key is still in alert state

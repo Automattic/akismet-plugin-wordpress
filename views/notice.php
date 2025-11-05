@@ -308,32 +308,32 @@ if ( ! isset( $type ) ) {
 					)
 				);
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limits_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
 				echo '</a>';
 
 				break;
 			case 'SECOND_MONTH_OVER_LIMIT':
-				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Please consider upgrading your plan.', 'akismet' ) );
+				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Increase your limit to make sure your site stays protected from spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limits_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
 				echo '</a>';
 
 				break;
 			case 'THIRD_MONTH_APPROACHING_LIMIT':
-				echo esc_html( __( 'Your Akismet usage is nearing your plan&#8217;s limit for the third consecutive month. We will restrict your account after you reach the limit. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' ) );
+				echo esc_html( __( 'Your Akismet usage is nearing your plan&#8217;s limit for the third consecutive month. We will restrict your account after you reach the limit. Increase your limit to make sure your site stays protected from spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limits_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
 				echo '</a>';
 
 				break;
 			case 'THIRD_MONTH_OVER_LIMIT':
 			case 'FOUR_PLUS_MONTHS_OVER_LIMIT':
-				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for three consecutive months. We have restricted your account for the rest of the month. Upgrade your plan so Akismet can continue blocking spam.', 'akismet' ) );
+				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for three consecutive months. We have restricted your account for the rest of the month. Increase your limit to make sure your site stays protected from spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limits_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
 				echo '</a>';
 
@@ -351,12 +351,22 @@ if ( ! isset( $type ) ) {
 				// Direct user to contact support.
 				esc_html_e( 'Contact Akismet support', 'akismet' );
 			} elseif ( ! empty( $upgrade_type ) && 'qty' === $upgrade_type ) {
-				// If only a qty upgrade is required, show a more generic message.
-				esc_html_e( 'Upgrade your subscription level', 'akismet' );
+				// If a qty upgrade is required, use recommended plan name if available.
+				if ( ! empty( $recommended_plan_name ) && is_string( $recommended_plan_name ) ) {
+					echo esc_html(
+						sprintf(
+							/* translators: The placeholder is the name of an Akismet subscription plan, like "Akismet Pro" or "Akismet Business" . */
+							__( 'Add an %s subscription', 'akismet' ),
+							$recommended_plan_name
+						)
+					);
+				} else {
+					esc_html_e( 'Increase your limit', 'akismet' );
+				}
 			} else {
 				echo esc_html(
 					sprintf(
-						/* translators: The placeholder is the name of a subscription level, like "Plus" or "Enterprise" . */
+						/* translators: The placeholder is the name of a subscription level, like "Akismet Business" or "Akismet Enterprise" . */
 						__( 'Upgrade to %s', 'akismet' ),
 						$upgrade_plan
 					)
