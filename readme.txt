@@ -38,7 +38,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Improve caching of compatible plugins.
 * Explain the key features of Akismet more clearly on the setup page.
 * Improve the configuration process to better explain errors when they occur.
-* UI cleanup and refresh
+* Setup UI cleanup and refresh.
 * Improve messaging related to usage limits.
 
 = 5.5 =

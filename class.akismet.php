@@ -1783,7 +1783,7 @@ class Akismet {
 			++$field_count;
 
 			$fields .= '<input type="hidden" id="ak_js_' . $field_count . '" name="' . $prefix . 'js" value="' . mt_rand( 0, 250 ) . '"/>';
-			$fields .= '<script>document.getElementById( "ak_js_' . $field_count . '" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
+			$fields .= wp_get_inline_script_tag( 'document.getElementById( "ak_js_' . $field_count . '" ).setAttribute( "value", ( new Date() ).getTime() );' );
 		}
 
 		$fields .= '</p>';
