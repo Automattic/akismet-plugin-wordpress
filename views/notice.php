@@ -221,7 +221,7 @@ if ( ! isset( $type ) ) {
 				echo wp_kses(
 					sprintf(
 						/* translators: The placeholder is a URL for checking pending comments. */
-						__( 'Would you like to <a href="%s">check pending comments</a>?', 'akismet' ),
+						__( 'Would you like to <a href="%s">scan pending comments for spam</a>?', 'akismet' ),
 						esc_url( $check_pending_link )
 					),
 					$kses_allow_link
