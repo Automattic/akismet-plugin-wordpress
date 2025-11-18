@@ -134,17 +134,6 @@ if ( ! isset( $type ) ) {
 	</p>
 </div>
 
-<?php elseif ( $type === 'active-dunning' ) : ?>
-<div class="akismet-alert is-bad">
-	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Please update your payment information.', 'akismet' ); ?></h3>
-	<p>
-		<?php
-		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'We cannot process your payment. Please <a class="akismet-external-link" href="%s" target="_blank">update your payment details</a>', 'akismet' ), esc_url( 'https://wordpress.com/me/purchases/payment-methods?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=payment_update' ) ), $kses_allow_link );
-		?>
-	</p>
-</div>
-
 <?php elseif ( $type === 'cancelled' ) : ?>
 <div class="akismet-alert is-bad">
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Your Akismet plan has been cancelled.', 'akismet' ); ?></h3>

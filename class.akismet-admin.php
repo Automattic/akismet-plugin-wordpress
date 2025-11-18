@@ -366,7 +366,7 @@ class Akismet_Admin {
 			$akismet_user = self::get_akismet_user( $api_key );
 
 			if ( $akismet_user ) {
-				if ( in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning' ) ) ) {
+				if ( $akismet_user->status === Akismet::USER_STATUS_ACTIVE ) {
 					update_option( 'wordpress_api_key', $api_key );
 				}
 
@@ -985,7 +985,7 @@ class Akismet_Admin {
 	 *
 	 * The returned object contains these properties:
 	 * - account_id (int|false): WordPress.com user ID, or false if unavailable.
-	 * - status (string): Account status - 'active', 'active-dunning', 'no-sub', 'cancelled', 'suspended', 'missing', or 'notice'.
+	 * - status (string): Account status - 'active', 'no-sub', 'cancelled', 'suspended', 'missing', or 'notice'.
 	 * - account_name (string): Subscription plan display name.
 	 * - account_type (string): Account type slug.
 	 * - next_billing_date (int|false): Unix timestamp of next billing date, or false if none.
@@ -1075,7 +1075,7 @@ class Akismet_Admin {
 
 				if ( is_object( $akismet_user ) ) {
 					self::save_key( $akismet_user->api_key );
-					return in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning', Akismet::USER_STATUS_NO_SUB ) );
+					return in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, Akismet::USER_STATUS_NO_SUB ) );
 				}
 			}
 		}
@@ -1299,7 +1299,6 @@ class Akismet_Admin {
 		// $notices[] = array( 'type' => 'notice', 'notice_header' => 'This is the notice header.', 'notice_text' => 'This is the notice text.' );
 		// $notices[] = array( 'type' => 'missing-functions' );
 		// $notices[] = array( 'type' => 'servers-be-down' );
-		// $notices[] = array( 'type' => 'active-dunning' );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_CANCELLED );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_SUSPENDED );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_MISSING );
