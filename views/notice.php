@@ -334,7 +334,7 @@ if ( ! isset( $type ) ) {
 		</p>
 	</div>
 	<div class="akismet-usage-limit-cta">
-		<a href="<?php echo esc_attr( $upgrade_url . ( strpos( $upgrade_url, '?' ) !== false ? '&' : '?' ) . 'utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=usage_limit_upgrade' ); ?>" class="button" target="_blank">
+		<a href="<?php echo esc_url( $upgrade_url . ( strpos( $upgrade_url, '?' ) !== false ? '&' : '?' ) . 'utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=usage_limit_upgrade' ); ?>" class="button" target="_blank">
 			<?php
 			if ( isset( $upgrade_via_support ) && $upgrade_via_support ) {
 				// Direct user to contact support.
