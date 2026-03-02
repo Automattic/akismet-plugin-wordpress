@@ -793,7 +793,7 @@ class Akismet_Admin {
 
 								if ( isset( $row['user'] ) ) {
 									/* translators: %1$s is a username; %2$s is a short string (like 'spam' or 'approved') denoting the new comment status. */
-									$message = sprintf( esc_html( __( '%1$s changed the comment status to %2$s.', 'akismet' ) ), $row['user'], '<code>' . esc_html( $new_status ) . '</code>' );
+									$message = sprintf( esc_html( __( '%1$s changed the comment status to %2$s.', 'akismet' ) ), esc_html( $row['user'] ), '<code>' . esc_html( $new_status ) . '</code>' );
 								}
 							}
 							break;
