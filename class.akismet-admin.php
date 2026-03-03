@@ -1169,32 +1169,15 @@ class Akismet_Admin {
 			return;
 		}
 
-		// the user can choose to auto connect their API key by clicking a button on the akismet done page
-		// if jetpack, get verified api key by using connected wpcom user id
-		// if no jetpack, get verified api key by using an akismet token
+		// The user can choose to auto-connect their API key by clicking a button on the Akismet done page.
+		// If Jetpack is insalled and connected, use the connected wpcom user.
 
 		$akismet_user = false;
 
-		if ( isset( $_GET['token'] ) && preg_match( '/^(\d+)-[0-9a-f]{20}$/', $_GET['token'] ) ) {
-			$akismet_user = self::verify_wpcom_key( '', '', array( 'token' => $_GET['token'] ) );
-		}
+		$jetpack_user = self::get_jetpack_user();
 
-		if ( false === $akismet_user ) {
-			$jetpack_user = self::get_jetpack_user();
-
-			if ( is_array( $jetpack_user ) ) {
-				$akismet_user = self::verify_wpcom_key( $jetpack_user['api_key'], $jetpack_user['user_id'] );
-			}
-		}
-
-		if ( isset( $_GET['action'] ) ) {
-			if ( $_GET['action'] == 'save-key' ) {
-				if ( is_object( $akismet_user ) ) {
-					self::save_key( $akismet_user->api_key );
-					self::display_configuration_page();
-					return;
-				}
-			}
+		if ( is_array( $jetpack_user ) ) {
+			$akismet_user = self::verify_wpcom_key( $jetpack_user['api_key'], $jetpack_user['user_id'] );
 		}
 
 		Akismet::view( 'start', compact( 'akismet_user' ) );
