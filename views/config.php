@@ -233,6 +233,33 @@ $kses_allow_link_href = array(
 									</div>
 								</div>
 							</div>
+
+							<?php if ( apply_filters( 'akismet_show_mcp_setting', true ) ) : ?>
+								<div class="akismet-settings__row">
+									<div class="akismet-settings__row-text">
+										<h3 class="akismet-settings__row-title">
+											<?php esc_html_e( 'Tool access', 'akismet' ); ?>
+										</h3>
+									</div>
+									<div class="akismet-settings__row-input">
+										<label class="akismet-settings__row-input-label" for="akismet_enable_mcp_access">
+											<input
+												name="akismet_enable_mcp_access"
+												id="akismet_enable_mcp_access"
+												value="1"
+												type="checkbox"
+												<?php checked( '1', get_option( 'akismet_enable_mcp_access' ) ); ?>
+											/>
+											<span class="akismet-settings__row-label-text">
+												<?php esc_html_e( 'Allow ', 'akismet' ); ?><abbr title="<?php esc_attr_e( 'Model Context Protocol', 'akismet' ); ?>"><?php esc_html_e( 'MCP', 'akismet' ); ?></abbr><?php esc_html_e( ' clients to access Akismet data and functionality', 'akismet' ); ?>
+											</span>
+										</label>
+										<div class="akismet-settings__row-note">
+											<?php esc_html_e( 'MCP (Model Context Protocol) allows AI assistants to access Akismet statistics and spam checking features.', 'akismet' ); ?>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
 						</div>
 
 						<div class="akismet-card-actions">

@@ -32,6 +32,14 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.7 =
+*Release Date - TBC*
+
+* Add Abilities API support for stats and comment checking, including MCP tool integration.
+* Improve detection of automated spam submissions on the front end.
+* Make comment history sorting more resilient when called with invalid data.
+* Use wp_get_inline_script_tag() for safer inline script output, and other small security enhancements.
+
 = 5.6 =
 *Release Date - 12 November 2025*
 

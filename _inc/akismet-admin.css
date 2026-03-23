@@ -243,6 +243,10 @@ body {
 	margin-top: 0.4em;
 }
 
+.akismet-settings__row-note abbr {
+	cursor: help;
+}
+
 .akismet-settings__row input[type="checkbox"],
 .akismet-settings__row input[type="radio"] {
 	accent-color: var(--akismet-color-mid-green);

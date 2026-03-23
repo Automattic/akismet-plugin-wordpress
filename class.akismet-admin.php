@@ -200,7 +200,7 @@ class Akismet_Admin {
 				),
 			);
 
-			if ( isset( $_GET['akismet_recheck'] ) && wp_verify_nonce( $_GET['akismet_recheck'], 'akismet_recheck' ) ) {
+			if ( isset( $_GET['akismet_recheck'] ) && is_string( $_GET['akismet_recheck'] ) && wp_verify_nonce( $_GET['akismet_recheck'], 'akismet_recheck' ) ) {
 				$inline_js['start_recheck'] = true;
 			}
 
@@ -326,11 +326,11 @@ class Akismet_Admin {
 			die( __( 'Cheatin&#8217; uh?', 'akismet' ) );
 		}
 
-		if ( ! wp_verify_nonce( $_POST['_wpnonce'], self::NONCE ) ) {
+		if ( empty( $_POST['_wpnonce'] ) || ! is_string( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], self::NONCE ) ) {
 			return false;
 		}
 
-		foreach ( array( 'akismet_strictness', 'akismet_show_user_comments_approved' ) as $option ) {
+		foreach ( array( 'akismet_strictness', 'akismet_show_user_comments_approved', 'akismet_enable_mcp_access' ) as $option ) {
 			update_option( $option, isset( $_POST[ $option ] ) && (int) $_POST[ $option ] == 1 ? '1' : '0' );
 		}
 
@@ -526,7 +526,7 @@ class Akismet_Admin {
 			return;
 		}
 
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'akismet_check_for_spam' ) ) {
+		if ( empty( $_POST['nonce'] ) || ! is_string( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'akismet_check_for_spam' ) ) {
 			wp_send_json(
 				array(
 					'error' => __( 'You don&#8217;t have permission to do that.', 'akismet' ),
@@ -1153,7 +1153,7 @@ class Akismet_Admin {
 	public static function display_start_page() {
 		if ( isset( $_GET['action'] ) ) {
 			if ( $_GET['action'] == 'delete-key' ) {
-				if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], self::NONCE ) ) {
+				if ( isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], self::NONCE ) ) {
 					delete_option( 'wordpress_api_key' );
 				}
 			}
@@ -1169,15 +1169,32 @@ class Akismet_Admin {
 			return;
 		}
 
-		// The user can choose to auto-connect their API key by clicking a button on the Akismet done page.
-		// If Jetpack is insalled and connected, use the connected wpcom user.
+		// the user can choose to auto connect their API key by clicking a button on the akismet done page
+		// if jetpack, get verified api key by using connected wpcom user id
+		// if no jetpack, get verified api key by using an akismet token
 
 		$akismet_user = false;
 
-		$jetpack_user = self::get_jetpack_user();
+		if ( isset( $_GET['token'] ) && preg_match( '/^(\d+)-[0-9a-f]{20}$/', $_GET['token'] ) ) {
+			$akismet_user = self::verify_wpcom_key( '', '', array( 'token' => $_GET['token'] ) );
+		}
 
-		if ( is_array( $jetpack_user ) ) {
-			$akismet_user = self::verify_wpcom_key( $jetpack_user['api_key'], $jetpack_user['user_id'] );
+		if ( false === $akismet_user ) {
+			$jetpack_user = self::get_jetpack_user();
+
+			if ( is_array( $jetpack_user ) ) {
+				$akismet_user = self::verify_wpcom_key( $jetpack_user['api_key'], $jetpack_user['user_id'] );
+			}
+		}
+
+		if ( isset( $_GET['action'] ) ) {
+			if ( $_GET['action'] == 'save-key' ) {
+				if ( is_object( $akismet_user ) ) {
+					self::save_key( $akismet_user->api_key );
+					self::display_configuration_page();
+					return;
+				}
+			}
 		}
 
 		Akismet::view( 'start', compact( 'akismet_user' ) );

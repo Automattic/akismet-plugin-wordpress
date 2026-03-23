@@ -1,4 +1,4 @@
-/* This file was automatically generated on Oct 23 2025 00:26:05 */
+/* This file was automatically generated on Jan 29 2026 03:19:02 */
 
 body {
 	--akismet-color-charcoal: #272635;
@@ -243,6 +243,10 @@ body {
 .akismet-settings__row-note {
 	font-size: 0.9em;
 	margin-top: 0.4em;
+}
+
+.akismet-settings__row-note abbr {
+	cursor: help;
 }
 
 .akismet-settings__row input[type="checkbox"],
