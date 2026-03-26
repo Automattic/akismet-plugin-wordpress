@@ -10,9 +10,33 @@ $kses_allow_link_href = array(
 ?>
 <div id="akismet-plugin-container">
 	<div class="akismet-masthead">
-		<div class="akismet-masthead__inside-container">
-			<?php Akismet::view( 'logo' ); ?>
-		</div>
+		<?php if ( Akismet_Admin::is_jetpack_active() ) : ?>
+			<div class="akismet-masthead__jetpack-header">
+				<div class="akismet-masthead__breadcrumb">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=jetpack' ) ); ?>" class="akismet-masthead__jetpack-link">
+						<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+							<g clip-path="url(#akismet-jetpack-icon-clip)">
+								<path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#069E08"/>
+								<path d="M15.5923 8.32031L10.5923 18.0146V8.32031H15.5923ZM9.58057 11.6602H4.6001L9.58057 1.98438V11.6602Z" fill="white"/>
+							</g>
+							<defs>
+								<clipPath id="akismet-jetpack-icon-clip">
+									<path d="M0 2C0 0.895431 0.895431 0 2 0H18C19.1046 0 20 0.895431 20 2V18C20 19.1046 19.1046 20 18 20H2C0.895431 20 0 19.1046 0 18V2Z" fill="white"/>
+								</clipPath>
+							</defs>
+						</svg>
+						<?php esc_html_e( 'Jetpack', 'akismet' ); ?>
+					</a>
+					<span class="akismet-masthead__breadcrumb-separator" aria-hidden="true">/</span>
+					<span class="akismet-masthead__breadcrumb-current" aria-current="page"><?php esc_html_e( 'Akismet Anti-spam', 'akismet' ); ?></span>
+				</div>
+				<p class="akismet-masthead__subtitle"><?php esc_html_e( 'Automatically blocks spam from your comments and forms.', 'akismet' ); ?></p>
+			</div>
+		<?php else : ?>
+			<div class="akismet-masthead__inside-container">
+				<?php Akismet::view( 'logo' ); ?>
+			</div>
+		<?php endif; ?>
 	</div>
 	<div class="akismet-lower">
 		<?php if ( Akismet::get_api_key() ) { ?>
@@ -30,12 +54,6 @@ $kses_allow_link_href = array(
 					<h2 class="akismet-section-header__label">
 						<span><?php esc_html_e( 'Statistics', 'akismet' ); ?></span>
 					</h2>
-
-					<div class="akismet-section-header__actions">
-						<a href="<?php echo esc_url( Akismet_Admin::get_page_url( 'stats' ) ); ?>">
-							<?php esc_html_e( 'Detailed stats', 'akismet' ); ?>
-						</a>
-					</div>
 				</div> <!-- close akismet-section-header -->
 
 				<div class="akismet-new-snapshot">
@@ -69,6 +87,13 @@ $kses_allow_link_href = array(
 						</li>
 					</ul>
 				</div> <!-- close akismet-new-snapshot -->
+
+				<a href="<?php echo esc_url( Akismet_Admin::get_page_url( 'stats' ) ); ?>" class="akismet-stats-footer">
+					<?php esc_html_e( 'View detailed stats', 'akismet' ); ?>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<polyline points="9 18 15 12 9 6"/>
+					</svg>
+				</a>
 			</div> <!-- close akismet-card -->
 		<?php endif; ?>
 
@@ -94,7 +119,12 @@ $kses_allow_link_href = array(
 										<label class="akismet-settings__row-label" for="key"><?php esc_html_e( 'API key', 'akismet' ); ?></label>
 									</h3>
 									<div class="akismet-settings__row-input">
-										<span class="api-key"><input id="key" name="key" type="text" size="15" value="<?php echo esc_attr( get_option( 'wordpress_api_key' ) ); ?>" class="<?php echo esc_attr( 'regular-text code ' . $akismet_user->status ); ?>"></span>
+										<div class="akismet-api-key-wrapper">
+											<input id="key" name="key" type="text" size="15" value="<?php echo esc_attr( get_option( 'wordpress_api_key' ) ); ?>" class="<?php echo esc_attr( 'regular-text code ' . $akismet_user->status ); ?>">
+											<button type="button" class="akismet-api-key-copy" aria-label="<?php esc_attr_e( 'Copy API key', 'akismet' ); ?>">
+												<?php include plugin_dir_path( __FILE__ ) . '../_inc/img/copy.svg'; ?>
+											</button>
+										</div>
 									</div>
 								</div>
 							<?php endif; ?>
