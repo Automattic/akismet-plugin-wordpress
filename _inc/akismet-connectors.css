@@ -1,0 +1,22 @@
+/* Connectors Page */
+
+.connectors-page .akismet-api-key-label {
+	display: block;
+	font-size: 11px;
+	line-height: 1.4;
+	margin-bottom: 8px;
+	padding: 0px;
+	text-transform: uppercase;
+}
+
+.connectors-page .akismet-connector-instructions span {
+	padding-inline-end: 1ch;
+}
+
+.connectors-page .akismet-connector-oneline-link {
+	color: rgb(117, 117, 117);
+	font-size: 12px;
+	font-style: normal;
+	margin-bottom: 0px;
+	margin-top: 8px;
+}

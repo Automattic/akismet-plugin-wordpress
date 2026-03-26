@@ -154,6 +154,61 @@ class Akismet_Admin {
 	public static function load_resources() {
 		global $hook_suffix;
 
+		$screen = get_current_screen();
+
+		if ( $screen && 'options-connectors' === $screen->id ) {
+			add_filter(
+				'script_module_data_akismet-connectors',
+				function ( array $data ): array {
+					$data['connector_logo'] = plugins_url( '_inc/img/akismet-logomark.svg', __FILE__ );
+
+					if ( Akismet::predefined_api_key() ) {
+						$data['api_key_predefined'] = true;
+					} else {
+						$data['api_key'] = Akismet::get_api_key();
+					}
+
+					if ( ! isset( $data['strings'] ) ) {
+						$data['strings'] = array();
+					}
+
+					$data['strings'] = array_merge(
+						$data['strings'],
+						array(
+							'API key'                                                       => __( 'API key', 'akismet' ),
+							'Protect your site from spam.'                                  => __( 'Protect your site from spam.', 'akismet' ),
+							'Connect Akismet to start protecting your site from spam.'      => __( 'Connect Akismet to start protecting your site from spam.', 'akismet' ),
+							'Set up your Akismet connection here.'                          => __( 'Set up your Akismet connection here.', 'akismet' ),
+							'Manage your Akismet connection here.'                          => __( 'Manage your Akismet connection here.', 'akismet' ),
+							'Manage your other Akismet settings here.'                      => __( 'Manage your other Akismet settings here.', 'akismet' ),
+							'Your Akismet API key is pre-configured and cannot be changed.' => __( 'Your Akismet API key is pre-configured and cannot be changed.', 'akismet' ),
+							'Close'                                                         => __( 'Close', 'akismet' ),
+							'View details'                                                  => __( 'View details', 'akismet' ),
+						)
+					);
+
+					return $data;
+				},
+				10,
+				1
+			);
+
+			wp_enqueue_script_module(
+				'akismet-connectors',
+				plugin_dir_url( __FILE__ ) . '_inc/connectors.js',
+				array(
+					array(
+						'id'     => '@wordpress/connectors',
+						'import' => 'static',
+					),
+				),
+				self::get_asset_file_version( '_inc/connectors.js' )
+			);
+
+			wp_register_style( 'akismet-connectors', plugin_dir_url( __FILE__ ) . '_inc/akismet-connectors.css', array(), self::get_asset_file_version( '_inc/akismet-connectors.css' ) );
+			wp_enqueue_style( 'akismet-connectors' );
+		}
+
 		if ( in_array(
 			$hook_suffix,
 			apply_filters(
@@ -192,12 +247,13 @@ class Akismet_Admin {
 			$inline_js = array(
 				'comment_author_url_nonce' => wp_create_nonce( 'comment_author_url_nonce' ),
 				'strings'                  => array(
-					'Remove this URL' => __( 'Remove this URL', 'akismet' ),
-					'Removing...'     => __( 'Removing...', 'akismet' ),
-					'URL removed'     => __( 'URL removed', 'akismet' ),
-					'(undo)'          => __( '(undo)', 'akismet' ),
-					'Re-adding...'    => __( 'Re-adding...', 'akismet' ),
+					'Remove this URL'      => __( 'Remove this URL', 'akismet' ),
+					'Removing...'          => __( 'Removing...', 'akismet' ),
+					'URL removed'          => __( 'URL removed', 'akismet' ),
+					'(undo)'               => __( '(undo)', 'akismet' ),
+					'Re-adding...'         => __( 'Re-adding...', 'akismet' ),
 				),
+				'manage_akismet_url'       => admin_url( 'admin.php?page=akismet-key-config' ),
 			);
 
 			if ( isset( $_GET['akismet_recheck'] ) && is_string( $_GET['akismet_recheck'] ) && wp_verify_nonce( $_GET['akismet_recheck'], 'akismet_recheck' ) ) {

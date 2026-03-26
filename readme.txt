@@ -39,6 +39,7 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 * Improve detection of automated spam submissions on the front end.
 * Make comment history sorting more resilient when called with invalid data.
 * Use wp_get_inline_script_tag() for safer inline script output, and other small security enhancements.
+* Add Akismet to the new Connectors page in WordPress 7.
 
 = 5.6 =
 *Release Date - 12 November 2025*
