@@ -2,7 +2,7 @@
 Contributors: matt, ryan, andy, mdawaffe, tellyworth, josephscott, lessbloat, eoigal, cfinke, automattic, jgs, procifer, stephdau, kbrownkd, bluefuton, derekspringer, lschuyler, andyperdomo, akismetantispam
 Tags: comments, spam, antispam, anti-spam, contact form
 Requires at least: 5.8
-Tested up to: 6.9
+Tested up to: 7.0
 Stable tag: 5.6
 License: GPLv2 or later
 
