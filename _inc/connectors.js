@@ -24,7 +24,7 @@ if ( registerConnector && ConnectorItem ) {
 		registerConnector( 'akismet', {
 			name: 'Akismet',
 			description: akismetConnectorsData.strings['Protect your site from spam.'],
-			logo: createElement( 'img', { src : akismetConnectorsData.connector_logo } ),
+			logo: createElement( 'img', { src : akismetConnectorsData.connector_logo, alt: akismetConnectorsData.strings['Akismet logo'] } ),
 			render: AkismetConnector
 		} );
 	}
@@ -108,7 +108,7 @@ function AkismetConnector( { name, description, logo } ) {
 									createElement(
 										'a',
 										{ href: akismetConnectorsData.manage_akismet_url },
-										akismetConnectorsData.strings['Manage your Akismet connection here.']
+										akismetConnectorsData.strings['Manage your Akismet connection']
 									)
 								)
 							)

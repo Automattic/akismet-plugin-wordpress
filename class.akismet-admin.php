@@ -160,7 +160,8 @@ class Akismet_Admin {
 			add_filter(
 				'script_module_data_akismet-connectors',
 				function ( array $data ): array {
-					$data['connector_logo'] = plugins_url( '_inc/img/akismet-logomark.svg', __FILE__ );
+					$data['connector_logo']    = plugins_url( '_inc/img/akismet-logomark.svg', __FILE__ );
+					$data['manage_akismet_url'] = admin_url( 'admin.php?page=akismet-key-config' );
 
 					if ( Akismet::predefined_api_key() ) {
 						$data['api_key_predefined'] = true;
@@ -179,10 +180,11 @@ class Akismet_Admin {
 							'Protect your site from spam.'                                  => __( 'Protect your site from spam.', 'akismet' ),
 							'Connect Akismet to start protecting your site from spam.'      => __( 'Connect Akismet to start protecting your site from spam.', 'akismet' ),
 							'Set up your Akismet connection here.'                          => __( 'Set up your Akismet connection here.', 'akismet' ),
-							'Manage your Akismet connection here.'                          => __( 'Manage your Akismet connection here.', 'akismet' ),
+							'Manage your Akismet connection'                                => __( 'Manage your Akismet connection', 'akismet' ),
 							'Manage your other Akismet settings here.'                      => __( 'Manage your other Akismet settings here.', 'akismet' ),
 							'Your Akismet API key is pre-configured and cannot be changed.' => __( 'Your Akismet API key is pre-configured and cannot be changed.', 'akismet' ),
 							'Close'                                                         => __( 'Close', 'akismet' ),
+							'Akismet logo'                                                  => __( 'Akismet logo', 'akismet' ),
 							'View details'                                                  => __( 'View details', 'akismet' ),
 						)
 					);
