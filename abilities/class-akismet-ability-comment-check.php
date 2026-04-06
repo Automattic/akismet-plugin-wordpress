@@ -221,14 +221,4 @@ class Akismet_Ability_Comment_Check extends Akismet_Ability implements Akismet_A
 
 		return $response;
 	}
-
-	/**
-	 * Permission callback for the comment-check ability.
-	 *
-	 * @param array|null $input The input parameters (unused).
-	 * @return bool Whether the current user can use this ability.
-	 */
-	public function current_user_has_permission( ?array $input = null ): bool {
-		return current_user_can( 'moderate_comments' );
-	}
 }
