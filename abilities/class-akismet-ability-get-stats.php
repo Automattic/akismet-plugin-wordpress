@@ -13,17 +13,7 @@ declare( strict_types = 1 );
  *
  * Registers and handles the ability to retrieve Akismet statistics.
  */
-class Akismet_Ability_Get_Stats implements Akismet_Ability_Interface {
-
-	/**
-	 * Constructor - registers the ability.
-	 */
-	public function __construct() {
-		wp_register_ability(
-			$this->get_ability_name(),
-			$this->get_config()
-		);
-	}
+class Akismet_Ability_Get_Stats extends Akismet_Ability implements Akismet_Ability_Interface {
 
 	/**
 	 * Get the ability name.
@@ -217,12 +207,6 @@ class Akismet_Ability_Get_Stats implements Akismet_Ability_Interface {
 	 * @return bool Whether the current user can use this ability.
 	 */
 	public function current_user_has_permission( ?array $input = null ): bool {
-		// Check if MCP access is enabled via settings
-		if ( get_option( 'akismet_enable_mcp_access' ) !== '1' ) {
-			return false;
-		}
-
-		// Allow users who can moderate comments to view stats.
 		return current_user_can( 'moderate_comments' );
 	}
 }

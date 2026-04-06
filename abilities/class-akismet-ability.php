@@ -9,7 +9,14 @@
  */
 
 declare( strict_types = 1 );
-abstract class Akismet_Ability {
+
+/**
+ * Base class for Akismet abilities.
+ *
+ * @package Akismet
+ * @since 5.7
+ */
+abstract class Akismet_Ability implements Akismet_Ability_Interface {
 
 	/**
 	 * Get the ability name.
@@ -21,13 +28,13 @@ abstract class Akismet_Ability {
 	abstract protected function get_ability_name(): string;
 
 	/**
-	 * Get the ability name.
+	 * Get the config.
 	 *
-	 * Classes extending this must implement this method to provide the ability name into the registration.
+	 * Classes extending this must implement this method to provide the ability configuration into the registration.
 	 *
 	 * @return array The ability configuration array.
 	 */
-	abstract protected function get_config(): array;
+	abstract public function get_config(): array;
 
 	/**
 	 * Constructor - registers the ability.
@@ -39,6 +46,7 @@ abstract class Akismet_Ability {
 		);
 	}
 
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Base class default, subclasses use $input.
 	/**
 	 * Permission callback for any ability that uses this trait.
 	 *
@@ -46,6 +54,7 @@ abstract class Akismet_Ability {
 	 * @return bool Whether the current user can use this ability.
 	 */
 	public function current_user_has_permission( ?array $input = null ): bool {
+	// phpcs:enable Generic.CodeAnalysis.UnusedFunctionParameter.Found
 		return current_user_can( 'moderate_comments' );
 	}
 }

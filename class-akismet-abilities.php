@@ -35,14 +35,14 @@ class Akismet_Abilities {
 	 * @return void
 	 */
 	public static function init() {
-		// Register category
+		// Register category.
 		if ( did_action( 'wp_abilities_api_categories_init' ) ) {
 			self::register_category();
 		} else {
 			add_action( 'wp_abilities_api_categories_init', array( __CLASS__, 'register_category' ) );
 		}
 
-		// Register abilities
+		// Register abilities.
 		if ( did_action( 'wp_abilities_api_init' ) ) {
 			self::register_abilities();
 		} else {
