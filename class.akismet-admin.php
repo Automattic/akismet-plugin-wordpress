@@ -222,7 +222,8 @@ class Akismet_Admin {
 				self::get_asset_file_version( '_inc/connectors.js' )
 			);
 
-			wp_register_style( 'akismet-connectors', plugin_dir_url( __FILE__ ) . '_inc/akismet-connectors.css', array(), self::get_asset_file_version( '_inc/akismet-connectors.css' ) );
+			$connectors_css_path = is_rtl() ? '_inc/rtl/akismet-connectors-rtl.css' : '_inc/akismet-connectors.css';
+			wp_register_style( 'akismet-connectors', plugin_dir_url( __FILE__ ) . $connectors_css_path, array(), self::get_asset_file_version( $connectors_css_path ) );
 			wp_enqueue_style( 'akismet-connectors' );
 		}
 
