@@ -108,6 +108,21 @@ class Akismet_Admin {
 				__( 'We collect information about visitors who comment on Sites that use our Akismet Anti-spam service. The information we collect depends on how the User sets up Akismet for the Site, but typically includes the commenter\'s IP address, user agent, referrer, and Site URL (along with other information directly provided by the commenter such as their name, username, email address, and the comment itself).', 'akismet' )
 			);
 		}
+
+		if ( ! Akismet::predefined_api_key() ) {
+			register_setting(
+				'connectors',
+				'wordpress_api_key',
+				array(
+					'type' => 'string',
+					'label' => __( 'Akismet API Key', 'akismet' ),
+					'description' => __( 'API key for Akismet.', 'akismet' ),
+					'default' => '',
+					'show_in_rest' => true,
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+		}
 	}
 
 	public static function admin_menu() {
