@@ -10,33 +10,9 @@ $kses_allow_link_href = array(
 ?>
 <div id="akismet-plugin-container">
 	<div class="akismet-masthead">
-		<?php if ( Akismet_Admin::is_jetpack_active() ) : ?>
-			<div class="akismet-masthead__jetpack-header">
-				<div class="akismet-masthead__breadcrumb">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=jetpack' ) ); ?>" class="akismet-masthead__jetpack-link">
-						<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-							<g clip-path="url(#akismet-jetpack-icon-clip)">
-								<path d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="#069E08"/>
-								<path d="M15.5923 8.32031L10.5923 18.0146V8.32031H15.5923ZM9.58057 11.6602H4.6001L9.58057 1.98438V11.6602Z" fill="white"/>
-							</g>
-							<defs>
-								<clipPath id="akismet-jetpack-icon-clip">
-									<path d="M0 2C0 0.895431 0.895431 0 2 0H18C19.1046 0 20 0.895431 20 2V18C20 19.1046 19.1046 20 18 20H2C0.895431 20 0 19.1046 0 18V2Z" fill="white"/>
-								</clipPath>
-							</defs>
-						</svg>
-						<?php esc_html_e( 'Jetpack', 'akismet' ); ?>
-					</a>
-					<span class="akismet-masthead__breadcrumb-separator" aria-hidden="true">/</span>
-					<span class="akismet-masthead__breadcrumb-current" aria-current="page"><?php esc_html_e( 'Akismet Anti-spam', 'akismet' ); ?></span>
-				</div>
-				<p class="akismet-masthead__subtitle"><?php esc_html_e( 'Automatically blocks spam from your comments and forms.', 'akismet' ); ?></p>
-			</div>
-		<?php else : ?>
-			<div class="akismet-masthead__inside-container">
-				<?php Akismet::view( 'logo' ); ?>
-			</div>
-		<?php endif; ?>
+		<div class="akismet-masthead__inside-container">
+			<?php Akismet::view( 'logo' ); ?>
+		</div>
 	</div>
 	<div class="akismet-lower">
 		<?php if ( Akismet::get_api_key() ) { ?>
