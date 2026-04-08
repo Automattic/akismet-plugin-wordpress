@@ -9,11 +9,15 @@ $kses_allow_link_href = array(
 );
 ?>
 <div id="akismet-plugin-container">
-	<div class="akismet-masthead">
-		<div class="akismet-masthead__inside-container">
-			<?php Akismet::view( 'logo' ); ?>
+	<?php if ( has_action( 'akismet_header' ) ) : ?>
+		<?php do_action( 'akismet_header' ); ?>
+	<?php else : ?>
+		<div class="akismet-masthead">
+			<div class="akismet-masthead__inside-container">
+				<?php Akismet::view( 'logo' ); ?>
+			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 	<div class="akismet-lower">
 		<?php if ( Akismet::get_api_key() ) { ?>
 			<?php Akismet_Admin::display_status(); ?>
@@ -345,4 +349,5 @@ $kses_allow_link_href = array(
 			<?php endif; ?>
 		<?php endif; ?>
 	</div>
+	<?php Akismet::view( 'footer' ); ?>
 </div>

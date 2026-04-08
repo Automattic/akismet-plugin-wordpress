@@ -4,11 +4,15 @@
 // There are "undefined" variables here because they're defined in the code that includes this file as a template.
 ?>
 <div id="akismet-plugin-container">
-	<div class="akismet-masthead">
-		<div class="akismet-masthead__inside-container">
-			<?php Akismet::view( 'logo' ); ?>
+	<?php if ( has_action( 'akismet_header' ) ) : ?>
+		<?php do_action( 'akismet_header' ); ?>
+	<?php else : ?>
+		<div class="akismet-masthead">
+			<div class="akismet-masthead__inside-container">
+				<?php Akismet::view( 'logo' ); ?>
+			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 	<div class="akismet-lower">
 		<?php Akismet_Admin::display_status(); ?>
 		<div class="akismet-boxes">
@@ -23,4 +27,5 @@
 			?>
 		</div>
 	</div>
+	<?php Akismet::view( 'footer' ); ?>
 </div>
