@@ -295,42 +295,32 @@ $kses_allow_link_href = array(
 					</div>
 
 					<div class="inside">
-						<table class="akismet-account">
-							<tbody>
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Subscription type', 'akismet' ); ?></th>
-									<td>
-										<?php echo esc_html( $akismet_user->account_name ); ?>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Status', 'akismet' ); ?></th>
-									<td>
-										<?php
-										if ( Akismet::USER_STATUS_CANCELLED === $akismet_user->status ) :
-											esc_html_e( 'Cancelled', 'akismet' );
-										elseif ( Akismet::USER_STATUS_SUSPENDED === $akismet_user->status ) :
-											esc_html_e( 'Suspended', 'akismet' );
-										elseif ( Akismet::USER_STATUS_MISSING === $akismet_user->status ) :
-											esc_html_e( 'Missing', 'akismet' );
-										elseif ( Akismet::USER_STATUS_NO_SUB === $akismet_user->status ) :
-											esc_html_e( 'No subscription found', 'akismet' );
-										else :
-											esc_html_e( 'Active', 'akismet' );
-										endif;
-										?>
-									</td>
-								</tr>
-								<?php if ( $akismet_user->next_billing_date ) : ?>
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Next billing date', 'akismet' ); ?></th>
-									<td>
-										<?php echo esc_html( gmdate( 'F j, Y', $akismet_user->next_billing_date ) ); ?>
-									</td>
-								</tr>
-								<?php endif; ?>
-							</tbody>
-						</table>
+						<dl class="akismet-account">
+							<dt class="akismet-account__label"><?php esc_html_e( 'Subscription type', 'akismet' ); ?></dt>
+							<dd class="akismet-account__value"><?php echo esc_html( $akismet_user->account_name ); ?></dd>
+
+							<dt class="akismet-account__label"><?php esc_html_e( 'Status', 'akismet' ); ?></dt>
+							<dd class="akismet-account__value">
+								<?php
+								if ( Akismet::USER_STATUS_CANCELLED === $akismet_user->status ) :
+									esc_html_e( 'Cancelled', 'akismet' );
+								elseif ( Akismet::USER_STATUS_SUSPENDED === $akismet_user->status ) :
+									esc_html_e( 'Suspended', 'akismet' );
+								elseif ( Akismet::USER_STATUS_MISSING === $akismet_user->status ) :
+									esc_html_e( 'Missing', 'akismet' );
+								elseif ( Akismet::USER_STATUS_NO_SUB === $akismet_user->status ) :
+									esc_html_e( 'No subscription found', 'akismet' );
+								else :
+									esc_html_e( 'Active', 'akismet' );
+								endif;
+								?>
+							</dd>
+
+							<?php if ( $akismet_user->next_billing_date ) : ?>
+								<dt class="akismet-account__label"><?php esc_html_e( 'Next billing date', 'akismet' ); ?></dt>
+								<dd class="akismet-account__value"><?php echo esc_html( gmdate( 'F j, Y', $akismet_user->next_billing_date ) ); ?></dd>
+							<?php endif; ?>
+						</dl>
 						<div class="akismet-card-actions">
 							<?php if ( $akismet_user->status === Akismet::USER_STATUS_ACTIVE ) : ?>
 								<div class="akismet-card-actions__secondary-action">

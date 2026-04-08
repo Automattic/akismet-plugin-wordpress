@@ -289,7 +289,8 @@ body {
 
 .akismet-card-actions__secondary-action {
 	align-self: center;
-	margin-right: auto;
+	margin-inline-end: auto;
+	margin-inline-start: 6px;
 }
 
 .akismet-settings__row label {
@@ -350,15 +351,22 @@ body {
 }
 
 .akismet-account {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	margin-inline-start: 2px;
+	margin-top: 0.25em;
 	padding-bottom: 0;
+	row-gap: 0.25em;
 }
 
-.akismet-account th {
+.akismet-account__label {
 	font-weight: 500;
-	padding-right: 1em;
+	padding-bottom: 1em;
+	padding-inline-end: 1em;
 }
 
-.akismet-account th, .akismet-account td {
+.akismet-account__value {
+	margin: 0;
 	padding-bottom: 1em;
 }
 
