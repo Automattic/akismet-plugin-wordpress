@@ -218,14 +218,14 @@ class Akismet_Admin {
 
 			wp_enqueue_script_module(
 				'akismet-connectors',
-				plugin_dir_url( __FILE__ ) . '_inc/connectors.js',
+				plugin_dir_url( __FILE__ ) . '_inc/akismet-connectors.js',
 				array(
 					array(
 						'id'     => '@wordpress/connectors',
 						'import' => 'static',
 					),
 				),
-				self::get_asset_file_version( '_inc/connectors.js' )
+				self::get_asset_file_version( '_inc/akismet-connectors.js' )
 			);
 
 			wp_enqueue_script( 'wp-api-fetch' );
