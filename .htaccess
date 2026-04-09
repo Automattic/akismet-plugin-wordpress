@@ -12,7 +12,7 @@
 </IfModule>
 
 # Akismet CSS and JS
-<FilesMatch "^(akismet-connectors(-rtl)?\.css|connectors\.js|form\.js|akismet(-frontend|-admin)?\.js|akismet(-admin)?(-rtl)?\.css|inter\.css)$">
+<FilesMatch "^(akismet-connectors\.css|connectors\.js|form\.js|akismet(-frontend|-admin)?\.js|akismet(-admin)?(-rtl)?\.css|inter\.css)$">
 	<IfModule !mod_authz_core.c>
 		Allow from all
 	</IfModule>
