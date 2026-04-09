@@ -32,23 +32,110 @@ if ( registerConnector && ConnectorItem ) {
 
 function AkismetConnector( { name, description, logo } ) {
 	const [ isExpanded, setIsExpanded ] = useState( false );
+	const [ apiKey, setApiKey ] = useState( akismetConnectorsData.api_key || '' );
+	const [ isConnected, setIsConnected ] = useState( !! akismetConnectorsData.api_key );
+	const [ isSaving, setIsSaving ] = useState( false );
+	const [ statusMessage, setStatusMessage ] = useState( '' );
+
+	function handleSave() {
+		setIsSaving( true );
+		setStatusMessage( '' );
+
+		let request;
+
+		if ( apiKey ) {
+			request = wp.apiFetch( {
+				path: '/akismet/v1/key',
+				method: 'POST',
+				data: { key: apiKey },
+			} );
+		} else {
+			request = wp.apiFetch( {
+				path: '/akismet/v1/key',
+				method: 'DELETE',
+			} );
+		}
+
+		request.then( function () {
+			if ( apiKey ) {
+				setIsConnected( true );
+				setStatusMessage( akismetConnectorsData.strings['API key saved successfully.'] );
+			} else {
+				setIsConnected( false );
+				setStatusMessage( akismetConnectorsData.strings['Your API key has been deleted.'] );
+			}
+		} ).catch( function ( error ) {
+			setStatusMessage( error.message || akismetConnectorsData.strings['An unexpected error occurred. Please try again later.'] );
+		} ).finally( function () {
+			setIsSaving( false );
+		} );
+	}
+
+	function getHelpText() {
+		if ( statusMessage ) {
+			return createElement(
+				'p',
+				{ className : 'akismet-connector__status' },
+				statusMessage
+			);
+		}
+
+		if ( ! isConnected && ! isSaving ) {
+			return createElement(
+				'p',
+				{ className : 'akismet-connector__status' },
+				createElement(
+					'a',
+					{ href: 'https://akismet.com/get/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=connectors', target : '_blank' },
+					akismetConnectorsData.strings['Get your API key at akismet.com']
+				)
+			);
+		}
+
+		return null;
+	}
 
 	return createElement(
 		ConnectorItem,
 		{
-			name: name,
+			name,
 			description,
 			logo,
 			actionArea: createElement(
-				Button,
-				{
-					variant: 'secondary',
-					size: 'compact',
-					onClick: () => setIsExpanded( ! isExpanded ),
-					'aria-expanded': isExpanded,
-				},
-				isExpanded ? akismetConnectorsData.strings['Close'] : akismetConnectorsData.strings['View details']
-			),
+				'div',
+				{ className : 'components-flex components-h-stack akismet-connector__action-area' },
+				createElement(
+					'span',
+					{
+						className : 'akismet-connector__connected-notice',
+						style : {
+							display : akismetConnectorsData.api_key_predefined || isConnected ? '' : 'none'
+						}
+					},
+					akismetConnectorsData.strings['Connected']
+				),
+				createElement(
+					Button,
+					{
+						variant: ( isExpanded || ! isConnected ) ? 'secondary' : 'tertiary',
+						size: 'compact',
+						onClick: () => { setIsExpanded( ! isExpanded ); setStatusMessage( '' ); },
+						'aria-expanded': isExpanded,
+					},
+					(
+						isExpanded ?
+						akismetConnectorsData.strings['Cancel'] : (
+							akismetConnectorsData.api_key_predefined ?
+							akismetConnectorsData.strings['View details'] :
+							(
+								isConnected ?
+								akismetConnectorsData.strings['Edit'] :
+								akismetConnectorsData.strings['Set up']
+							)
+						)
+					)
+				)
+			)
 		},
 		isExpanded && (
 			akismetConnectorsData.api_key_predefined ?
@@ -59,7 +146,7 @@ function AkismetConnector( { name, description, logo } ) {
 						{},
 						createElement(
 							'p',
-							{ className : 'akismet-connector-instructions' },
+							{ className : 'akismet-connector__instructions' },
 							createElement(
 								'span',
 								{},
@@ -68,71 +155,54 @@ function AkismetConnector( { name, description, logo } ) {
 							createElement(
 								'a',
 								{ href: akismetConnectorsData.manage_akismet_url },
-								akismetConnectorsData.strings['Manage your other Akismet settings here.']
+								akismetConnectorsData.strings['Manage your other Akismet settings']
 							)
 						)
 					)
 				)
 				:
 				(
-					akismetConnectorsData.api_key ?
-					// API key is configurable and set.
-					(
+					createElement(
+						'div',
+						{ className : 'components-flex components-h-stack components-v-stack connector-settings akismet-connector__settings' },
 						createElement(
 							'div',
-							{ className : 'components-flex components-h-stack components-v-stack connector-settings' },
+							{ className : 'components-base-control' },
 							createElement(
 								'div',
-								{ className : 'components-base-control' },
+								{ className : 'components-base-control__field' },
 								createElement(
-									'div',
-									{ className : 'components-base-control__field' },
-									createElement(
-										'label',
-										{ className : 'akismet-api-key-label' },
-										akismetConnectorsData.strings['API key']
-									),
-									createElement(
-										'input',
-										{
-											className : 'components-text-control__input is-next-40px-default-size',
-											type : 'text',
-											value : akismetConnectorsData.api_key,
-											disabled : true,
-										}
-									)
+									'label',
+									{ className : 'akismet-connector__key-label' },
+									akismetConnectorsData.strings['API key']
 								),
 								createElement(
-									'p',
-									{ className : 'akismet-connector-oneline-link' },
-									createElement(
-										'a',
-										{ href: akismetConnectorsData.manage_akismet_url },
-										akismetConnectorsData.strings['Manage your Akismet connection']
-									)
+									'input',
+									{
+										className : 'components-text-control__input is-next-40px-default-size',
+										type : 'text',
+										value : apiKey,
+										onChange : function ( e ) {
+											setApiKey( e.target.value );
+										}
+									}
 								)
-							)
-						)
-					)
-					:
-					// API key is configurable but not set.
-					(
+							),
+							getHelpText()
+						),
 						createElement(
 							'div',
-							{},
+							{ className : 'components-flex components-h-stack' },
 							createElement(
-								'p',
-								{ className: 'akismet-connector-instructions' },
-								createElement(
-									'span',
-									{},
-									akismetConnectorsData.strings['Connect Akismet to start protecting your site from spam.']
-								),
-								createElement(
-									'a',
-									{ href: akismetConnectorsData.manage_akismet_url },
-									akismetConnectorsData.strings['Set up your Akismet connection here.']
-								)
+								Button,
+								{
+									variant : 'primary',
+									size : 'default',
+									isBusy : isSaving,
+									disabled : isSaving,
+									onClick : handleSave,
+								},
+								akismetConnectorsData.strings['Save']
 							)
 						)
 					)

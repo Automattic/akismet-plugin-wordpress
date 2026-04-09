@@ -175,14 +175,14 @@ class Akismet_Admin {
 			add_filter(
 				'script_module_data_akismet-connectors',
 				function ( array $data ): array {
-					$data['connector_logo']    = plugins_url( '_inc/img/akismet-logomark.svg', __FILE__ );
+					$data['connector_logo']     = plugins_url( '_inc/img/akismet-logomark.svg', __FILE__ );
 					$data['manage_akismet_url'] = admin_url( 'admin.php?page=akismet-key-config' );
 
 					if ( Akismet::predefined_api_key() ) {
 						$data['api_key_predefined'] = true;
-					} else {
-						$data['api_key'] = Akismet::get_api_key();
 					}
+
+					$data['api_key'] = (string) Akismet::get_api_key();
 
 					if ( ! isset( $data['strings'] ) ) {
 						$data['strings'] = array();
@@ -193,14 +193,20 @@ class Akismet_Admin {
 						array(
 							'API key'                                                       => __( 'API key', 'akismet' ),
 							'Protect your site from spam.'                                  => __( 'Protect your site from spam.', 'akismet' ),
-							'Connect Akismet to start protecting your site from spam.'      => __( 'Connect Akismet to start protecting your site from spam.', 'akismet' ),
-							'Set up your Akismet connection here.'                          => __( 'Set up your Akismet connection here.', 'akismet' ),
-							'Manage your Akismet connection'                                => __( 'Manage your Akismet connection', 'akismet' ),
-							'Manage your other Akismet settings here.'                      => __( 'Manage your other Akismet settings here.', 'akismet' ),
+							'Manage your other Akismet settings'                            => __( 'Manage your other Akismet settings', 'akismet' ),
 							'Your Akismet API key is pre-configured and cannot be changed.' => __( 'Your Akismet API key is pre-configured and cannot be changed.', 'akismet' ),
-							'Close'                                                         => __( 'Close', 'akismet' ),
+							'Cancel'                                                        => __( 'Cancel', 'akismet' ),
 							'Akismet logo'                                                  => __( 'Akismet logo', 'akismet' ),
 							'View details'                                                  => __( 'View details', 'akismet' ),
+							'Connected'                                                     => __( 'Connected', 'akismet' ),
+							'Set up'                                                        => __( 'Set up', 'akismet' ),
+							'Edit'                                                          => __( 'Edit', 'akismet' ),
+							'Save'                                                          => __( 'Save', 'akismet' ),
+							/* translators: %s: the URL of the Akismet.com page where the API key can obtained */
+							'Get your API key at akismet.com'                               => sprintf( __( 'Get your API key at %s', 'akismet' ), 'akismet.com ↗' ),
+							'API key saved successfully.'                                   => __( 'API key saved successfully.', 'akismet' ),
+							'Your API key has been deleted.'                                 => __( 'Your API key has been deleted.', 'akismet' ),
+							'An unexpected error occurred. Please try again later.'          => __( 'An unexpected error occurred. Please try again later.', 'akismet' ),
 						)
 					);
 
@@ -222,8 +228,9 @@ class Akismet_Admin {
 				self::get_asset_file_version( '_inc/connectors.js' )
 			);
 
-			$connectors_css_path = is_rtl() ? '_inc/rtl/akismet-connectors-rtl.css' : '_inc/akismet-connectors.css';
-			wp_register_style( 'akismet-connectors', plugin_dir_url( __FILE__ ) . $connectors_css_path, array(), self::get_asset_file_version( $connectors_css_path ) );
+			wp_enqueue_script( 'wp-api-fetch' );
+
+			wp_register_style( 'akismet-connectors', plugin_dir_url( __FILE__ ) . '_inc/akismet-connectors.css', array(), self::get_asset_file_version( '_inc/akismet-connectors.css' ) );
 			wp_enqueue_style( 'akismet-connectors' );
 		}
 
