@@ -1,4 +1,4 @@
-/* This file was automatically generated on Apr 01 2026 01:35:13 */
+/* This file was automatically generated on Apr 09 2026 23:28:55 */
 
 body {
 	--akismet-color-charcoal: #272635;
@@ -182,6 +182,7 @@ body {
 
 .akismet-stats-footer {
 	align-items: center;
+	border-radius: 0 0 7px 7px;
 	border-top: 1px solid var(--akismet-color-border-light);
 	display: flex;
 	justify-content: space-between;
@@ -192,6 +193,16 @@ body {
 
 .akismet-stats-footer:hover {
 	text-decoration: underline;
+}
+
+.akismet-stats-footer:focus {
+	border-radius: 0 0 7px 7px;
+	box-shadow: none;
+}
+
+.akismet-stats-footer:focus-visible {
+	box-shadow: none;
+	outline: 2px solid var(--akismet-color-light-blue);
 }
 
 .akismet-box {
