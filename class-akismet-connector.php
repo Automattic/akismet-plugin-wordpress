@@ -17,6 +17,8 @@ class Akismet_Connector {
 	 * Register hooks for the WordPress Connectors integration.
 	 */
 	public static function init() {
+		add_action( 'wp_connectors_init', array( 'Akismet_Connector', 'register_connector' ) );
+
 		// Priority 9 so we validate the real key before core's connector masking filter at priority 10.
 		add_filter( 'rest_post_dispatch', array( 'Akismet_Connector', 'validate_api_key' ), 9, 3 );
 		add_filter( 'script_module_data_options-connectors-wp-admin', array( 'Akismet_Connector', 'set_connected_status' ), 11 );
@@ -80,5 +82,43 @@ class Akismet_Connector {
 		$data['connectors']['akismet']['authentication']['isConnected'] = ( 'valid' === Akismet::verify_key( $key ) );
 
 		return $data;
+	}
+
+	/**
+	 * Register the Akismet connector with an is_active callback so the
+	 * connectors page can detect Akismet as active when installed as a mu-plugin.
+	 *
+	 * We re-register the full connector rather than patching the core one
+	 * so that Akismet still has a connector even if core removes its own.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/pull/76994
+	 *
+	 * @param WP_Connector_Registry $registry Connector registry instance.
+	 */
+	public static function register_connector( $registry ) {
+		if ( method_exists( $registry, 'is_registered' ) && $registry->is_registered( 'akismet' ) ) {
+			$registry->unregister( 'akismet' );
+		}
+
+		$registry->register(
+			'akismet',
+			array(
+				'name'           => __( 'Akismet Anti-spam', 'akismet' ),
+				'description'    => __( 'Protect your site from spam.', 'akismet' ),
+				'type'           => 'spam_filtering',
+				'plugin'         => array(
+					'file'      => 'akismet/akismet.php',
+					'is_active' => function () {
+						return defined( 'AKISMET_VERSION' );
+					},
+				),
+				'authentication' => array(
+					'method'          => 'api_key',
+					'credentials_url' => 'https://akismet.com/get/',
+					'setting_name'    => 'wordpress_api_key',
+					'constant_name'   => 'WPCOM_API_KEY',
+				),
+			)
+		);
 	}
 }
