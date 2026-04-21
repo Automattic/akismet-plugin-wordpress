@@ -22,6 +22,11 @@ class Akismet_Connector {
 		// Priority 9 so we validate the real key before core's connector masking filter at priority 10.
 		add_filter( 'rest_post_dispatch', array( 'Akismet_Connector', 'validate_api_key' ), 9, 3 );
 		add_filter( 'script_module_data_options-connectors-wp-admin', array( 'Akismet_Connector', 'set_connected_status' ), 11 );
+
+		// Invalidate the connector key status cache on any key change.
+		foreach ( array( 'add', 'update', 'delete' ) as $action ) {
+			add_action( "{$action}_option_wordpress_api_key", array( 'Akismet_Connector', 'invalidate_key_status_cache' ) );
+		}
 	}
 
 	/**
@@ -58,8 +63,6 @@ class Akismet_Connector {
 			$response->set_data( $data );
 		}
 
-		delete_transient( 'akismet_connector_key_status' );
-
 		return $response;
 	}
 
@@ -95,6 +98,13 @@ class Akismet_Connector {
 		$data['connectors']['akismet']['authentication']['isConnected'] = ( Akismet::KEY_STATUS_VALID === $is_connected );
 
 		return $data;
+	}
+
+	/**
+	 * Clear the connector key status cache so it doesn't serve stale data.
+	 */
+	public static function invalidate_key_status_cache() {
+		delete_transient( 'akismet_connector_key_status' );
 	}
 
 	/**
