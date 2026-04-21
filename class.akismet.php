@@ -19,6 +19,11 @@ class Akismet {
 	const USER_STATUS_CANCELLED = 'cancelled';
 	const USER_STATUS_SUSPENDED = 'suspended';
 
+	// Key verification status constants
+	const KEY_STATUS_VALID   = 'valid';
+	const KEY_STATUS_INVALID = 'invalid';
+	const KEY_STATUS_FAILED  = 'failed';
+
 	public static $limit_notices = array(
 		10501 => 'FIRST_MONTH_OVER_LIMIT',
 		10502 => 'SECOND_MONTH_OVER_LIMIT',

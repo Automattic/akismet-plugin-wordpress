@@ -52,11 +52,13 @@ class Akismet_Connector {
 			return $response;
 		}
 
-		if ( 'invalid' === Akismet::verify_key( $key ) ) {
+		if ( Akismet::KEY_STATUS_INVALID === Akismet::verify_key( $key ) ) {
 			update_option( 'wordpress_api_key', '' );
 			$data['wordpress_api_key'] = '';
 			$response->set_data( $data );
 		}
+
+		delete_transient( 'akismet_connector_key_status' );
 
 		return $response;
 	}
@@ -79,7 +81,18 @@ class Akismet_Connector {
 			return $data;
 		}
 
-		$data['connectors']['akismet']['authentication']['isConnected'] = ( 'valid' === Akismet::verify_key( $key ) );
+		$is_connected = get_transient( 'akismet_connector_key_status' );
+
+		if ( false === $is_connected ) {
+			$is_connected = Akismet::verify_key( $key );
+
+			// Don't cache failures (e.g. network timeouts) so we retry on the next page load.
+			if ( Akismet::KEY_STATUS_FAILED !== $is_connected ) {
+				set_transient( 'akismet_connector_key_status', $is_connected, DAY_IN_SECONDS );
+			}
+		}
+
+		$data['connectors']['akismet']['authentication']['isConnected'] = ( Akismet::KEY_STATUS_VALID === $is_connected );
 
 		return $data;
 	}
