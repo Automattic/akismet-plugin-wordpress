@@ -486,6 +486,10 @@ class Akismet_Admin {
 			return;
 		}
 
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			return;
+		}
+
 		$link = '';
 
 		$comments_count = wp_count_comments();
@@ -494,6 +498,7 @@ class Akismet_Admin {
 		echo '<div class="alignleft actions">';
 
 		$classes = array(
+			'button',
 			'button-secondary',
 			'checkforspam',
 			'button-disabled',   // Disable button until the page is loaded
@@ -542,7 +547,7 @@ class Akismet_Admin {
 			return;
 		}
 
-		if ( empty( $_POST['nonce'] ) || ! is_string( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'akismet_check_for_spam' ) ) {
+		if ( empty( $_POST['nonce'] ) || ! is_string( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'akismet_check_for_spam' ) || ! current_user_can( 'moderate_comments' ) ) {
 			wp_send_json(
 				array(
 					'error' => __( 'You don&#8217;t have permission to do that.', 'akismet' ),
