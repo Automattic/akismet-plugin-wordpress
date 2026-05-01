@@ -70,10 +70,10 @@ if ( ! isset( $type ) ) {
 			Akismet::view(
 				'get',
 				array(
-					'text'         => __( 'Upgrade plan', 'akismet' ),
-					'classes'      => array( 'akismet-alert-button', 'akismet-button' ),
-					'redirect'     => 'upgrade',
-					'utm_content'  => 'commercial_upgrade',
+					'text'        => __( 'Upgrade plan', 'akismet' ),
+					'classes'     => array( 'akismet-alert-button', 'akismet-button' ),
+					'redirect'    => 'upgrade',
+					'utm_content' => 'commercial_upgrade',
 				)
 			);
 			?>

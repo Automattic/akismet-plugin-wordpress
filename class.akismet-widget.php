@@ -11,9 +11,6 @@
  */
 class Akismet_Widget extends WP_Widget {
 
-	/**
-	* Constructor
-	*/
 	function __construct() {
 		parent::__construct(
 			'akismet_widget',
