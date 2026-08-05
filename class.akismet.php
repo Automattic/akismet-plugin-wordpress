@@ -151,6 +151,19 @@ class Akismet {
 	}
 
 	/**
+	 * Return a visually-hidden "(opens in a new tab)" hint for screen readers.
+	 *
+	 * Append this inside a link (or pass it as a translation placeholder) so assistive
+	 * technology announces that the link opens in a new tab. The phrase is translated
+	 * once here and reused everywhere, so translators never handle the span markup.
+	 *
+	 * @return string
+	 */
+	public static function get_new_tab_screen_reader_html() {
+		return '<span class="screen-reader-text"> ' . esc_html__( '(opens in a new tab)', 'akismet' ) . '</span>';
+	}
+
+	/**
 	 * Exchange the API key for a token that can only be used to access stats pages.
 	 *
 	 * @return string

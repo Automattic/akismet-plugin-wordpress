@@ -1601,6 +1601,30 @@ class Akismet_Admin {
 	}
 
 	/**
+	 * Return the wp_kses allowlist for an external link that opens in a new tab.
+	 *
+	 * Covers the anchor plus the visually-hidden "(opens in a new tab)" span
+	 * emitted by Akismet::get_new_tab_screen_reader_html(). Centralised here so the
+	 * views that render these links share one allowlist instead of each defining
+	 * their own copy.
+	 *
+	 * @return array
+	 */
+	public static function get_link_kses_allowed_elements() {
+		return array(
+			'a'    => array(
+				'href'   => true,
+				'target' => true,
+				'rel'    => true,
+				'class'  => true,
+			),
+			'span' => array(
+				'class' => true,
+			),
+		);
+	}
+
+	/**
 	 * Return a version to append to the URL of an asset file (e.g. CSS and images).
 	 *
 	 * @param string $relative_path Relative path to asset file

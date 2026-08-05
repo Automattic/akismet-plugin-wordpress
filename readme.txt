@@ -32,6 +32,12 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.7.1 =
+*Release Date - TBC*
+
+* Fix link styling and hover previews in the Comments screen for the upcoming WordPress 7.1.
+* Display external links consistently.
+
 = 5.7 =
 *Release Date - 23 April 2026*
 
