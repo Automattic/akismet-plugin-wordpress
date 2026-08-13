@@ -330,8 +330,8 @@ class Akismet_Admin {
 		$current_screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'For more information:', 'akismet' ) . '</strong></p>' .
 
-			'<p><a href="https://akismet.com/resources/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=help_faq" target="_blank">' . esc_html__( 'Akismet FAQ', 'akismet' ) . '</a></p>' .
-			'<p><a href="https://akismet.com/support/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=help_support" target="_blank">' . esc_html__( 'Akismet Support', 'akismet' ) . '</a></p>'
+			'<p><a class="akismet-external-link" href="https://akismet.com/support/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=help_faq" target="_blank" rel="noopener">' . esc_html__( 'Akismet FAQ', 'akismet' ) . Akismet::get_new_tab_screen_reader_html() . '</a></p>' .
+			'<p><a class="akismet-external-link" href="https://akismet.com/contact/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=help_support" target="_blank" rel="noopener">' . esc_html__( 'Akismet Support', 'akismet' ) . Akismet::get_new_tab_screen_reader_html() . '</a></p>'
 		);
 	}
 

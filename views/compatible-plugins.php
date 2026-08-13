@@ -24,7 +24,7 @@ if ( is_array( $compatible_plugins ) ) :
 			echo '<p>';
 
 			if ( 0 === $compatible_plugin_count ) {
-				echo '<a class="akismet-external-link" href="https://akismet.com/developers/plugins-and-libraries/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=compatible_plugins" target="_blank" rel="noopener">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/developers/plugins-and-libraries/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=compatible_plugins#wordpress-plugins" target="_blank" rel="noopener">';
 				echo esc_html( __( 'See supported integrations', 'akismet' ) );
 				echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper.
 				echo '</a>';
