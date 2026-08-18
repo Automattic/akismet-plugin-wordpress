@@ -32,6 +32,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.7.2 =
+*Release Date - TBC*
+
+* Fix Fluent Forms integration on WordPress versions older than 6.1.
+
 = 5.7.1 =
 *Release Date - 17 August 2026*
 
