@@ -1,6 +1,11 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /** @var array|WP_Error $compatible_plugins */
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Cache-refresh flag on the manage_options config page. Re-fetches the public plugin list into cache. Mutates no user or site data.
 $bypass_cache       = ! empty( $_GET['akismet_refresh_compatible_plugins'] );
 $compatible_plugins = Akismet_Compatible_Plugins::get_installed_compatible_plugins( $bypass_cache );
 if ( is_array( $compatible_plugins ) ) :

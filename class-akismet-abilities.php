@@ -8,6 +8,10 @@
 
 declare( strict_types = 1 );
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // Load ability interface and classes.
 require_once __DIR__ . '/abilities/interface-akismet-ability.php';
 require_once __DIR__ . '/abilities/class-akismet-ability.php';

@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 WP_CLI::add_command( 'akismet', 'Akismet_CLI' );
 
 /**

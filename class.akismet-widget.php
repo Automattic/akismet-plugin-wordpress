@@ -3,6 +3,10 @@
  * @package Akismet
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // We plan to gradually remove all of the disabled lint rules below.
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 

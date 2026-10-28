@@ -4,7 +4,6 @@
 // phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 // phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 // phpcs:disable WordPress.Security.NonceVerification.Missing
-// phpcs:disable Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure
 
 class Akismet {
 	const API_HOST                          = 'rest.akismet.com';
@@ -624,7 +623,8 @@ class Akismet {
 			if ( $discard ) {
 				// The spam is obvious, so we're bailing out early.
 				// akismet_result_spam() won't be called so bump the counter here
-				if ( $incr = apply_filters( 'akismet_spam_count_incr', 1 ) ) {
+				$incr = apply_filters( 'akismet_spam_count_incr', 1 );
+				if ( $incr ) {
 					update_option( 'akismet_spam_count', get_option( 'akismet_spam_count' ) + $incr );
 				}
 
@@ -905,7 +905,7 @@ class Akismet {
 			do_action( 'akismet_delete_comment_batch', is_countable( $comment_ids ) ? count( $comment_ids ) : 0 );
 		}
 
-		if ( apply_filters( 'akismet_optimize_table', ( mt_rand( 1, 5000 ) == 11 ), $wpdb->comments ) ) { // lucky number
+		if ( apply_filters( 'akismet_optimize_table', ( wp_rand( 1, 5000 ) == 11 ), $wpdb->comments ) ) { // lucky number
 			$wpdb->query( "OPTIMIZE TABLE {$wpdb->comments}" );
 		}
 	}
@@ -938,7 +938,7 @@ class Akismet {
 			do_action( 'akismet_delete_commentmeta_batch', is_countable( $comment_ids ) ? count( $comment_ids ) : 0 );
 		}
 
-		if ( apply_filters( 'akismet_optimize_table', ( mt_rand( 1, 5000 ) == 11 ), $wpdb->commentmeta ) ) { // lucky number
+		if ( apply_filters( 'akismet_optimize_table', ( wp_rand( 1, 5000 ) == 11 ), $wpdb->commentmeta ) ) { // lucky number
 			$wpdb->query( "OPTIMIZE TABLE {$wpdb->commentmeta}" );
 		}
 	}
@@ -978,7 +978,7 @@ class Akismet {
 			}
 		}
 
-		if ( apply_filters( 'akismet_optimize_table', ( mt_rand( 1, 5000 ) == 11 ), $wpdb->commentmeta ) ) { // lucky number
+		if ( apply_filters( 'akismet_optimize_table', ( wp_rand( 1, 5000 ) == 11 ), $wpdb->commentmeta ) ) { // lucky number
 			$wpdb->query( "OPTIMIZE TABLE {$wpdb->commentmeta}" );
 		}
 	}
@@ -1263,10 +1263,12 @@ class Akismet {
 			// action=unspam: Choosing "Not Spam" from the Bulk Actions dropdown in wp-admin.
 			// action=spamcomment: Following the "Spam" link below a comment in wp-admin (not allowing AJAX request to happen).
 			// action=unspamcomment: Following the "Not Spam" link below a comment in wp-admin (not allowing AJAX request to happen).
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Detecting how core changed the comment status. Core verifies the nonce for the moderation action.
 			|| ( isset( $_GET['action'] ) && in_array( $_GET['action'], array( 'spam', 'unspam', 'spamcomment', 'unspamcomment' ) ) )
 			// action=editedcomment: Editing a comment via wp-admin (and possibly changing its status).
 			|| ( isset( $_POST['action'] ) && in_array( $_POST['action'], array( 'editedcomment' ) ) )
 			// for=jetpack: Moderation via the WordPress app, Calypso, anything powered by the Jetpack connection.
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Detecting how core changed the comment status. Core verifies the nonce for the moderation action.
 			|| ( isset( $_GET['for'] ) && ( 'jetpack' == $_GET['for'] ) && ( ! defined( 'IS_WPCOM' ) || ! IS_WPCOM ) )
 			// Certain WordPress.com API requests
 			|| ( defined( 'REST_API_REQUEST' ) && REST_API_REQUEST )
@@ -1710,7 +1712,8 @@ class Akismet {
 		}
 
 		// bump the counter here instead of when the filter is added to reduce the possibility of overcounting
-		if ( $incr = apply_filters( 'akismet_spam_count_incr', 1 ) ) {
+		$incr = apply_filters( 'akismet_spam_count_incr', 1 );
+		if ( $incr ) {
 			update_option( 'akismet_spam_count', get_option( 'akismet_spam_count' ) + $incr );
 		}
 
@@ -1838,7 +1841,11 @@ class Akismet {
 			do_action( 'akismet_ssl_disabled' );
 		}
 
-		if ( ! $ssl_disabled && ( $ssl = wp_http_supports( array( 'ssl' ) ) ) ) {
+		if ( ! $ssl_disabled ) {
+			$ssl = wp_http_supports( array( 'ssl' ) );
+		}
+
+		if ( $ssl ) {
 			$akismet_url = set_url_scheme( $akismet_url, 'https' );
 
 			do_action( 'akismet_https_request_pre' );
@@ -1966,7 +1973,7 @@ class Akismet {
 
 			++$field_count;
 
-			$fields .= '<input type="hidden" id="ak_js_' . $field_count . '" name="' . $prefix . 'js" value="' . mt_rand( 0, 250 ) . '"/>';
+			$fields .= '<input type="hidden" id="ak_js_' . $field_count . '" name="' . $prefix . 'js" value="' . wp_rand( 0, 250 ) . '"/>';
 			$fields .= wp_get_inline_script_tag( 'document.getElementById( "ak_js_' . $field_count . '" ).setAttribute( "value", ( new Date() ).getTime() );' );
 		}
 

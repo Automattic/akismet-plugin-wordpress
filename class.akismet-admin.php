@@ -4,7 +4,6 @@
 // phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 // phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 // phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-// phpcs:disable Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 class Akismet_Admin {
@@ -50,6 +49,7 @@ class Akismet_Admin {
 			self::init_hooks();
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Dispatch check only. enter_api_key() verifies the nonce before processing.
 		if ( isset( $_POST['action'] ) && $_POST['action'] == 'enter-key' ) {
 			self::enter_api_key();
 		}
@@ -58,6 +58,7 @@ class Akismet_Admin {
 	public static function init_hooks() {
 		// The standalone stats page was removed in 3.0 for an all-in-one config and stats page.
 		// Redirect any links that might have been bookmarked or in browser history.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only redirect of a legacy bookmarked page. No state changed.
 		if ( isset( $_GET['page'] ) && 'akismet-stats-display' == $_GET['page'] ) {
 			wp_safe_redirect( esc_url_raw( self::get_page_url( 'stats' ) ), 301 );
 			die;
@@ -96,7 +97,8 @@ class Akismet_Admin {
 			delete_option( 'Activated_Akismet' );
 			if ( ! headers_sent() ) {
 				$admin_url = self::get_page_url( 'init' );
-				wp_redirect( $admin_url );
+				wp_safe_redirect( $admin_url );
+				exit;
 			}
 		}
 
@@ -236,6 +238,7 @@ class Akismet_Admin {
 
 		// Screen Content
 		if ( current_user_can( 'manage_options' ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only view routing for help tabs. No state changed.
 			if ( ! Akismet::get_api_key() || ( isset( $_GET['view'] ) && $_GET['view'] == 'start' ) ) {
 				// setup page
 				$current_screen->add_help_tab(
@@ -274,6 +277,7 @@ class Akismet_Admin {
 							'</ol>',
 					)
 				);
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only view routing for help tabs. No state changed.
 			} elseif ( isset( $_GET['view'] ) && $_GET['view'] == 'stats' ) {
 				// stats page
 				$current_screen->add_help_tab(
@@ -412,7 +416,8 @@ class Akismet_Admin {
 			return; // We already displayed this info in the "Right Now" section
 		}
 
-		if ( ! $count = get_option( 'akismet_spam_count' ) ) {
+		$count = get_option( 'akismet_spam_count' );
+		if ( ! $count ) {
 			return;
 		}
 
@@ -436,7 +441,8 @@ class Akismet_Admin {
 
 	// WP 2.5+
 	public static function rightnow_stats() {
-		if ( $count = get_option( 'akismet_spam_count' ) ) {
+		$count = get_option( 'akismet_spam_count' );
+		if ( $count ) {
 			$intro = sprintf(
 			/* translators: 1: Akismet website URL, 2: Number of spam comments. */
 				_n(
@@ -455,7 +461,8 @@ class Akismet_Admin {
 
 		$link = add_query_arg( array( 'comment_status' => 'spam' ), admin_url( 'edit-comments.php' ) );
 
-		if ( $queue_count = self::get_spam_count() ) {
+		$queue_count = self::get_spam_count();
+		if ( $queue_count ) {
 			$queue_text = sprintf(
 			/* translators: 1: Number of comments, 2: Comments page URL. */
 				_n(
@@ -1088,7 +1095,8 @@ class Akismet_Admin {
 
 	public static function connect_jetpack_user() {
 
-		if ( $jetpack_user = self::get_jetpack_user() ) {
+		$jetpack_user = self::get_jetpack_user();
+		if ( $jetpack_user ) {
 			if ( isset( $jetpack_user['user_id'] ) && isset( $jetpack_user['api_key'] ) ) {
 				$akismet_user = self::verify_wpcom_key( $jetpack_user['api_key'], $jetpack_user['user_id'], array( 'action' => 'connect_jetpack_user' ) );
 
@@ -1160,6 +1168,7 @@ class Akismet_Admin {
 	}
 
 	public static function display_page() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only view routing. No state changed.
 		if ( ! Akismet::get_api_key() || ( isset( $_GET['view'] ) && $_GET['view'] == 'start' ) ) {
 			self::display_start_page();
 		} elseif ( isset( $_GET['view'] ) && $_GET['view'] == 'stats' ) {
@@ -1167,6 +1176,7 @@ class Akismet_Admin {
 		} else {
 			self::display_configuration_page();
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	public static function display_start_page() {
@@ -1370,6 +1380,7 @@ class Akismet_Admin {
 			self::display_spam_check_warning();
 		}
 
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only admin notice. Values are displayed, not processed.
 		if ( isset( $_GET['akismet_recheck_complete'] ) ) {
 			$recheck_count = (int) $_GET['recheck_count'];
 			$spam_count    = (int) $_GET['spam_count'];
@@ -1393,6 +1404,7 @@ class Akismet_Admin {
 		} elseif ( isset( $_GET['akismet_recheck_error'] ) ) {
 			echo '<div class="notice notice-error"><p>' . esc_html( __( 'Akismet could not recheck your comments for spam.', 'akismet' ) ) . '</p></div>';
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	public static function display_status() {

@@ -6,4 +6,8 @@
  */
 declare( strict_types = 1 );
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 do_action( 'akismet_footer' );

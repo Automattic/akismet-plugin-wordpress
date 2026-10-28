@@ -1,4 +1,4 @@
-/* This file was automatically generated on Aug 04 2026 01:41:39 */
+/* This file was automatically generated on Aug 10 2026 02:24:17 */
 
 .wp-admin.jetpack_page_akismet-key-config, .wp-admin.settings_page_akismet-key-config {
 	background-color:#f3f6f8;
@@ -174,55 +174,6 @@ table.comments th.comment p a:after {
 	border-radius:2px;
 	background:#e6ecf1;
 	color:#647a88
-}
-.akismet-masthead__links {
-	display:flex;
-	flex-flow:row wrap;
-	flex:2 50%;
-	justify-content:flex-end;
-	margin:0
-}
-@media (max-width: 480px) {
-	.akismet-masthead__links {
-		padding-left:.625rem
-	}
-}
-.akismet-masthead__link-li {
-	margin:0;
-	padding:0
-}
-.akismet-masthead__link {
-	font-style:normal;
-	color:#0087be;
-	padding:.625rem;
-	display:inline-block
-}
-.akismet-masthead__link:visited {
-	color:#0087be
-}
-.akismet-masthead__link:active,.akismet-masthead__link:hover {
-	color:#00aadc
-}
-.akismet-masthead__link:hover {
-	text-decoration:underline
-}
-.akismet-masthead__link .dashicons {
-	display:none
-}
-@media (max-width: 480px) {
-	.akismet-masthead__link:hover,.akismet-masthead__link:active {
-		text-decoration:none
-	}
-	.akismet-masthead__link .dashicons {
-		display:block;
-		font-size:1.75rem
-	}
-	.akismet-masthead__link span+span {
-		display:none
-	}
-}
-.akismet-masthead__link-li:last-of-type .akismet-masthead__link {
-	padding-left:0
 }
 
 .akismet-lower {

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 //phpcs:disable VariableAnalysis
 // There are "undefined" variables here because they're defined in the code that includes this file as a template.
 $kses_allow_link   = Akismet_Admin::get_link_kses_allowed_elements();
@@ -190,26 +193,24 @@ if ( ! isset( $type ) ) {
 
 <?php elseif ( $type === 'new-key-valid' ) : ?>
 	<?php
-	global $wpdb;
-
-	$check_pending_link = false;
-
-	$at_least_one_comment_in_moderation = ! ! $wpdb->get_var( "SELECT comment_ID FROM {$wpdb->comments} WHERE comment_approved = '0' LIMIT 1" );
-
-	if ( $at_least_one_comment_in_moderation ) {
-		$check_pending_link = 'edit-comments.php?akismet_recheck=' . wp_create_nonce( 'akismet_recheck' );
-	}
+	$at_least_one_comment_in_moderation = ! ! get_comments(
+		array(
+			'status' => 'hold',
+			'number' => 1,
+			'fields' => 'ids',
+		)
+	);
 	?>
 	<div class="akismet-alert is-good">
 		<p><?php esc_html_e( 'Akismet is now protecting your site from spam.', 'akismet' ); ?></p>
-		<?php if ( $check_pending_link ) : ?>
+		<?php if ( $at_least_one_comment_in_moderation ) : ?>
 			<p>
 				<?php
 				echo wp_kses(
 					sprintf(
 						/* translators: The placeholder is a URL for checking pending comments. */
 						__( 'Would you like to <a href="%s">scan pending comments for spam</a>?', 'akismet' ),
-						esc_url( $check_pending_link )
+						esc_url( 'edit-comments.php?akismet_recheck=' . wp_create_nonce( 'akismet_recheck' ) )
 					),
 					$kses_allow_link
 				);

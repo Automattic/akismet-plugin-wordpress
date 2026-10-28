@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
 <div id="akismet-plugin-container">
 	<?php if ( has_action( 'akismet_header' ) ) : ?>
 		<?php do_action( 'akismet_header' ); ?>

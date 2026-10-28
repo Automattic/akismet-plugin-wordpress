@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
 <div class="akismet-enter-api-key-box centered">
 	<button class="akismet-enter-api-key-box__reveal"><?php esc_html_e( 'Manually enter an API key', 'akismet' ); ?></button>
 	<div class="akismet-enter-api-key-box__form-wrapper">
