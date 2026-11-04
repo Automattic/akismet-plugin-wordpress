@@ -1832,6 +1832,30 @@ class Akismet {
 		$akismet_url = $http_akismet_url = "http://{$http_host}/1.1/{$path}";
 
 		/**
+		 * Filters the URL and arguments of an API request before it is sent.
+		 *
+		 * @param array $http_request {
+		 *     @type string $url  The URL, with the http scheme. The request is tried with https first.
+		 *     @type array  $args The arguments for wp_remote_post().
+		 * }
+		 * @param string $path    The 1.1 path, like comment-check.
+		 * @param string $api_key The API key that the request is made with.
+		 */
+		$http_request = apply_filters(
+			'akismet_http_request',
+			array(
+				'url'  => $http_akismet_url,
+				'args' => $http_args,
+			),
+			$path,
+			$api_key
+		);
+
+		$http_akismet_url = $http_request['url'];
+		$akismet_url      = $http_akismet_url;
+		$http_args        = $http_request['args'];
+
+		/**
 		 * Try SSL first; if that fails, try without it and don't try it again for a while.
 		 */
 
@@ -1897,6 +1921,23 @@ class Akismet {
 
 			do_action( 'akismet_https_disabled' );
 		}
+
+		/**
+		 * Filters a successful API response before the plugin reads it.
+		 *
+		 * @param array  $response     The response from wp_remote_post().
+		 * @param string $path         The 1.1 path, like comment-check.
+		 * @param array  $http_request The URL and arguments that the request was sent with. See akismet_http_request.
+		 */
+		$response = apply_filters(
+			'akismet_http_response',
+			$response,
+			$path,
+			array(
+				'url'  => $http_akismet_url,
+				'args' => $http_args,
+			)
+		);
 
 		$simplified_response = array( $response['headers'], $response['body'] );
 
