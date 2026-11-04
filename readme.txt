@@ -32,6 +32,11 @@ Upload the Akismet plugin to your blog, activate it, and then enter your Akismet
 
 == Changelog ==
 
+= 5.7.3 =
+*Release Date - TBC*
+
+* Improve input handling and error reporting in the comment-check ability.
+
 = 5.7.2 =
 *Release Date - 19 August 2026*
 

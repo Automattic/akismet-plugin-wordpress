@@ -58,12 +58,10 @@ class Akismet_Ability_Comment_Check extends Akismet_Ability {
 				'comment_author_email' => array(
 					'type'        => 'string',
 					'description' => __( 'Email address of the comment author.', 'akismet' ),
-					'format'      => 'email',
 				),
 				'comment_author_url'   => array(
 					'type'        => 'string',
 					'description' => __( 'URL/website of the comment author.', 'akismet' ),
-					'format'      => 'uri',
 				),
 				'comment_content'      => array(
 					'type'        => 'string',
@@ -81,7 +79,6 @@ class Akismet_Ability_Comment_Check extends Akismet_Ability {
 				'permalink'            => array(
 					'type'        => 'string',
 					'description' => __( 'The permanent link to the post or page.', 'akismet' ),
-					'format'      => 'uri',
 				),
 				'user_ip'              => array(
 					'type'        => 'string',
@@ -100,6 +97,7 @@ class Akismet_Ability_Comment_Check extends Akismet_Ability {
 					'description' => __( 'The user role of the comment author if logged in.', 'akismet' ),
 				),
 			),
+			'required'             => array( 'user_ip' ),
 			'additionalProperties' => false,
 		);
 	}
@@ -194,6 +192,10 @@ class Akismet_Ability_Comment_Check extends Akismet_Ability {
 
 		// Perform the comment check.
 		$result = Akismet::comment_check( $input );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
 
 		if ( ! $result ) {
 			return new WP_Error(
