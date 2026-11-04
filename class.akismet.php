@@ -312,7 +312,7 @@ class Akismet {
 	 *
 	 * @param array  $comment_data Array of comment data to check.
 	 * @param string $api_key      Optional. API key to use. Defaults to stored key.
-	 * @return object|false Result object on success, false on failure.
+	 * @return object|WP_Error|false Result object on success, WP_Error if Akismet rejected the request, false on failure.
 	 */
 	public static function comment_check( $comment_data, $api_key = null ) {
 		if ( is_null( $api_key ) ) {
@@ -329,8 +329,6 @@ class Akismet {
 				'blog'         => get_option( 'home' ),
 				'blog_lang'    => get_locale(),
 				'blog_charset' => get_option( 'blog_charset' ),
-				'user_ip'      => self::get_ip_address(),
-				'user_agent'   => self::get_user_agent(),
 			),
 			$comment_data
 		);
@@ -341,6 +339,14 @@ class Akismet {
 
 		if ( empty( $response[1] ) ) {
 			return false;
+		}
+
+		// Akismet answers anything other than "true" or "false" when it can't check the comment, e.g. "invalid" or a missing field.
+		if ( 'true' !== $response[1] && 'false' !== $response[1] ) {
+			return new WP_Error(
+				'comment_check_failed',
+				$response[0]['x-akismet-debug-help'] ?? $response[1]
+			);
 		}
 
 		// Build result object.
