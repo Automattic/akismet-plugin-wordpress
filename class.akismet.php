@@ -10,6 +10,7 @@ class Akismet {
 	const API_PORT                          = 80;
 	const MAX_DELAY_BEFORE_MODERATION_EMAIL = 86400; // One day in seconds
 	const ALERT_CODE_COMMERCIAL             = 30001;
+	const SERVER_CONNECTIVITY_TRANSIENT     = 'akismet_server_connectivity';
 
 	// User account status constants
 	const USER_STATUS_ACTIVE    = 'active';
