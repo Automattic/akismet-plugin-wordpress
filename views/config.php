@@ -123,17 +123,13 @@ $kses_allow_link_href = array(
 										<div class="akismet-settings__row-description">
 											<?php if ( ! wp_http_supports( array( 'ssl' ) ) ) : ?>
 												<strong><?php esc_html_e( 'Disabled.', 'akismet' ); ?></strong>
-												<?php esc_html_e( 'Your Web server cannot make SSL requests; contact your Web host and ask them to add support for SSL requests.', 'akismet' ); ?>
+												<?php esc_html_e( 'Your web server cannot make SSL requests. Contact your web host and ask them to add support for SSL requests.', 'akismet' ); ?>
+											<?php elseif ( ! Akismet_Admin::check_server_connectivity() ) : ?>
+												<strong><?php esc_html_e( 'Failing.', 'akismet' ); ?></strong>
+												<?php esc_html_e( 'Your web server supports SSL, but a secure connection to Akismet could not be established. Akismet will not fall back to an insecure connection. Contact your web host and ask them to check outbound HTTPS connections to rest.akismet.com.', 'akismet' ); ?>
 											<?php else : ?>
-												<?php $ssl_disabled = get_option( 'akismet_ssl_disabled' ); ?>
-
-												<?php if ( $ssl_disabled ) : ?>
-													<strong><?php esc_html_e( 'Temporarily disabled.', 'akismet' ); ?></strong>
-													<?php esc_html_e( 'Akismet encountered a problem with a previous SSL request and disabled it temporarily. It will begin using SSL for requests again shortly.', 'akismet' ); ?>
-												<?php else : ?>
-													<strong><?php esc_html_e( 'Enabled.', 'akismet' ); ?></strong>
-													<?php esc_html_e( 'All systems functional.', 'akismet' ); ?>
-												<?php endif; ?>
+												<strong><?php esc_html_e( 'Enabled.', 'akismet' ); ?></strong>
+												<?php esc_html_e( 'All systems functional.', 'akismet' ); ?>
 											<?php endif; ?>
 										</div>
 									</div>

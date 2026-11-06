@@ -7,7 +7,7 @@
 
 class Akismet {
 	const API_HOST                          = 'rest.akismet.com';
-	const API_PORT                          = 80;
+	const API_PORT                          = 443;
 	const MAX_DELAY_BEFORE_MODERATION_EMAIL = 86400; // One day in seconds
 	const ALERT_CODE_COMMERCIAL             = 30001;
 	const SERVER_CONNECTIVITY_TRANSIENT     = 'akismet_server_connectivity';
@@ -87,6 +87,7 @@ class Akismet {
 		add_action( 'akismet_scheduled_delete', array( 'Akismet', 'delete_old_comments' ) );
 		add_action( 'akismet_scheduled_delete', array( 'Akismet', 'delete_old_comments_meta' ) );
 		add_action( 'akismet_scheduled_delete', array( 'Akismet', 'delete_orphaned_commentmeta' ) );
+		add_action( 'akismet_scheduled_delete', array( 'Akismet', 'delete_legacy_options' ) );
 		add_action( 'akismet_schedule_cron_recheck', array( 'Akismet', 'cron_recheck' ) );
 
 		add_action( 'akismet_email_fallback', array( 'Akismet', 'email_fallback' ), 10, 3 );
@@ -185,6 +186,10 @@ class Akismet {
 	}
 
 	public static function check_key_status( $key, $ip = null ) {
+		if ( ! empty( $ip ) ) {
+			_deprecated_argument( __METHOD__, '5.8', 'Requests are always sent to the Akismet API hostname.' );
+		}
+
 		$request_args = array(
 			'key'  => $key,
 			'blog' => get_option( 'home' ),
@@ -192,16 +197,20 @@ class Akismet {
 
 		$request_args = apply_filters( 'akismet_request_args', $request_args, 'verify-key' );
 
-		return self::http_post( self::build_query( $request_args ), 'verify-key', $ip );
+		return self::http_post( self::build_query( $request_args ), 'verify-key' );
 	}
 
 	public static function verify_key( $key, $ip = null ) {
+		if ( ! empty( $ip ) ) {
+			_deprecated_argument( __METHOD__, '5.8', 'Requests are always sent to the Akismet API hostname.' );
+		}
+
 		// Shortcut for obviously invalid keys.
 		if ( strlen( $key ) != 12 ) {
 			return self::KEY_STATUS_INVALID;
 		}
 
-		$response = self::check_key_status( $key, $ip );
+		$response = self::check_key_status( $key );
 
 		if ( $response[1] != self::KEY_STATUS_VALID && $response[1] != self::KEY_STATUS_INVALID ) {
 			return self::KEY_STATUS_FAILED;
@@ -950,6 +959,21 @@ class Akismet {
 		}
 	}
 
+	// Older versions left these options behind, and Akismet no longer reads them.
+	public static function delete_legacy_options() {
+		foreach ( array( 'akismet_available_servers', 'akismet_connectivity_time' ) as $option ) {
+			if ( false !== get_option( $option ) ) {
+				delete_option( $option );
+			}
+		}
+
+		// bbPress 2.6 and earlier use this for a 24-hour HTTP fallback, so only clear values they would treat as expired.
+		$ssl_disabled = get_option( 'akismet_ssl_disabled' );
+		if ( $ssl_disabled && $ssl_disabled < time() - DAY_IN_SECONDS ) {
+			delete_option( 'akismet_ssl_disabled' );
+		}
+	}
+
 	// Clear out comments meta that no longer have corresponding comments in the database
 	public static function delete_orphaned_commentmeta() {
 		global $wpdb;
@@ -1447,8 +1471,6 @@ class Akismet {
 			return false;
 		}
 
-		delete_option( 'akismet_available_servers' );
-
 		$comment_errors = $wpdb->get_col( "SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = 'akismet_error'	LIMIT 100" );
 
 		foreach ( (array) $comment_errors as $comment_id ) {
@@ -1797,10 +1819,23 @@ class Akismet {
 	 *
 	 * @param string $request The body of the request.
 	 * @param string $path The path for the request.
-	 * @param string $ip The specific IP address to hit.
+	 * @param string $ip Deprecated. Requests are always sent to the Akismet API hostname so TLS hostname validation and SNI are preserved.
 	 * @return array A two-member array consisting of the headers and the response body, both empty in the case of a failure.
 	 */
 	public static function http_post( $request, $path, $ip = null ) {
+		if ( ! empty( $ip ) ) {
+			_deprecated_argument( __METHOD__, '5.8', 'Requests are always sent to the Akismet API hostname.' );
+		}
+
+		foreach ( array( 'akismet_ssl_disabled', 'akismet_https_disabled', 'akismet_http_request_pre' ) as $removed_hook ) {
+			if ( has_action( $removed_hook ) ) {
+				_deprecated_hook( esc_html( $removed_hook ), '5.8', '', 'Akismet no longer falls back to plaintext HTTP, so this action never fires.' );
+			}
+		}
+
+		if ( ! wp_http_supports( array( 'ssl' ) ) ) {
+			return self::http_post_failed( new WP_Error( 'akismet_ssl_unsupported', 'This server cannot make SSL requests.' ) );
+		}
 
 		$akismet_ua = sprintf( 'WordPress/%s | Akismet/%s', $GLOBALS['wp_version'], constant( 'AKISMET_VERSION' ) );
 		$akismet_ua = apply_filters( 'akismet_ua', $akismet_ua );
@@ -1810,13 +1845,6 @@ class Akismet {
 
 		if ( $api_key ) {
 			$request = add_query_arg( 'api_key', $api_key, $request );
-		}
-
-		$http_host = $host;
-		// use a specific IP if provided
-		// needed by Akismet_Admin::check_server_connectivity()
-		if ( $ip && long2ip( ip2long( $ip ) ) ) {
-			$http_host = $ip;
 		}
 
 		$http_args = array(
@@ -1830,13 +1858,13 @@ class Akismet {
 			'timeout'     => 15,
 		);
 
-		$akismet_url = $http_akismet_url = "http://{$http_host}/1.1/{$path}";
+		$akismet_url = "https://{$host}/1.1/{$path}";
 
 		/**
 		 * Filters the URL and arguments of an API request before it is sent.
 		 *
 		 * @param array $http_request {
-		 *     @type string $url  The URL, with the http scheme. The request is tried with https first.
+		 *     @type string $url  The URL. The request is always sent over HTTPS.
 		 *     @type array  $args The arguments for wp_remote_post().
 		 * }
 		 * @param string $path    The 1.1 path, like comment-check.
@@ -1845,82 +1873,48 @@ class Akismet {
 		$http_request = apply_filters(
 			'akismet_http_request',
 			array(
-				'url'  => $http_akismet_url,
+				'url'  => $akismet_url,
 				'args' => $http_args,
 			),
 			$path,
 			$api_key
 		);
 
-		$http_akismet_url = $http_request['url'];
-		$akismet_url      = $http_akismet_url;
-		$http_args        = $http_request['args'];
-
-		/**
-		 * Try SSL first; if that fails, try without it and don't try it again for a while.
-		 */
-
-		$ssl = $ssl_failed = false;
-
-		// Check if SSL requests were disabled fewer than X hours ago.
-		$ssl_disabled = get_option( 'akismet_ssl_disabled' );
-
-		if ( $ssl_disabled && $ssl_disabled < ( time() - 60 * 60 * 24 ) ) { // 24 hours
-			$ssl_disabled = false;
-			delete_option( 'akismet_ssl_disabled' );
-		} elseif ( $ssl_disabled ) {
-			do_action( 'akismet_ssl_disabled' );
+		if ( 'https' !== wp_parse_url( $http_request['url'], PHP_URL_SCHEME ) ) {
+			_doing_it_wrong( __METHOD__, 'The akismet_http_request filter must return an https:// URL. The request will be sent over HTTPS anyway.', '5.8' );
 		}
 
-		if ( ! $ssl_disabled ) {
-			$ssl = wp_http_supports( array( 'ssl' ) );
+		// The request must never fall back to plaintext, whatever URL a filter returns.
+		$akismet_url = set_url_scheme( $http_request['url'], 'https' );
+		$http_args   = $http_request['args'];
+
+		// The API never redirects, and following one could resend the key and comment over plaintext.
+		$http_args['redirection'] = 0;
+
+		// set_url_scheme() runs its own filter, which can still return http://.
+		if ( 'https' !== wp_parse_url( $akismet_url, PHP_URL_SCHEME ) ) {
+			return self::http_post_failed( new WP_Error( 'akismet_https_required', 'Akismet requests must be sent over HTTPS.' ) );
 		}
 
-		if ( $ssl ) {
-			$akismet_url = set_url_scheme( $akismet_url, 'https' );
-
-			do_action( 'akismet_https_request_pre' );
-		}
+		do_action( 'akismet_https_request_pre' );
 
 		$response = wp_remote_post( $akismet_url, $http_args );
 
 		self::log( compact( 'akismet_url', 'http_args', 'response' ) );
 
-		if ( $ssl && is_wp_error( $response ) ) {
+		if ( is_wp_error( $response ) && self::is_retryable_request_error( $response ) ) {
 			do_action( 'akismet_https_request_failure', $response );
 
-			// Intermittent connection problems may cause the first HTTPS
-			// request to fail and subsequent HTTP requests to succeed randomly.
-			// Retry the HTTPS request once before disabling SSL for a time.
+			// Retry once in case the failure was caused by an intermittent connection problem.
 			$response = wp_remote_post( $akismet_url, $http_args );
 
 			self::log( compact( 'akismet_url', 'http_args', 'response' ) );
-
-			if ( is_wp_error( $response ) ) {
-				$ssl_failed = true;
-
-				do_action( 'akismet_https_request_failure', $response );
-
-				do_action( 'akismet_http_request_pre' );
-
-				// Try the request again without SSL.
-				$response = wp_remote_post( $http_akismet_url, $http_args );
-
-				self::log( compact( 'http_akismet_url', 'http_args', 'response' ) );
-			}
 		}
 
 		if ( is_wp_error( $response ) ) {
-			do_action( 'akismet_request_failure', $response );
+			do_action( 'akismet_https_request_failure', $response );
 
-			return array( '', '' );
-		}
-
-		if ( $ssl_failed ) {
-			// The request failed when using SSL but succeeded without it. Disable SSL for future requests.
-			update_option( 'akismet_ssl_disabled', time() );
-
-			do_action( 'akismet_https_disabled' );
+			return self::http_post_failed( $response );
 		}
 
 		/**
@@ -1935,7 +1929,7 @@ class Akismet {
 			$response,
 			$path,
 			array(
-				'url'  => $http_akismet_url,
+				'url'  => $akismet_url,
 				'args' => $http_args,
 			)
 		);
@@ -1953,6 +1947,22 @@ class Akismet {
 		}
 
 		return $simplified_response;
+	}
+
+	// Certificate errors fail the same way every time, and a timeout has already spent the full request timeout.
+	private static function is_retryable_request_error( $error ) {
+		return ! preg_match( '/^cURL error (28|51|60):|certificate|timed out/i', $error->get_error_message() );
+	}
+
+	private static function http_post_failed( $error ) {
+		do_action( 'akismet_request_failure', $error );
+
+		// Let the next admin page load show the connectivity notice without waiting for the cached result to expire.
+		if ( 'connected' === get_transient( self::SERVER_CONNECTIVITY_TRANSIENT ) ) {
+			delete_transient( self::SERVER_CONNECTIVITY_TRANSIENT );
+		}
+
+		return array( '', '' );
 	}
 
 	// given a response from an API call like check_key_status(), update the alert code options if an alert is present.

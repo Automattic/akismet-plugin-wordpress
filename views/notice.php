@@ -108,20 +108,10 @@ if ( ! isset( $type ) ) {
 	</p>
 </div>
 
-<?php elseif ( $type === 'missing-functions' ) : ?>
+<?php elseif ( $type === 'ssl-unsupported' ) : ?>
 <div class="akismet-alert is-bad">
-	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Network functions are disabled.', 'akismet' ); ?></h3>
-	<p>
-		<?php
-		echo wp_kses( __( 'Your web host or server administrator has disabled PHP&#8217;s <code>gethostbynamel</code> function.', 'akismet' ), array_merge( $kses_allow_link, $kses_allow_strong, array( 'code' => true ) ) );
-		?>
-	</p>
-	<p>
-		<?php
-		/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
-		echo wp_kses( sprintf( __( 'Please contact your web host or firewall administrator and give them <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">this information about Akismet&#8217;s system requirements%2$s</a>', 'akismet' ), esc_url( 'https://akismet.com/akismet-hosting-faq/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=hosting_faq_php' ), $opens_in_new_tab ), array_merge( $kses_allow_link, $kses_allow_strong, array( 'code' => true ) ) );
-		?>
-	</p>
+	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Your site can&#8217;t connect to the Akismet servers.', 'akismet' ); ?></h3>
+	<p><?php esc_html_e( 'Your web server cannot make SSL requests. Contact your web host and ask them to add support for SSL requests.', 'akismet' ); ?></p>
 </div>
 
 <?php elseif ( $type === 'servers-be-down' ) : ?>

@@ -886,36 +886,20 @@ class Akismet_Admin {
 		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(comment_ID) FROM {$wpdb->comments} WHERE comment_approved = 'spam' AND comment_type = %s", $type ) );
 	}
 
-	// Check connectivity between the WordPress blog and Akismet's servers.
-	// Returns an associative array of server IP addresses, where the key is the IP address, and value is true (available) or false (unable to connect).
+	/**
+	 * @deprecated 5.8 Use Akismet_Admin::check_server_connectivity().
+	 */
 	public static function check_server_ip_connectivity() {
+		_deprecated_function( __METHOD__, '5.8', 'Akismet_Admin::check_server_connectivity' );
 
-		$servers = $ips = array();
+		$status = self::check_server_connectivity() ? 'connected' : 'unable to connect';
+		$ips    = function_exists( 'gethostbynamel' ) ? gethostbynamel( Akismet::API_HOST ) : false;
 
-		// Some web hosts may disable this function
-		if ( function_exists( 'gethostbynamel' ) ) {
-
-			$ips = gethostbynamel( 'rest.akismet.com' );
-			if ( $ips && is_array( $ips ) && count( $ips ) ) {
-				$api_key = Akismet::get_api_key();
-
-				foreach ( $ips as $ip ) {
-					$response = Akismet::verify_key( $api_key, $ip );
-					// even if the key is invalid, at least we know we have connectivity
-					if ( $response == Akismet::KEY_STATUS_VALID || $response == Akismet::KEY_STATUS_INVALID ) {
-						$servers[ $ip ] = 'connected';
-					} else {
-						$servers[ $ip ] = $response ? $response : 'unable to connect';
-					}
-				}
-			}
-		}
-
-		return $servers;
+		// Callers written for the per-IP check expect the API's IP addresses as keys.
+		return array_fill_keys( $ips ? $ips : array( Akismet::API_HOST ), $status );
 	}
 
-	// Simpler connectivity check
-	public static function check_server_connectivity( $cache_timeout = 86400 ) {
+	public static function check_server_connectivity() {
 
 		$debug                        = array();
 		$debug['PHP_VERSION']         = PHP_VERSION;
@@ -925,21 +909,8 @@ class Akismet_Admin {
 		$debug['SITE_URL']            = site_url();
 		$debug['HOME_URL']            = home_url();
 
-		$servers = get_option( 'akismet_available_servers' );
-		if ( ( time() - get_option( 'akismet_connectivity_time' ) < $cache_timeout ) && $servers !== false ) {
-			$servers = self::check_server_ip_connectivity();
-			update_option( 'akismet_available_servers', $servers );
-			update_option( 'akismet_connectivity_time', time() );
-		}
+		$response = wp_remote_get( 'https://' . Akismet::API_HOST . '/1.1/test' );
 
-		if ( wp_http_supports( array( 'ssl' ) ) ) {
-			$response = wp_remote_get( 'https://rest.akismet.com/1.1/test' );
-		} else {
-			$response = wp_remote_get( 'http://rest.akismet.com/1.1/test' );
-		}
-
-		$debug['gethostbynamel']  = function_exists( 'gethostbynamel' ) ? 'exists' : 'not here';
-		$debug['Servers']         = $servers;
 		$debug['Test Connection'] = $response;
 
 		Akismet::log( $debug );
@@ -951,9 +922,27 @@ class Akismet_Admin {
 		return false;
 	}
 
-	// Check the server connectivity and store the available servers in an option.
+	/**
+	 * A failed check is only cached for five minutes so the notice clears soon after the problem is fixed.
+	 *
+	 * @param int $cache_timeout How long to cache a successful check, in seconds.
+	 */
 	public static function get_server_connectivity( $cache_timeout = 86400 ) {
-		return self::check_server_connectivity( $cache_timeout );
+		$cached = get_transient( Akismet::SERVER_CONNECTIVITY_TRANSIENT );
+
+		if ( false !== $cached ) {
+			return 'connected' === $cached;
+		}
+
+		$connected = self::check_server_connectivity();
+
+		set_transient(
+			Akismet::SERVER_CONNECTIVITY_TRANSIENT,
+			$connected ? 'connected' : 'disconnected',
+			$connected ? $cache_timeout : 5 * MINUTE_IN_SECONDS
+		);
+
+		return $connected;
 	}
 
 	/**
@@ -1326,7 +1315,7 @@ class Akismet_Admin {
 		// $notices[] = array( 'type' => 'active-notice', 'time_saved' => 'Cleaning up spam takes time. Akismet has saved you 1 minute!' );
 		// $notices[] = array( 'type' => 'plugin' );
 		// $notices[] = array( 'type' => 'notice', 'notice_header' => 'This is the notice header.', 'notice_text' => 'This is the notice text.' );
-		// $notices[] = array( 'type' => 'missing-functions' );
+		// $notices[] = array( 'type' => 'ssl-unsupported' );
 		// $notices[] = array( 'type' => 'servers-be-down' );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_CANCELLED );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_SUSPENDED );
@@ -1408,7 +1397,9 @@ class Akismet_Admin {
 	}
 
 	public static function display_status() {
-		if ( ! self::get_server_connectivity() ) {
+		if ( ! wp_http_supports( array( 'ssl' ) ) ) {
+			Akismet::view( 'notice', array( 'type' => 'ssl-unsupported' ) );
+		} elseif ( ! self::get_server_connectivity() ) {
 			Akismet::view( 'notice', array( 'type' => 'servers-be-down' ) );
 		} elseif ( ! empty( self::$notices ) ) {
 			foreach ( self::$notices as $index => $type ) {
